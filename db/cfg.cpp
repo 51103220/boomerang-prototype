@@ -319,6 +319,7 @@ void Cfg::addOutEdge(PBB pBB, PBB pDestBB, bool bSetLabel /* = false */)
 {
 	// Add the given BB pointer to the list of out edges
 	pBB->m_OutEdges.push_back(pDestBB);
+	std::cout << "pBB" << pBB << std::endl;
 	// Note that the number of out edges is set at constructor time, not incremented here.
 	// Add the in edge to the destination BB
 	pDestBB->m_InEdges.push_back(pBB);
@@ -341,14 +342,17 @@ void Cfg::addOutEdge(PBB pBB, ADDRESS addr, bool bSetLabel /* = false */)
 {
 	// Check to see if the address is in the map, i.e. we already have a BB for this address
 	MAPBB::iterator it = m_mapBB.find(addr);
+
 	PBB pDestBB;
 	if (it != m_mapBB.end() && (*it).second) {
 		// Just add this PBB to the list of out edges
 		pDestBB = (*it).second;
+		
 	}
 	else {
 		// Else, create a new incomplete BB, add that to the map, and add the new BB as the out edge
 		pDestBB = newIncompleteBB(addr);
+		
 	}
 	addOutEdge(pBB, pDestBB, bSetLabel);
 }

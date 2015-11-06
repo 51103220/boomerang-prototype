@@ -246,8 +246,10 @@ void Prog::generateCode(Cluster *cluster, UserProc *proc, bool intermixRTL) {
 	
 		code->AddPrototype(up);
 							// May be the wrong signature if up has ellipsis
-		if (cluster == NULL || cluster == m_rootCluster)
+		if (cluster == NULL || cluster == m_rootCluster){
+			std::cout<<"cluster == null\n";
 			code->print(os);
+		}
 	}
 	if ((proto && cluster == NULL) || cluster == m_rootCluster)
 		os << "\n";				// Separate prototype(s) from first proc
@@ -264,12 +266,13 @@ void Prog::generateCode(Cluster *cluster, UserProc *proc, bool intermixRTL) {
 		up->getCFG()->compressCfg();
 		HLLCode *code = Boomerang::get()->getHLLCode(up);
 		std::cout<<"got into generate code1\n";
-		up->generateCode(code);
-
+		up->generateCode(code);	
 		if (up->getCluster() == m_rootCluster) {
+			
 			if (cluster == NULL || cluster == m_rootCluster)
 				code->print(os);
 		} else {
+
 			if (cluster == NULL || cluster == up->getCluster()) {
 				up->getCluster()->openStream("c");
 				code->print(up->getCluster()->getStream());
@@ -1325,8 +1328,10 @@ void Prog::decompile() {
 			// A final pass to remove returns not used by any caller
 			if (VERBOSE)
 				LOG << "prog: global removing unused returns\n";
+			std::cout << "prog: global removing unused returns\n";
 			// Repeat until no change. Note 100% sure if needed.
-			while(removeUnusedReturns());
+			//if (!ASS_FILE)
+				while(removeUnusedReturns());
 		}
 
 		// print XML after removing returns

@@ -1,0 +1,79 @@
+got filename elf-init.c for main
+after removing matching assigns (t[WILDSTR]).
+### type analysis for main ###
+### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
+in proc main adding addrExp r14{0} to local table
+in proc main adding addrExp r14{0} + 4 to local table
+in proc main adding addrExp r14{0} + 8 to local table
+in proc main adding addrExp r14{0} + 12 to local table
+in proc main adding addrExp r14{0} + 16 to local table
+in proc main adding addrExp r14{0} + 20 to local table
+in proc main adding addrExp r14{0} + 24 to local table
+in proc main adding addrExp r14{0} + 28 to local table
+in proc main adding addrExp r14{0} + 32 to local table
+in proc main adding addrExp r14{0} + 36 to local table
+in proc main adding addrExp r14{0} + 40 to local table
+in proc main adding addrExp r14{0} + 44 to local table
+in proc main adding addrExp r14{0} + 48 to local table
+in proc main adding addrExp r14{0} + 52 to local table
+in proc main adding addrExp r14{0} + 56 to local table
+in proc main adding addrExp r14{0} + 60 to local table
+in proc main adding addrExp r14{0} + 68 to local table
+in proc main adding addrExp r14{0} + 72 to local table
+in proc main adding addrExp r14{0} + 76 to local table
+### type analysis for main ###
+### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
+local o0 has type char * that doesn't agree with type of define void of a library, why?
+*forced* { int r8 } main(int argc r8, char *[] * argv r9, char *[] * envp r10)
+in cluster elf-init
+parameters: i32 argc, [c*]* argv, [c*]* envp
+end parameters
+locals:
+end locals
+symbols:
+  r8{0} maps to argc type int
+  r9{0} maps to argv type char *[] *
+  r10{0} maps to envp type char *[] *
+end symbols
+live variables: r8,  r9,  r10,  r11,  r12,  r13,  r14,  r15,  r16,  r17,  r18,  r19,  r20,  r21,  r22,  r23,  r24,  r25,  r26,  r27,  r28,  r29,  r30,  r31
+end live variables
+Call BB:
+in edges: 
+out edges: 10494 
+00000000
+00010474
+00010478
+0001047c
+00010480
+00010484
+00010488
+0001048c   32 {*v* r9, *v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL puts(
+                *c** o0 := "HELLO"WORD"
+              )
+              Reaching definitions: r1="HELLO"WORD",   r8="HELLO"WORD",   r9=r9{0},   r10=r10{0},   r11=r11{0},
+                r12=r12{0},   r13=r13{0},   r14=r14{0} - 96,   r15=r15{0},   r16=r16{0},   r17=r17{0},   r18=r18{0},
+                r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},
+                r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
+                m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},
+                m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},
+                m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},
+                m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0} + 68]=r8{0},
+                m[r14{0} + 72]=r9{0},   m[r14{0} + 76]=r10{0},   m[r14{0}]=r16{0},   tmp=r14{0} - 96
+              Live variables: 
+Ret BB:
+in edges: 1048c 
+out edges: 
+00010494
+00010498
+0001049c
+000104a0   62 RET *32* o0 := 0
+              Modifieds: *32* o0,  *32* r0,  *32* r1
+              Reaching definitions: r0=0,   r1=0,   o0=0,   r9=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13,
+                r14=r14,   r15=r15,   r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,   r22=r22,
+                r23=r23,   r24=r24,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,
+                m[r14 + 4]=r17,   m[r14 + 8]=r18,   m[r14 + 12]=r19,   m[r14 + 16]=r20,   m[r14 + 20]=r21,
+                m[r14 + 24]=r22,   m[r14 + 28]=r23,   m[r14 + 32]=r24,   m[r14 + 36]=r25,   m[r14 + 40]=r26,
+                m[r14 + 44]=r27,   m[r14 + 48]=r28,   m[r14 + 52]=r29,   m[r14 + 56]=r30,   m[r14 + 60]=r31,
+                m[r14 + 68]=argc,   m[r14 + 72]=argv,   m[r14 + 76]=envp,   m[r14]=r16,   tmp=0
+
+

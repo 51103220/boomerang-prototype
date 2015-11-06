@@ -1214,7 +1214,7 @@ int Boomerang::decompile(const char *fname, const char *pname)
 			}
 	}
 
-	std::cout << "generating code.1..\n";
+	std::cout << "Start Generating Code";
 	prog->generateCode();
 
 	std::cout << "output written to " << outputPath << prog->getRootCluster()->getName() << "\n";

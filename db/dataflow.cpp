@@ -40,19 +40,28 @@ void DataFlow::DFS(int p, int n) {
 	if (dfnum[n] == 0) {
 		dfnum[n] = N; vertex[N] = n; parent[n] = p;
 		N++;
+
 		// For each successor w of n
 		PBB bb = BBs[n];
+	
+		
 		std::vector<PBB>& outEdges = bb->getOutEdges();
+		
 		std::vector<PBB>::iterator oo;
+
 		for (oo = outEdges.begin(); oo != outEdges.end(); oo++) {
+		
 			DFS(n, indices[*oo]);
 		}
+
 	}
 }
 
 // Essentially Algorithm 19.9 of Appel's "modern compiler implementation in Java" 2nd ed 2002
 void DataFlow::dominators(Cfg* cfg) {
 	PBB r = cfg->getEntryBB();
+	
+
 	unsigned numBB = cfg->getNumBBs();
 	BBs.resize(numBB, (PBB)-1);
 	N = 0; BBs[0] = r;
@@ -69,26 +78,37 @@ void DataFlow::dominators(Cfg* cfg) {
 	best.resize(numBB, -1);
 	bucket.resize(numBB);
 	DF.resize(numBB);
+	
+
 	// Set up the BBs and indices vectors. Do this here because sometimes a BB can be unreachable (so relying on
 	// in-edges doesn't work)
+
 	std::list<PBB>::iterator ii;
 	int idx = 1;
 	for (ii = cfg->begin(); ii != cfg->end(); ii++) {
+		
 		PBB bb = *ii;
-		if (bb != r) {	   // Entry BB r already done
+		
+		if (bb != r) {
+			   // Entry BB r already done
 			indices[bb] = idx;
 			BBs[idx++] = bb;
 		}
 	}
+	
 	DFS(-1, 0);
 	int i;
+
 	for (i=N-1; i >= 1; i--) {
+
 		int n = vertex[i]; int p = parent[n]; int s = p;
+
 		/* These lines calculate the semi-dominator of n, based on the Semidominator Theorem */
 		// for each predecessor v of n
 		PBB bb = BBs[n];
 		std::vector<PBB>& inEdges = bb->getInEdges();
 		std::vector<PBB>::iterator it;
+
 		for (it = inEdges.begin(); it != inEdges.end(); it++) {
 			if (indices.find(*it) == indices.end()) {
 				std::cerr << "BB not in indices: "; (*it)->print(std::cerr);
@@ -120,6 +140,8 @@ void DataFlow::dominators(Cfg* cfg) {
 		}
 		bucket[p].clear();
 	}
+
+
 	for (i=1; i < N-1; i++) {
 		/* Now all the deferred dominator calculations, based on the second clause of the Dominator Theorem, are
 			performed. */

@@ -583,11 +583,14 @@ PBB UserProc::getEntryBB() {
  *============================================================================*/
 void UserProc::setEntryBB() {
 	std::list<PBB>::iterator bbit;
-	PBB pBB = cfg->getFirstBB(bbit);		// Get an iterator to the first BB
+	PBB pBB = cfg->getFirstBB(bbit);
+			// Get an iterator to the first BB
 	// Usually, but not always, this will be the first BB, or at least in the first few
-	while (pBB && address != pBB->getLowAddr()) {
-		pBB = cfg->getNextBB(bbit);
-	}
+	if (!ASS_FILE)
+		while (pBB && address != pBB->getLowAddr()) {
+			pBB = cfg->getNextBB(bbit);
+			
+		}
 	cfg->setEntryBB(pBB);
 }
 
@@ -617,7 +620,7 @@ void UserProc::generateCode(HLLCode *hll) {
 	// Note: don't try to remove unused statements here; that requires the
 	// RefExps, which are all gone now (transformed out of SSA form)!
 
-	if (VERBOSE || Boomerang::get()->printRtl)
+	//if (VERBOSE || Boomerang::get()->printRtl)
 		printToLog();
 
 	hll->AddProcStart(this);
@@ -766,7 +769,7 @@ void UserProc::printDFG() {
 // initialise all statements
 void UserProc::initStatements() {
 	BB_IT it;
-	std::cerr<<"GetFirstBB"<<std::endl;
+	std::cerr<<"GetFirstBB initStatements"<<std::endl;
 	BasicBlock::rtlit rit; StatementList::iterator sit;
 	for (PBB bb = cfg->getFirstBB(it); bb; bb = cfg->getNextBB(it)) {
 
@@ -774,6 +777,7 @@ void UserProc::initStatements() {
 			s->setProc(this);
 			s->setBB(bb);
 			CallStatement* call = dynamic_cast<CallStatement*>(s);
+			
 			if (call) {
 				call->setSigArguments();
 				if (call->getDestProc() && call->getDestProc()->isNoReturn() && bb->getNumOutEdges() == 1) {
@@ -785,6 +789,7 @@ void UserProc::initStatements() {
 				}
 			}
 		}
+		std::cerr<<"Debug after initialise"<<std::endl;
 	}
 }
 
@@ -1058,10 +1063,15 @@ ProcSet* UserProc::decompile(ProcList* path, int& indent) {
 					std::cout<<"Call3.5 "<<c->getSignature()->prints()<<"\n";
 					ProcSet* tmp = c->decompile(path, indent);
 					std::cout<<"Call3.51 "<<c->getSignature()->prints()<<"\n";
+					std::cout<<"Get Return Statement "<<c->getTheReturnStatement()->prints()<<"\n";
 					child->insert(tmp->begin(), tmp->end());
+					ProcSet::iterator pi;
+ 					for (pi =child->begin(); pi != child->end(); ++pi)
+  						std::cerr << (*pi)->getName() << ", ";
 					// Child has at least done middleDecompile(), possibly more
 					call->setCalleeReturn(c->getTheReturnStatement());
 					if (tmp->size() > 0) {
+						std::cout<<"tmp size > 0  \n";
 						setStatus(PROC_INCYCLE);
 					}
 				}
@@ -1083,12 +1093,16 @@ ProcSet* UserProc::decompile(ProcList* path, int& indent) {
 		child = middleDecompile(path, indent);
 		// If there is a switch statement, middleDecompile could contribute some cycles. If so, we need to test for
 		// the recursion logic again
-		if (child->size() != 0)
+		if (child->size() != 0){
 			// We've just come back out of decompile(), so we've lost the current proc from the path.
+			std::cout << "Child != 0\n";
 			path->push_back(this);
+		}
+		std::cout<<"----BEFORE remUnusedStmtEtc "<<theReturnStatement->getNumReturns()<<"\n";
 	}
 	if (child->size() == 0) {
 		remUnusedStmtEtc();	// Do the whole works
+		std::cout<<"----AFTER remUnusedStmtEtc "<<theReturnStatement->getNumReturns()<<"\n";
 		setStatus(PROC_FINAL);
 		Boomerang::get()->alert_end_decompile(this);
 	} else {
@@ -1143,12 +1157,12 @@ void UserProc::initialiseDecompile() {
 	if (VERBOSE) LOG << "initialise decompile for " << getName() << "\n";
 
 	// Sort by address, so printouts make sense
-
+	std::cout << "DEBUG before sortByAddress" << std::endl;
 	cfg->sortByAddress();
 
 	// Initialise statements
 	initStatements();
-
+	std::cout << "After initStatements" << std::endl;
 
 	if (VERBOSE) {
 		LOG << "--- debug print before SSA for " << getName() << " ---\n";
@@ -1158,6 +1172,7 @@ void UserProc::initialiseDecompile() {
 
 	// Compute dominance frontier
 	df.dominators(cfg);
+	std::cout << "After dominators" << std::endl;
 
 	// Number the statements
 	stmtNumber = 0;
@@ -1306,6 +1321,7 @@ ProcSet* UserProc::middleDecompile(ProcList* path, int indent) {
 		if (theReturnStatement) {
 			theReturnStatement->updateModifieds();		// Everything including new arguments reaching the exit
 			theReturnStatement->updateReturns();
+			std::cout<<"----Out loop: "<<theReturnStatement->getNumReturns()<<"\n";
 		}
 
 		printXML();
@@ -1345,7 +1361,7 @@ ProcSet* UserProc::middleDecompile(ProcList* path, int indent) {
 			}
 		}
 #endif
-
+		std::cout<<"----Out loop: "<<theReturnStatement->getNumReturns()<<"\n";
 		printXML();
 		// Print if requested
 		if (VERBOSE) {		// was if debugPrintSSA
@@ -1521,6 +1537,7 @@ void UserProc::remUnusedStmtEtc() {
 
 	if (VERBOSE)
 		LOG << "--- remove unused statements for " << getName() << " ---\n";
+	std::cout << "--- remove unused statements for " << getName() << " ---\n";
 	// A temporary hack to remove %CF = %CF{7} when 7 isn't a SUBFLAGS
 //	if (theReturnStatement)
 //		theReturnStatement->specialProcessing();
@@ -1529,6 +1546,7 @@ void UserProc::remUnusedStmtEtc() {
 	// do the local TA pass now. Ellipsis processing often reveals additional uses (e.g. additional parameters
 	// to printf/scanf), and removing unused statements is unsafe without full use information
 	if (status < PROC_FINAL) {
+		std::cout <<"< PROC_FINAL" << std::endl;
 		typeAnalysis();
 		// Now that locals are identified, redo the dataflow
 		bool change = df.placePhiFunctions(this);
@@ -1558,12 +1576,16 @@ void UserProc::remUnusedStmtEtc() {
 	// Count the references first
 	countRefs(refCounts);
 	// Now remove any that have no used
-	if (!Boomerang::get()->noRemoveNull)
+	if (!Boomerang::get()->noRemoveNull){
+		std::cout << "No Used Statement" << " ---\n";
 		remUnusedStmtEtc(refCounts);
+	}
 
 	// Remove null statements
-	if (!Boomerang::get()->noRemoveNull)
+	if (!Boomerang::get()->noRemoveNull){
+		std::cout << "Remove NULL Statement" << " ---\n";
 		removeNullStatements();
+	}
 
 	printXML();
 	if (VERBOSE && !Boomerang::get()->noRemoveNull) {
@@ -1577,6 +1599,7 @@ void UserProc::remUnusedStmtEtc() {
 	if (!Boomerang::get()->noParameterNames) {
 		// Replace the existing temporary parameters with the final ones:
 		//mapExpressionsToParameters();
+		std::cout << "Adding Parameters" << " ---\n";
 		addParameterSymbols();
 
 		if (VERBOSE) {
@@ -1622,6 +1645,7 @@ void UserProc::remUnusedStmtEtc(RefCounter& refCounts) {
 		StatementList::iterator ll = stmts.begin();
 		while (ll != stmts.end()) {
 			Statement* s = *ll;
+			//std::cout << s->prints() << "-----\n";
 			if (!s->isAssignment()) {
 				// Never delete a statement other than an assignment (e.g. nothing "uses" a Jcond)
 				ll++;
@@ -2156,6 +2180,7 @@ void UserProc::findFinalParameters() {
 	parameters.clear();
 
 	if (signature->isForced()) {
+		std::cout << "Signature is forced\n"; 
 		// Copy from signature
 		int n = signature->getNumParams();
 		ImplicitConverter ic(cfg);
@@ -2190,6 +2215,7 @@ void UserProc::findFinalParameters() {
 	StatementList::iterator it;
 	for (it = stmts.begin(); it != stmts.end(); ++it) {
 		Statement* s = *it;
+		std::cout << s->prints() << "-----\n";
 		// Assume that all parameters will be m[]{0} or r[]{0}, and in the implicit definitions at the start of the
 		// program
 		if (!s->isImplicit())
@@ -3949,6 +3975,9 @@ void UserProc::addImplicitAssigns() {
 	cfg->setImplicitsDone();
 	df.convertImplicits(cfg);			// Some maps have m[...]{-} need to be m[...]{0} now
 	makeSymbolsImplicit();
+	for (it = stmts.begin(); it != stmts.end(); it++) {
+		std::cout << (*it)->prints();
+	}
 	// makeParamsImplicit();			// Not necessary yet, since registers are not yet mapped
 
 	Boomerang::get()->alert_decompile_debug_point(this, "after adding implicit assigns");
@@ -4846,11 +4875,13 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 	Boomerang::get()->alert_decompile_debug_point(this, "before removing unused returns");
 	// First remove the unused parameters
 	bool removedParams = removeRedundantParameters();
+	std::cout << "Redundant Parameters: " <<  removedParams << std::endl;
 	if (theReturnStatement == NULL)
 		return removedParams;
 	if (DEBUG_UNUSED)
 		LOG << "%%% removing unused returns for " << getName() << " %%%\n";
-
+	std::cout << "%%% removing unused returns for " << getName() << " %%%\n";
+	std::cout << "%%% Number of returns" << theReturnStatement->getNumReturns() <<"%%%\n";
 	if (signature->isForced()) {
 		// Respect the forced signature, but use it to remove returns if necessary
 		bool removedRets = false;
@@ -4892,24 +4923,31 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 		std::set<CallStatement*>& callers = getCallers();
 		std::set<CallStatement*>::iterator cc;
 		for (cc = callers.begin(); cc != callers.end(); ++cc) {
+			std::cout<<"Caller: "<< (*cc)->prints(); 
 			// Union in the set of locations live at this call
 			UseCollector* useCol = (*cc)->getUseCollector();
+			std::cout<<"Use Collector " << useCol->prints();
 			unionOfCallerLiveLocs.makeUnion(useCol->getLocSet());
+			std::ostringstream ost;
+			unionOfCallerLiveLocs.print(ost);
+			std::cout <<"Live Locs " << ost;
 		}
 	}
 	// Intersect with the current returns
 	bool removedRets = false;
 	ReturnStatement::iterator rr;
+	if (!ASS_FILE)
 	for (rr = theReturnStatement->begin(); rr != theReturnStatement->end(); ) {
 		Assign* a = (Assign*)*rr;
 		if (!unionOfCallerLiveLocs.exists(a->getLeft())) {
 			if (DEBUG_UNUSED)
 				LOG << "%%%  removing unused return " << a << " from proc " << getName() << "\n";
+			std::cout << "%%%  removing unused return " << a << " from proc " << getName() << "\n";
 			// If a component of the RHS referenced a call statement, the liveness used to be killed here.
 			// This was wrong; you need to notice the liveness changing inside updateForUseChange() to correctly
 			// recurse to callee
-			rr = theReturnStatement->erase(rr);
-			removedRets = true;
+				rr = theReturnStatement->erase(rr);
+				removedRets = true;
 		}
 		else
 			rr++;
@@ -4931,6 +4969,7 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 		// Update the statements that call us
 		std::set<CallStatement*>::iterator it;
 		for (it = callerSet.begin(); it != callerSet.end() ; it++) {
+			std::cout << "%%% Update the statement that call us \n";
 			(*it)->updateArguments();				// Update caller's arguments
 			updateSet.insert((*it)->getProc());		// Make sure we redo the dataflow
 			removeRetSet.insert((*it)->getProc());	// Also schedule caller proc for more analysis
@@ -4949,6 +4988,7 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 	}
 
 	if (theReturnStatement->getNumReturns() == 1) {
+		std::cout << "%%% getNumReturns == 1 \n";
 		Assign *a = (Assign*)*theReturnStatement->getReturns().begin();
 		signature->setRetType(a->getType());
 	}
@@ -5037,9 +5077,9 @@ void UserProc::clearUses() {
 }
 
 void UserProc::typeAnalysis() {
-	if (VERBOSE)
+	//if (VERBOSE)
 		LOG << "### type analysis for " << getName() << " ###\n";
-
+	std::cout << "### type analysis for " << getName() << " ###\n";
 	// Now we need to add the implicit assignments. Doing this earlier is extremely problematic, because
 	// of all the m[...] that change their sorting order as their arguments get subscripted or propagated into
 	// Do this regardless of whether doing dfa-based TA, so things like finding parameters can rely on implicit assigns
@@ -5050,7 +5090,7 @@ void UserProc::typeAnalysis() {
 	if (DFA_TYPE_ANALYSIS) {
 		if (VERBOSE || DEBUG_TA)
 			LOG << "--- start data flow based type analysis for " << getName() << " ---\n";
-
+		std::cout << "### DFA TYPE ANALYSIS ###\n";
 		bool first = true;
 		do {
 			if (!first) {
@@ -5074,7 +5114,13 @@ void UserProc::typeAnalysis() {
 	else if (CON_TYPE_ANALYSIS) {
 		// FIXME: if we want to do comparison
 	}
-
+	std::cout <<"AFTER DFA_TYPE ANALYSIS--------------\n";
+	StatementList stmts;
+	getStatements(stmts);
+	StatementList::iterator it;
+	for (it = stmts.begin(); it != stmts.end(); it++) {
+		std::cout << (*it)->prints() << "------------\n";
+	}
 	printXML();
 }
 

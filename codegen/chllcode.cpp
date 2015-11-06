@@ -1637,8 +1637,10 @@ void CHLLCode::AddGlobal(const char *name, Type *type, Exp *init) {
 
 /// Dump all generated code to \a os.
 void CHLLCode::print(std::ostream &os) {
-	for (std::list<char*>::iterator it = lines.begin(); it != lines.end(); it++) 
+	for (std::list<char*>::iterator it = lines.begin(); it != lines.end(); it++){ 
 		 os << *it << std::endl;
+		 std::cout << *it <<std::endl;
+	}
 	if (m_proc == NULL)
 		os << std::endl;
 }

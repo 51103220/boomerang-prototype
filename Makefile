@@ -68,7 +68,7 @@ TKML =
 MAKEDEPEND=
 BISONPP=
 FLEXPP=
-M4=
+M4=/usr/bin/m4
 
 ####################################
 # Detection of OS specific settings
@@ -108,10 +108,10 @@ endif
 
 CC = gcc
 CXX = g++
-CFLAGS = -g -O2 -Wall
-CXXFLAGS = -g -O2 -Wall
+CFLAGS = -m32 -Wall
+CXXFLAGS = -m32 -Wall
 CPPFLAGS = -I$(top_srcdir)/include 
-LDFLAGS = 
+LDFLAGS = -m32
 
 # NOTE: "win32make/include" should be after "include" because if there is a generated include/config.h then we prefer to
 # use that
@@ -180,7 +180,7 @@ remote:
         transform/transformation-parser.cpp transform/transformation-scanner.cpp \
         transform/transformation-parser.h transform/transformation-scanner.h
 # Also touch the decoders, since the user won't have the NJMC toolkit
-	touch frontend/pentiumdecoder.cpp frontend/ppcdecoder.cpp frontend/st20decoder.cpp frontend/mipsdecoder.cpp frontend/sparcdecoder.cpp frontend/sparcassemblydecoder.cpp
+	touch frontend/pentiumdecoder.cpp frontend/sparcdecoder.cpp frontend/ppcdecoder.cpp frontend/st20decoder.cpp frontend/mipsdecoder.cpp
 
 #######################
 # Lots of object files
@@ -196,10 +196,9 @@ DB_OBJS = db/basicblock.o db/proc.o db/sslscanner.o db/cfg.o db/prog.o db/table.
 	c/ansi-c-scanner.o boomerang.o log.o db/visitor.o db/dataflow.o db/xmlprogparser.o 
 TRANSFORM_OBJS = transform/rdi.o transform/transformer.o transform/generic.o transform/transformation-parser.o \
 	transform/transformation-scanner.o
-FRONT_OBJS = frontend/frontend.o frontend/njmcDecoder.o frontend/pentiumdecoder.o \
+FRONT_OBJS = frontend/frontend.o frontend/njmcDecoder.o frontend/sparcdecoder.o frontend/pentiumdecoder.o \
 	frontend/sparcfrontend.o frontend/pentiumfrontend.o frontend/ppcdecoder.o frontend/ppcfrontend.o \
-	frontend/st20decoder.o frontend/st20frontend.o frontend/mipsdecoder.o frontend/mipsfrontend.o \
-	frontend/sparcdecoder.o #frontend/abcxyzdecoder.o
+	frontend/st20decoder.o frontend/st20frontend.o frontend/mipsdecoder.o frontend/mipsfrontend.o
 CODEGEN = codegen/chllcode.o codegen/syntax.o
 TYPEOBJS = type/constraint.o type/type.o type/dfa.o
 LOADER_OBJS = loader/BinaryFileFactory.o
@@ -601,7 +600,7 @@ frontend/sparcdecoder.o: include/decoder.h include/types.h include/rtl.h include
 frontend/sparcdecoder.o: include/type.h include/memo.h include/exphelp.h include/register.h include/prog.h
 frontend/sparcdecoder.o: include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h include/proc.h
 frontend/sparcdecoder.o: include/cfg.h include/basicblock.h include/managed.h include/dataflow.h include/hllcode.h
-frontend/sparcdecoder.o: include/statement.h frontend/sparcdecoder.h include/boomerang.h frontend/sparcassemblydecoder.cpp
+frontend/sparcdecoder.o: include/statement.h frontend/sparcdecoder.h include/boomerang.h
 frontend/sparcfrontend.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 frontend/sparcfrontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
 frontend/sparcfrontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h

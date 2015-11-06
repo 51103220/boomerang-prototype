@@ -2276,7 +2276,7 @@ void CallStatement::generateCode(HLLCode *hll, BasicBlock *pbb, int indLevel) {
 
 	Proc *p = getDestProc();
 
-	if (p == NULL && isComputed()) {
+	if (p == NULL && isComputed()) { 
 		hll->AddIndCallStatement(indLevel, pDest, arguments, calcResults());
 		return;
 	}
@@ -2286,9 +2286,11 @@ void CallStatement::generateCode(HLLCode *hll, BasicBlock *pbb, int indLevel) {
 	LOG << "call: " << this;
 	LOG << " in proc " << proc->getName() << "\n";
 #endif
+	std::cout << " in proc " << proc->getName() << "\n";
+	std::cout <<"getNumReturns = " << procDest->getSignature()->getNumReturns() << std::endl;
 	assert(p);
 	if (Boomerang::get()->noDecompile) {
-		if (procDest->getSignature()->getNumReturns() > 0) {
+		if (procDest->getSignature()->getNumReturns() > 0) {		
 			Assign* as = new Assign(new IntegerType(), new Unary(opRegOf, new Const(24)), new Unary(opRegOf, new Const(24)));
 			as->setProc(proc);
 			as->setBB(pbb);

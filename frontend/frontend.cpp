@@ -266,7 +266,9 @@ void FrontEnd::decode(Prog* prog, bool decodeMain, const char *pname) {
 	Boomerang::get()->alert_start_decode(pBF->getLimitTextLow(), pBF->getLimitTextHigh() - pBF->getLimitTextLow());
 
 	bool gotMain;
-	ADDRESS a = getMainEntryPoint(gotMain);
+	ADDRESS a;
+	a = getMainEntryPoint(gotMain);
+	
 	std::cout<< "start: " << a << " gotmain: " << (gotMain ? "true" : "false") << "\n";
 	if (VERBOSE)
 		LOG << "start: " << a << " gotmain: " << (gotMain ? "true" : "false") << "\n";
@@ -335,11 +337,11 @@ void FrontEnd::decode(Prog *prog, ADDRESS a) {
 		std::ofstream os;
 			PROGMAP::const_iterator it;
 			for (Proc *pProc = prog->getFirstProc(it); pProc != NULL; pProc = prog->getNextProc(it)) {
-				std::cout<<"Proc name boom1 "<<pProc->getName()<<"\n";
+				std::cout<<"Proc name Before main "<<pProc->getName()<<"\n";
 			}
 		processProc(a, p, os);
 			for (Proc *pProc = prog->getFirstProc(it); pProc != NULL; pProc = prog->getNextProc(it)) {
-				std::cout<<"Proc name boom2 "<<pProc->getName()<<"\n";
+				std::cout<<"Proc name After decode main "<<pProc->getName()<<"\n";
 
 			}
 		p->setDecoded();
@@ -358,9 +360,10 @@ void FrontEnd::decode(Prog *prog, ADDRESS a) {
 				// undecoded userproc.. decode it			
 				change = true;
 				std::ofstream os;
-				std::cout<<"process Proc :"<<p->getSignature()->prints()<<"\n";
+				std::cout<<"Signature Before :"<<p->getSignature()->prints()<<"\n";
 
 				int res = processProc(p->getNativeAddress(), p, os);
+				std::cout<<"Signature After :"<<p->getSignature()->prints()<<"\n";
 				//std::cout<<"Sig type:"<<p->getSignature()->prints()<<"\n";
 				std::cout<<"process Proc finish< res:"<<res<<"\n";
 
@@ -1216,6 +1219,7 @@ PBB FrontEnd::createReturnBlock(UserProc* pProc, std::list<RTL*>* BB_rtls, RTL* 
 	if (BB_rtls == NULL) BB_rtls = new std::list<RTL*>;		// In case no other semantics
 	BB_rtls->push_back(pRtl);
 	ADDRESS retAddr = pProc->getTheReturnAddr();
+	std::cout << "retAddr = " << std::hex << retAddr << " rtl = " <<std::hex<< pRtl->getAddress() << "\n";
 	// LOG << "retAddr = " << retAddr << " rtl = " << pRtl->getAddress() << "\n";
 	if (retAddr == NO_ADDRESS) {
 		// Create the basic block
