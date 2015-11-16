@@ -726,11 +726,12 @@ Type* Type::createUnion(Type* other, bool& ch, bool bHighestPtr /* = false */) {
 
 
 void CallStatement::dfaTypeAnalysis(bool& ch) {
-	// Iterate through the arguments
+	// Iterate through the arguments	
 	StatementList::iterator aa;
     int n = 0;
 	for (aa = arguments.begin(); aa != arguments.end(); ++aa, ++n) {
         if (procDest && procDest->getSignature()->getParamBoundMax(n) && ((Assign*)*aa)->getRight()->isIntConst()) {
+
             Assign *a = (Assign*)*aa;
             std::string boundmax = procDest->getSignature()->getParamBoundMax(n);
             assert(a->getType()->resolvesToInteger());

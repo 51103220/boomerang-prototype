@@ -2040,12 +2040,15 @@ void CallStatement::setSigArguments() {
 		return;
 	// Clone here because each call to procDest could have a different signature, modified by ellipsisProcessing
 	signature = procDest->getSignature()->clone();
+	;
 	procDest->addCaller(this);
 
 	if (!procDest->isLib())
 		return;				// Using dataflow analysis now
+	std::cout << "Signature at setSigArguments : " << signature->prints() << "\n";
 	int n = signature->getNumParams();
 	int i;
+	std::cout <<"Number or param : " << n << std::endl;
 	arguments.clear();
 	for (i = 0; i < n; i++) {
 		Exp *e = signature->getArgumentExp(i);
@@ -2102,6 +2105,7 @@ bool CallStatement::searchAndReplace(Exp* search, Exp* replace, bool cc) {
 		for (dd = defCol.begin(); dd != defCol.end(); ++dd)
 			change |= (*dd)->searchAndReplace(search, replace, cc);
 	}
+	
 	return change;
 }
 
@@ -2281,7 +2285,7 @@ void CallStatement::generateCode(HLLCode *hll, BasicBlock *pbb, int indLevel) {
 		return;
 	}
 	StatementList* results = calcResults();
-
+	
 #if 0
 	LOG << "call: " << this;
 	LOG << " in proc " << proc->getName() << "\n";
@@ -4533,6 +4537,7 @@ void CallStatement::updateDefines() {
 		for (mm = modifieds.begin(); mm != modifieds.end(); ++mm) {
 			Assign* as = (Assign*)*mm;
 			Exp* loc = as->getLeft();
+			std::cout << "LHS " << loc->prints() << std::endl;
 			if (proc->filterReturns(loc))
 				continue;
 			Type* ty = as->getType();
@@ -4574,7 +4579,8 @@ void CallStatement::updateDefines() {
 		StatementList::iterator nn;
 		bool inserted = false;
 		for (nn = defines.begin(); nn != defines.end(); ++nn) {
-			if (sig->returnCompare(*as, *(Assign*)*nn)) {	// If the new assignment is less than the current one
+			if (sig->returnCompare(*as, *(Assign*)*nn)) {
+					// If the new assignment is less than the current one
 				nn = defines.insert(nn, as);				// then insert before this position
 				inserted = true;
 				break;
@@ -4582,6 +4588,10 @@ void CallStatement::updateDefines() {
 		}
 		if (!inserted)
 			defines.insert(defines.end(), as);	// In case larger than all existing elements
+	}
+	StatementList::iterator dd;
+	for (dd = defines.begin(); dd != defines.end(); ++dd) {
+		Exp* lhs = ((Assign*)*dd)->getLeft();
 	}
 }
 
@@ -4609,8 +4619,11 @@ ArgSourceProvider::ArgSourceProvider(CallStatement* call) : call(call) {
 	Proc* procDest = call->getDestProc();
 	if (procDest && procDest->isLib()) {
 		src = SRC_LIB;
+		std::cout << "is Lib\n";
 		callSig = call->getSignature();
+		std::cout << "Signature " << callSig->prints() << std::endl;
 		n = callSig->getNumParams();
+		std::cout << "n = " << n << std::endl;
 		i = 0;
 	} else if (call->getCalleeReturn() != NULL) {
 		src = SRC_CALLEE;
@@ -4692,10 +4705,14 @@ bool ArgSourceProvider::exists(Exp* e) {
 	bool allZero;
 	switch (src) {
 		case SRC_LIB:
-			if (callSig->hasEllipsis())
+			std::cout << "LIB\n";
+			if (callSig->hasEllipsis()){
 				// FIXME: for now, just don't check
+				std::cout << "has ellipsis\n";
 				return true;
+			}
 			for (i=0; i < n; i++) {
+				std::cout << "i to n\n";
 				Exp* sigParam = callSig->getParamExp(i)->clone();
 				sigParam->removeSubscripts(allZero);
 				call->localiseComp(sigParam);
@@ -4719,6 +4736,10 @@ bool ArgSourceProvider::exists(Exp* e) {
 }
 
 void CallStatement::updateArguments() {
+	Proc* procDest = this->getDestProc();
+	if(ASS_FILE)
+		if(procDest->isLib())
+			return;
 	/* If this is a library call, source = signature
 		else if there is a callee return, source = callee parameters
 		else
@@ -4746,6 +4767,8 @@ void CallStatement::updateArguments() {
 		proc->propagateStatements(convert, 88);
 	}
 	StatementList oldArguments(arguments);
+	//std::cout << "Update Argument in Call " << this->prints() << std::endl;
+	//std::cout << "------Number of arguments before update " << arguments.size() << std::endl;
 	arguments.clear();
 	if (EXPERIMENTAL) {
 		// I don't really know why this is needed, but I was seeing r28 := ((((((r28{-}-4)-4)-4)-8)-4)-4)-4:
@@ -4760,9 +4783,11 @@ void CallStatement::updateArguments() {
 	ArgSourceProvider asp(this);
 	Exp* loc;
 	while ((loc = asp.nextArgLoc()) != NULL) {
+		//std::cout << "nextArgLoc exists\n";
 		if (proc->filterParams(loc))
 			continue;
 		if (!oldArguments.existsOnLeft(loc)) {
+			//std::cout << "!existsOnLeft\n";
 			// Check if the location is renamable. If not, localising won't work, since it relies on definitions
 			// collected in the call, and you just get m[...]{-} even if there are definitions.
 			Exp* rhs;
@@ -4779,31 +4804,41 @@ void CallStatement::updateArguments() {
 			oldArguments.append(as);
 		}
 	}
-
+	//std::cout << "------Number of old arguments" << oldArguments.size() << std::endl;
 	StatementList::iterator it;
 	for (it = oldArguments.end(); it != oldArguments.begin(); ) {
 		--it;										// Becuase we are using a forwards iterator backwards
 		// Make sure the LHS is still in the callee signature / callee parameters / use collector
 		Assign* as = (Assign*)*it;
 		Exp* lhs = as->getLeft();
-		if (!asp.exists(lhs)) continue;
-		if (proc->filterParams(lhs))
+		//if (!ASS_FILE)
+		if (!asp.exists(lhs)){
+			//std::cout << "!asp.exist\n";
+			continue;
+		} 
+		if (proc->filterParams(lhs)){
+			//std::cout << "filterParams\n";
 			continue;						// Filtered out: delete it
+		}						
 
 		// Insert as, in order, into the existing set of definitions
 		StatementList::iterator nn;
 		bool inserted = false;
 		for (nn = arguments.begin(); nn != arguments.end(); ++nn) {
-			if (sig->argumentCompare(*as, *(Assign*)*nn)) {		// If the new assignment is less than the current one
+			//std::cout << "In loop\n";
+			if (sig->argumentCompare(*as, *(Assign*)*nn)) {
+				//std::cout<< "insert special case Compare\n";		// If the new assignment is less than the current one
 				nn = arguments.insert(nn, as);					// then insert before this position
 				inserted = true;
 				break;
 			}
 		}
-		if (!inserted)
+		if (!inserted){
+			//std::cout<< "insert special case !insert\n";
 			arguments.insert(arguments.end(), as);				// In case larger than all existing elements
+		}
 	}
-
+	//std::cout << "------Number of arguments after update " << arguments.size() << std::endl;
 }
 
 // Calculate results(this) = defines(this) isect live(this)
@@ -4838,7 +4873,7 @@ StatementList* CallStatement::calcResults() {
 				// The stack pointer is allowed as a define, so remove it here as a special case non result
 				if (*lhs == *rsp) continue;
 				if (useCol.exists(lhs))
-					ret->append(*dd);
+						ret->append(*dd);
 			}
 		}
 	} else {

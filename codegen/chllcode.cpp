@@ -1210,6 +1210,7 @@ bool isBareMemof(Exp* e, UserProc* proc) {
 /// Prints an assignment expression.
 void CHLLCode::AddAssignmentStatement(int indLevel, Assign *asgn) {
 	// Gerard: shouldn't these  3 types of statements be removed earlier?
+		std::cout << "Generate assignment: "<< asgn->prints() << std::endl;
 	if (asgn->getLeft()->getOper() == opPC)
 		return;						// Never want to see assignments to %PC
 	Exp *result;
@@ -1218,7 +1219,7 @@ void CHLLCode::AddAssignmentStatement(int indLevel, Assign *asgn) {
 	// ok I want this now
 	//if (asgn->getLeft()->isFlags())
 	//	return;
-
+	
 	std::ostringstream s;
 	indent(s, indLevel);
 	Type* asgnType = asgn->getType();

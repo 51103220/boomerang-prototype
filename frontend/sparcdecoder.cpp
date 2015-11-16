@@ -855,7 +855,7 @@ DecodeResult& SparcDecoder::decodeAssembly (ADDRESS pc, std::string line)
       unsigned rd = magic_process(tokens.at(2));
       char *name =  new char[tokens.at(0).length() + 1];
       strcpy(name, tokens.at(0).c_str());
-      stmts = instantiate(pc,  "or", new Const(0), DIS_ROI, DIS_RD);
+      stmts = instantiate(pc,  "OR", new Const(0), DIS_ROI, DIS_RD);
     } 
     else{
       unsigned rs1 = magic_process(tokens.at(1));
@@ -1032,7 +1032,7 @@ DecodeResult& SparcDecoder::decodeAssembly (ADDRESS pc, std::string line)
   }
   result.numBytes = nextPC - hostPC;
   if(result.valid && result.rtl == 0)
-  result.rtl = new RTL(pc, stmts);
+    result.rtl = new RTL(pc, stmts);
   return result;
 }
 /***********************************************************************

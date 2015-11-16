@@ -1055,6 +1055,7 @@ void CallingConvention::StdC::SparcSignature::setLibraryDefines(StatementList* d
 	if (defs->size()) return;				// Do only once
 	for (int r=8; r <= 15; ++r)
 		defs->append(new ImplicitAssign(Location::regOf(r)));	// o0-o7 (r8-r15) modified
+	std::cout << "setLibraryDefines" << std::endl;
 }
 
 

@@ -456,8 +456,8 @@ std::list<Statement*>* RTLInstDict::instantiateRTL(RTL& rtl, ADDRESS natPC, std:
 			//delete formal;
 		}
 		(*ss)->fixSuccessor();
-		if (Boomerang::get()->debugDecoder)
-			std::cout << "			" << *ss << "\n";
+		//if (true)
+			std::cout << "	instantiateRTL:\n\t		" << *ss << "\n";
 	}
 
 	transformPostVars( newList, true );

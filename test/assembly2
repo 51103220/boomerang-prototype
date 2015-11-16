@@ -8,7 +8,7 @@ call	return1, 0
  nop
 mov	%o0, %g1
 mov	%g1, %o1
-sethi	"Something", %g1
+sethi	"Something%d", %g1
 or	%g1, 0, %o0
 call	printf, 0
  nop

@@ -381,6 +381,7 @@ Proc *Proc::getFirstCaller() {
  *============================================================================*/
 LibProc::LibProc(Prog *prog, std::string& name, ADDRESS uNative) : Proc(prog, uNative, NULL) {
 	Signature* sig = prog->getLibSignature(name.c_str());
+	std::cout << "Lib Proc Signature" << sig->prints();
 	signature = sig;
 }
 
@@ -615,8 +616,11 @@ void UserProc::generateCode(HLLCode *hll) {
 	assert(getEntryBB());
 
 	cfg->structure();
+
+	
 	removeUnusedLocals();
 
+	
 	// Note: don't try to remove unused statements here; that requires the
 	// RefExps, which are all gone now (transformed out of SSA form)!
 
@@ -632,6 +636,7 @@ void UserProc::generateCode(HLLCode *hll) {
 		Type* locType = it->second;
 		if (locType == NULL || locType->isVoid())
 			locType = new IntegerType();
+		std::cout << "Local variables: " << it->first.c_str() << std::endl;
 		hll->AddLocal(it->first.c_str(), locType, it == last);
 	}
 
@@ -769,7 +774,7 @@ void UserProc::printDFG() {
 // initialise all statements
 void UserProc::initStatements() {
 	BB_IT it;
-	std::cerr<<"GetFirstBB initStatements"<<std::endl;
+	std::cerr<<"--*-initStatements-*---"<<std::endl;
 	BasicBlock::rtlit rit; StatementList::iterator sit;
 	for (PBB bb = cfg->getFirstBB(it); bb; bb = cfg->getNextBB(it)) {
 
@@ -1063,7 +1068,7 @@ ProcSet* UserProc::decompile(ProcList* path, int& indent) {
 					std::cout<<"Call3.5 "<<c->getSignature()->prints()<<"\n";
 					ProcSet* tmp = c->decompile(path, indent);
 					std::cout<<"Call3.51 "<<c->getSignature()->prints()<<"\n";
-					std::cout<<"Get Return Statement "<<c->getTheReturnStatement()->prints()<<"\n";
+					//std::cout<<"Get Return Statement "<<c->getTheReturnStatement()->prints()<<"\n";
 					child->insert(tmp->begin(), tmp->end());
 					ProcSet::iterator pi;
  					for (pi =child->begin(); pi != child->end(); ++pi)
@@ -1081,15 +1086,17 @@ ProcSet* UserProc::decompile(ProcList* path, int& indent) {
 
 
 	// if child is empty, i.e. no child involved in recursion
+	
+	
 	if (child->size() == 0) {
 		std::cout<<"child size = 0\n";
 		Boomerang::get()->alert_decompiling(this);
-		std::cout << std::setw(indent) << " " << "decompiling " << getName() << "\n";
-		std::cerr<<"AFTER initialise"<<std::endl;
+		std::cout << std::setw(indent) << "***START" << "decompiling " << getName() << "\n";
+		std::cerr<<"***BEFORE INITIALISE"<<std::endl;
 		initialiseDecompile();					// Sort the CFG, number statements, etc
 		
 		earlyDecompile();
-		std::cerr<<"AFTER initialise"<<std::endl;
+		std::cerr<<"***AFTER INITIALISE"<<std::endl;
 		child = middleDecompile(path, indent);
 		// If there is a switch statement, middleDecompile could contribute some cycles. If so, we need to test for
 		// the recursion logic again
@@ -1098,11 +1105,13 @@ ProcSet* UserProc::decompile(ProcList* path, int& indent) {
 			std::cout << "Child != 0\n";
 			path->push_back(this);
 		}
-		std::cout<<"----BEFORE remUnusedStmtEtc "<<theReturnStatement->getNumReturns()<<"\n";
+		std::cout<<"***BEFORE REMOVE STMT \n";
+	
 	}
 	if (child->size() == 0) {
 		remUnusedStmtEtc();	// Do the whole works
-		std::cout<<"----AFTER remUnusedStmtEtc "<<theReturnStatement->getNumReturns()<<"\n";
+		std::cout<<"***AFTER AFTER STMT \n";
+	
 		setStatus(PROC_FINAL);
 		Boomerang::get()->alert_end_decompile(this);
 	} else {
@@ -1155,15 +1164,13 @@ void UserProc::initialiseDecompile() {
 	Boomerang::get()->alert_decompile_debug_point(this, "before initialise");
 
 	if (VERBOSE) LOG << "initialise decompile for " << getName() << "\n";
-
+	std::cout << "Initialise Decompile For " << getName() << "\n";
 	// Sort by address, so printouts make sense
-	std::cout << "DEBUG before sortByAddress" << std::endl;
 	cfg->sortByAddress();
 
 	// Initialise statements
 	initStatements();
-	std::cout << "After initStatements" << std::endl;
-
+	
 	if (VERBOSE) {
 		LOG << "--- debug print before SSA for " << getName() << " ---\n";
 		printToLog();
@@ -1172,7 +1179,6 @@ void UserProc::initialiseDecompile() {
 
 	// Compute dominance frontier
 	df.dominators(cfg);
-	std::cout << "After dominators" << std::endl;
 
 	// Number the statements
 	stmtNumber = 0;
@@ -1575,18 +1581,22 @@ void UserProc::remUnusedStmtEtc() {
 	RefCounter refCounts;			// The map
 	// Count the references first
 	countRefs(refCounts);
+	StatementList stmts;
+	getStatements(stmts);
+	StatementList::iterator it;
+
 	// Now remove any that have no used
 	if (!Boomerang::get()->noRemoveNull){
-		std::cout << "No Used Statement" << " ---\n";
+		std::cout << "Remove No used Statement" << " ---\n";
 		remUnusedStmtEtc(refCounts);
 	}
-
+	
 	// Remove null statements
 	if (!Boomerang::get()->noRemoveNull){
-		std::cout << "Remove NULL Statement" << " ---\n";
+		std::cout << "Remove Null Statement" << " ---\n";
 		removeNullStatements();
 	}
-
+	
 	printXML();
 	if (VERBOSE && !Boomerang::get()->noRemoveNull) {
 		LOG << "--- after removing unused and null statements pass " << 1 << " for " << getName() << " ---\n";
@@ -1608,6 +1618,7 @@ void UserProc::remUnusedStmtEtc() {
 			LOG << "=== end after adding new parameters ===\n";
 		}
 	}
+	
 
 #if 0				// Construction zone; pay no attention
 	bool convert;
@@ -1620,7 +1631,10 @@ void UserProc::remUnusedStmtEtc() {
 #endif
 
 	updateCalls();				// Or just updateArguments?
-
+	/*std::cout<<"\t\tAfter Update Call\n";
+		for (it = stmts.begin(); it != stmts.end(); it++) {
+			std::cout << (*it)->prints() << "------------\n";
+	}*/
 	branchAnalysis();
 	fixUglyBranches();
 	
@@ -2215,14 +2229,16 @@ void UserProc::findFinalParameters() {
 	StatementList::iterator it;
 	for (it = stmts.begin(); it != stmts.end(); ++it) {
 		Statement* s = *it;
-		std::cout << s->prints() << "-----\n";
+		//std::cout << s->prints() << "-----\n";
 		// Assume that all parameters will be m[]{0} or r[]{0}, and in the implicit definitions at the start of the
 		// program
 		if (!s->isImplicit())
 			// Note: phis can get converted to assignments, but I hope that this is only later on: check this!
 			break;					// Stop after reading all implicit assignments
 		Exp *e = ((ImplicitAssign*)s)->getLeft();
+		std::cout <<"ImplicitAssign : " << e->prints() << "\n";
 		if (signature->findParam(e) == -1) {
+			std::cout << "signature - 1 \n";
 			if (VERBOSE || DEBUG_PARAMS)
 				LOG << "potential param " << e << "\n";
 #if 1		// I believe that the only true parameters will be registers or memofs that look like locals (stack
@@ -3006,8 +3022,8 @@ void UserProc::removeUnusedLocals() {
 				if (!u->isLocal()) continue;
 				std::string name(((Const*)((Location*)u)->getSubExp1())->getStr());
 				usedLocals.insert(name);
-				if (DEBUG_UNUSED)
-					LOG << "counted local " << name << " in " << s << "\n";
+				//if (DEBUG_UNUSED)
+					//std::cout << "counted local " << name << " in " << s << "\n";
 			}
 		}
 		if (s->isAssignment() && !s->isImplicit() && ((Assignment*)s)->getLeft()->isLocal()) {
@@ -3015,7 +3031,7 @@ void UserProc::removeUnusedLocals() {
 			Const* c = (Const*)((Unary*)as->getLeft())->getSubExp1();
 			std::string name(c->getStr());
 			usedLocals.insert(name);
-			if (DEBUG_UNUSED) LOG << "counted local " << name.c_str() << " on left of " << s << "\n";
+			//std::cout << "counted local " << name.c_str() << " on left of " << s << "\n";
 
 		}
 	}
@@ -3103,6 +3119,16 @@ void UserProc::fromSSAform() {
 		(*it)->insertCasts();
 	}
 
+	for (it = stmts.begin(); it != stmts.end(); it++) {
+		// Map registers to initial local variables
+		if ((*it)->isCall()){
+			StatementList& sts =((CallStatement*)*it)->getDefines();
+			StatementList::iterator ii;
+			for (ii = sts.begin(); ii != sts.end(); ii++){
+				Exp* lhs = ((Assign*)*ii)->getLeft();
+			}
+		}
+	}
 
 	// First split the live ranges where needed by reason of type incompatibility, i.e. when the type of a subscripted
 	// variable is different to its previous type. Start at the top, because we don't want to rename parameters (e.g.
@@ -3162,6 +3188,7 @@ void UserProc::fromSSAform() {
 			}
 		}
 	}
+	
 	// Find the interferences generated by more than one version of a variable being live at the same program point
 	cfg->findInterferences(ig);
 
@@ -3221,7 +3248,7 @@ void UserProc::fromSSAform() {
 			LOG << "renaming " << rename << " to " << local << "\n";
 		mapSymbolTo(rename, local);
 	}
-
+	
 	// Implement part of the Phi Unites list, where renamings or parameters have broken them, by renaming
 	// The rest of them will be done as phis are removed
 	// The idea is that where l1 and l2 have to unite, and exactly one of them already has a local/name, you can
@@ -3264,7 +3291,7 @@ void UserProc::fromSSAform() {
 			continue;
 		}
 	}
-
+	
 
 /*	*	*	*	*	*	*	*	*	*	*	*	*	*	*\
  *														*
@@ -3287,6 +3314,7 @@ void UserProc::fromSSAform() {
 		Statement* s = *it;
 		s->replaceSubscriptsWithLocals();
 	}
+	
 
 	// Now remove the phis
 	for (it = stmts.begin(); it != stmts.end(); it++) {
@@ -3365,7 +3393,8 @@ void UserProc::fromSSAform() {
 #endif
 		}
 	}
-
+	
+	
 
 	if (cfg->getNumBBs() >= 100)		// Only for the larger procs
 		std::cout << "\n";
@@ -3969,15 +3998,13 @@ void UserProc::addImplicitAssigns() {
 	StatementList::iterator it;
 	ImplicitConverter ic(cfg);
 	StmtImplicitConverter sm(&ic, cfg);
+	
 	for (it = stmts.begin(); it != stmts.end(); it++) {
 		(*it)->accept(&sm);
 	}
 	cfg->setImplicitsDone();
 	df.convertImplicits(cfg);			// Some maps have m[...]{-} need to be m[...]{0} now
 	makeSymbolsImplicit();
-	for (it = stmts.begin(); it != stmts.end(); it++) {
-		std::cout << (*it)->prints();
-	}
 	// makeParamsImplicit();			// Not necessary yet, since registers are not yet mapped
 
 	Boomerang::get()->alert_decompile_debug_point(this, "after adding implicit assigns");
@@ -4121,6 +4148,7 @@ void UserProc::updateArguments() {
     Boomerang::get()->alert_decompiling(this);
 	if (VERBOSE)
 		LOG << "### update arguments for " << getName() << " ###\n";
+	std::cout << "### update arguments for " << getName() << " ###\n";
 	Boomerang::get()->alert_decompile_debug_point(this, "before updating arguments");
 	BB_IT it;
 	BasicBlock::rtlrit rrit; StatementList::reverse_iterator srit;
@@ -4922,8 +4950,7 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 		// For each caller
 		std::set<CallStatement*>& callers = getCallers();
 		std::set<CallStatement*>::iterator cc;
-		for (cc = callers.begin(); cc != callers.end(); ++cc) {
-			std::cout<<"Caller: "<< (*cc)->prints(); 
+		for (cc = callers.begin(); cc != callers.end(); ++cc) { 
 			// Union in the set of locations live at this call
 			UseCollector* useCol = (*cc)->getUseCollector();
 			std::cout<<"Use Collector " << useCol->prints();
@@ -4936,7 +4963,7 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 	// Intersect with the current returns
 	bool removedRets = false;
 	ReturnStatement::iterator rr;
-	if (!ASS_FILE)
+	//if (!ASS_FILE)
 	for (rr = theReturnStatement->begin(); rr != theReturnStatement->end(); ) {
 		Assign* a = (Assign*)*rr;
 		if (!unionOfCallerLiveLocs.exists(a->getLeft())) {
@@ -5079,7 +5106,8 @@ void UserProc::clearUses() {
 void UserProc::typeAnalysis() {
 	//if (VERBOSE)
 		LOG << "### type analysis for " << getName() << " ###\n";
-	std::cout << "### type analysis for " << getName() << " ###\n";
+	std::cout << "BEGIN TYPE ANALYSIS:" << getName() << " ###\n";
+	
 	// Now we need to add the implicit assignments. Doing this earlier is extremely problematic, because
 	// of all the m[...] that change their sorting order as their arguments get subscripted or propagated into
 	// Do this regardless of whether doing dfa-based TA, so things like finding parameters can rely on implicit assigns
@@ -5090,7 +5118,7 @@ void UserProc::typeAnalysis() {
 	if (DFA_TYPE_ANALYSIS) {
 		if (VERBOSE || DEBUG_TA)
 			LOG << "--- start data flow based type analysis for " << getName() << " ---\n";
-		std::cout << "### DFA TYPE ANALYSIS ###\n";
+		
 		bool first = true;
 		do {
 			if (!first) {
@@ -5101,12 +5129,15 @@ void UserProc::typeAnalysis() {
 			}
 			first = false;
 			dfaTypeAnalysis();
+			std::cout <<"--------AFTER every dfaTypeAnalysis--------------\n";
+			
 
 			// There used to be a pass here to insert casts. This is best left until global type analysis is complete,
 			// so do it just before translating from SSA form (which is the where type information becomes inaccessible)
 
 		} while (ellipsisProcessing());
-		simplify();						// In case there are new struct members
+		simplify();
+		// In case there are new struct members
 		if (VERBOSE || DEBUG_TA)
 			LOG << "=== end type analysis for " << getName() << " ===\n";
 	}
@@ -5114,14 +5145,9 @@ void UserProc::typeAnalysis() {
 	else if (CON_TYPE_ANALYSIS) {
 		// FIXME: if we want to do comparison
 	}
-	std::cout <<"AFTER DFA_TYPE ANALYSIS--------------\n";
-	StatementList stmts;
-	getStatements(stmts);
-	StatementList::iterator it;
-	for (it = stmts.begin(); it != stmts.end(); it++) {
-		std::cout << (*it)->prints() << "------------\n";
-	}
+	
 	printXML();
+	std::cout <<"-----------END TYPE ANALYSIS--------------\n";
 }
 
 void UserProc::clearRanges()

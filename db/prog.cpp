@@ -1351,6 +1351,23 @@ void Prog::decompile() {
 	// Note: removeUnusedLocals() is now in UserProc::generateCode()
 
 	removeUnusedGlobals();
+	for (std::list<Proc*>::iterator it = m_procs.begin(); it != m_procs.end(); it++) {
+		if ((*it)->isLib())	continue;
+		UserProc *u = (UserProc*)(*it);
+		StatementList stmts;
+		StatementList::iterator ss;
+		u->getStatements(stmts);
+		for (ss = stmts.begin(); ss != stmts.end(); ++ss) {
+			if ((*ss)->isCall()){
+				StatementList& sts =((CallStatement*)*ss)->getDefines();
+				StatementList::iterator ii;
+				for (ii = sts.begin(); ii != sts.end(); ii++){
+					Exp* lhs = ((Assign*)*ii)->getLeft();
+					
+				}
+			}
+		}
+	}
 }
 
 void Prog::removeUnusedGlobals() {

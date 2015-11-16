@@ -740,11 +740,11 @@ std::vector<std::string> process_file(Prog* prog, ADDRESS address){
 		int i = 0;
 		for( ; getline( infile, line );) 
 		{
-	    	//if (i>=start && i <= end){
+	    	if (i>=start && i <= end){
 	    		temp=line;
 	    		vinit[count]=(char*)temp.c_str();
 	    		count++;
-	    	//}
+	    	}
 	    		i++;
 		}
 		std::vector<std::string> assemblySets(vinit,vinit+count);
@@ -994,7 +994,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 					// e.g.
 					// 142c8:  40 00 5b 91		  call		   exit
 					// 142cc:  91 e8 3f ff		  restore	   %g0, -1, %o0
-					std::cout<<"First STMT_CALL " << std::hex << new_address << std::endl;
+					std::cout<<"First STMT_CALL in last->getKind() " << std::hex << new_address << std::endl;
 					if (((SparcDecoder*)decoder)->isRestore(address+4+pBF->getTextDelta())) {
 						// Give the address of the call; I think that this is actually important, if faintly annoying
 						delay_inst.rtl->updateAddress(address);
@@ -1015,6 +1015,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 					// (move/x/call/move in UQBT terms).  In boomerang, we leave the semantics of the moves there
 					// (to be likely removed by dataflow analysis) and merely insert a return BB after the call
 					int nd = delay_inst.rtl->getNumStmt();
+					std::cout << "Num of Stmt" << nd << std::endl;
 					// Note that if an add, there may be an assignment to a temp register first. So look at last RT
 					Statement* a = delay_inst.rtl->elementAt(nd-1); // Look at last
 					if (a && a->isAssign()) {

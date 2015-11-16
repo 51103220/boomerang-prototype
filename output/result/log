@@ -1,5 +1,28 @@
 got filename elf-init.c for main
 after removing matching assigns (t[WILDSTR]).
+### type analysis for return1 ###
+### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure return1 ###
+in proc return1 adding addrExp r14{0} to local table
+in proc return1 adding addrExp r14{0} + 4 to local table
+in proc return1 adding addrExp r14{0} + 8 to local table
+in proc return1 adding addrExp r14{0} + 12 to local table
+in proc return1 adding addrExp r14{0} + 16 to local table
+in proc return1 adding addrExp r14{0} + 20 to local table
+in proc return1 adding addrExp r14{0} + 24 to local table
+in proc return1 adding addrExp r14{0} + 28 to local table
+in proc return1 adding addrExp r14{0} + 32 to local table
+in proc return1 adding addrExp r14{0} + 36 to local table
+in proc return1 adding addrExp r14{0} + 40 to local table
+in proc return1 adding addrExp r14{0} + 44 to local table
+in proc return1 adding addrExp r14{0} + 48 to local table
+in proc return1 adding addrExp r14{0} + 52 to local table
+in proc return1 adding addrExp r14{0} + 56 to local table
+in proc return1 adding addrExp r14{0} + 60 to local table
+in proc return1 adding addrExp r14{0} + 68 to local table
+finding final parameters for return1
+potential param r8
+found new parameter r8
+after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 in proc main adding addrExp r14{0} to local table
@@ -21,16 +44,59 @@ in proc main adding addrExp r14{0} + 60 to local table
 in proc main adding addrExp r14{0} + 68 to local table
 in proc main adding addrExp r14{0} + 72 to local table
 in proc main adding addrExp r14{0} + 76 to local table
+in proc main adding addrExp r14{0} - 4 to local table
+Unhandled format character D in format string for call   37 {*v* r8, *v* r9, *v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL printf(
+                *c** r8 := "SOMETHING%D"
+              )
+              Reaching definitions: r0=r0{32},   r1="SOMETHING%D",   r8="SOMETHING%D",   r9=r8{32},   r14=r14{0} - 104,
+                r24=r8{0},   r25=r9{0},   r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},
+                r31=r15{0},   m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},
+                m[r14{0} + 16]=r20{0},   m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},
+                m[r14{0} + 32]=r24{0},   m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},
+                m[r14{0} + 48]=r28{0},   m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},
+                m[r14{0} + 68]=r8{0},   m[r14{0} + 72]=r9{0},   m[r14{0} + 76]=r10{0},   m[r14{0} - 4]=0,
+                m[r14{0}]=r16{0},   tmp=r14{0} - 104
+              Live variables: 
+### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
+in proc main adding addrExp r14{0} to local table
+in proc main adding addrExp r14{0} + 4 to local table
+in proc main adding addrExp r14{0} + 8 to local table
+in proc main adding addrExp r14{0} + 12 to local table
+in proc main adding addrExp r14{0} + 16 to local table
+in proc main adding addrExp r14{0} + 20 to local table
+in proc main adding addrExp r14{0} + 24 to local table
+in proc main adding addrExp r14{0} + 28 to local table
+in proc main adding addrExp r14{0} + 32 to local table
+in proc main adding addrExp r14{0} + 36 to local table
+in proc main adding addrExp r14{0} + 40 to local table
+in proc main adding addrExp r14{0} + 44 to local table
+in proc main adding addrExp r14{0} + 48 to local table
+in proc main adding addrExp r14{0} + 52 to local table
+in proc main adding addrExp r14{0} + 56 to local table
+in proc main adding addrExp r14{0} + 60 to local table
+in proc main adding addrExp r14{0} + 68 to local table
+in proc main adding addrExp r14{0} + 72 to local table
+in proc main adding addrExp r14{0} + 76 to local table
+in proc main adding addrExp r14{0} - 4 to local table
+TYPE ERROR: at address 0xfffffffc, overlapping type __size32 does not resolve to compound or array
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-local o0 has type char * that doesn't agree with type of define void of a library, why?
+### type analysis for return1 ###
+### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure return1 ###
+finding final parameters for return1
+potential param r8
+found new parameter r8
+local o0 has type __size32 that doesn't agree with type of define void of a library, why?
+local o1 has type char * that doesn't agree with type of define void of a library, why?
 *forced* { int r8 } main(int argc r8, char *[] * argv r9, char *[] * envp r10)
 in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
+void o0 r8
 end locals
 symbols:
+  r8 maps to o0 type void
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
@@ -47,33 +113,87 @@ out edges: 10494
 00010480
 00010484
 00010488
-0001048c   32 {*v* r9, *v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL puts(
-                *c** o0 := "HELLO"WORD"
+0001048c   32 {*c** o0, *32* r0, *32* r1} := CALL return1(
+                *32* o0 := 0
               )
-              Reaching definitions: r1="HELLO"WORD",   r8="HELLO"WORD",   r9=r9{0},   r10=r10{0},   r11=r11{0},
-                r12=r12{0},   r13=r13{0},   r14=r14{0} - 96,   r15=r15{0},   r16=r16{0},   r17=r17{0},   r18=r18{0},
-                r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},
-                r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
+              Reaching definitions: r8=0,   r9=r9{0},   r10=r10{0},   r11=r11{0},   r12=r12{0},   r13=r13{0},
+                r14=r14{0} - 104,   r15=r15{0},   r16=r16{0},   r17=r17{0},   r18=r18{0},   r19=r19{0},   r20=r20{0},
+                r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},   r26=r10{0},   r27=r11{0},
+                r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},   m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},
+                m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},   m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},
+                m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},   m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},
+                m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},   m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},
+                m[r14{0} + 60]=r31{0},   m[r14{0} + 68]=r8{0},   m[r14{0} + 72]=r9{0},   m[r14{0} + 76]=r10{0},
+                m[r14{0} - 4]=0,   m[r14{0}]=r16{0},   tmp=r14{0} - 104
+              Live variables: o0
+Call BB:
+in edges: 1048c 
+out edges: 104ac 
+00010494
+00010498
+0001049c
+000104a0
+000104a4   37 {*v* o0, *v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL printf(
+                *c** o0 := "SOMETHING%D"
+                *c** o1 := o0
+              )
+              Reaching definitions: r0=r0{32},   r1="SOMETHING%D",   r8="SOMETHING%D",   r9=r8{32},   r10=r10{0},
+                r11=r11{0},   r12=r12{0},   r13=r13{0},   r14=r14{0} - 104,   r15=r15{0},   r16=r16{0},   r17=r17{0},
+                r18=r18{0},   r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},
+                r25=r9{0},   r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
                 m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},
                 m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},
                 m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},
                 m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0} + 68]=r8{0},
-                m[r14{0} + 72]=r9{0},   m[r14{0} + 76]=r10{0},   m[r14{0}]=r16{0},   tmp=r14{0} - 96
+                m[r14{0} + 72]=r9{0},   m[r14{0} + 76]=r10{0},   m[r14{0} - 4]=0,   m[r14{0}]=r16{0},
+                tmp=r14{0} - 104
               Live variables: 
 Ret BB:
-in edges: 1048c 
+in edges: 104a4 
 out edges: 
-00010494
-00010498
-0001049c
-000104a0   62 RET *32* o0 := 0
+000104ac
+000104b0
+000104b4
+000104b8   67 RET *32* o0 := 0
               Modifieds: *32* o0,  *32* r0,  *32* r1
-              Reaching definitions: r0=0,   r1=0,   o0=0,   r9=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13,
+              Reaching definitions: r0=0,   r1=0,   o0=0,   o1=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13,
                 r14=r14,   r15=r15,   r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,   r22=r22,
                 r23=r23,   r24=r24,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,
                 m[r14 + 4]=r17,   m[r14 + 8]=r18,   m[r14 + 12]=r19,   m[r14 + 16]=r20,   m[r14 + 20]=r21,
                 m[r14 + 24]=r22,   m[r14 + 28]=r23,   m[r14 + 32]=r24,   m[r14 + 36]=r25,   m[r14 + 40]=r26,
                 m[r14 + 44]=r27,   m[r14 + 48]=r28,   m[r14 + 52]=r29,   m[r14 + 56]=r30,   m[r14 + 60]=r31,
-                m[r14 + 68]=argc,   m[r14 + 72]=argv,   m[r14 + 76]=envp,   m[r14]=r16,   tmp=0
+                m[r14 + 68]=argc,   m[r14 + 72]=argv,   m[r14 + 76]=envp,   m[r14 - 4]=0,   m[r14]=r16,   tmp=0
+
+
+void return1(__size32 param1 r8)
+in cluster sparcbinary
+parameters: 32 param1
+end parameters
+locals:
+end locals
+symbols:
+  r8{0} maps to param1 type __size32
+end symbols
+live variables: r8,  r9,  r10,  r11,  r12,  r13,  r14,  r15,  r16,  r17,  r18,  r19,  r20,  r21,  r22,  r23,  r24,  r25,  r26,  r27,  r28,  r29,  r30,  r31
+end live variables
+Ret BB:
+in edges: 
+out edges: 
+00000000    0 *32* param1 := -
+000104c0
+000104c4
+000104c8
+000104cc
+000104d0
+000104d4
+000104d8   59 RET *32* o0 := param1 + 1
+              Modifieds: *32* o0,  *32* r0,  *32* r1
+              Reaching definitions: r0=0,   r1=param1 + 1,   o0=param1 + 1,   r9=r9,   r10=r10,   r11=r11,   r12=r12,
+                r13=r13,   r14=r14,   r15=r15,   r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,
+                r22=r22,   r23=r23,   r24=r24,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,
+                r31=r31,   m[r14 + 4]=r17,   m[r14 + 8]=r18,   m[r14 + 12]=r19,   m[r14 + 16]=r20,   m[r14 + 20]=r21,
+                m[r14 + 24]=r22,   m[r14 + 28]=r23,   m[r14 + 32]=r24,   m[r14 + 36]=r25,   m[r14 + 40]=r26,
+                m[r14 + 44]=r27,   m[r14 + 48]=r28,   m[r14 + 52]=r29,   m[r14 + 56]=r30,   m[r14 + 60]=r31,
+                m[r14 + 68]=param1,   m[r14]=r16,   tmp=0
 
 
