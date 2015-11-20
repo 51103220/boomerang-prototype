@@ -802,13 +802,11 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 		assemblySets = process_file(prog,address);
 	}
 	std::cout<<"Start First Address \n" << address << std::endl;
-	//std::vector<std::string> assemblySets(vinit,vinit+count) ;
+
 	int sizeSets = assemblySets.size();
-	//std::cerr<<"size = "<< sizeSets << std::endl;
+
 	int line = 0;
-	//std::cerr<<"line = "<< line << std::endl;
-	//std::cout<<"assset.at"<<vinit[line]<<"\n";
-	////////////////////////////END MY CODE////////////////////////////
+
 	// Get the next address from which to continue decoding and go from
 	// there. Exit the loop if there are no more addresses or they all
 	// correspond to locations that have been decoded.
@@ -848,11 +846,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 			{
 				if(ASS_FILE){
 					if(line<sizeSets){
-							
-							 	
-								inst = decodeAssemblyInstruction(new_address,assemblySets.at(line));//donbinhvn: decode assembly inst instead of binary
-								
-								
+								inst = decodeAssemblyInstruction(new_address,assemblySets.at(line));//donbinhvn: decode assembly inst instead of binary	
 							
 					}
 				}

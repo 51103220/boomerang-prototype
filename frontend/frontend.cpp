@@ -79,7 +79,7 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 		case MACHINE_SPARC:
 			std::cout<<"instantiate SPARC\n";
 			return new SparcFrontEnd(pBF, prog, pbff);
-		
+			//return new _8051FrontEnd(pBf,prog,fbff);
 		case MACHINE_PPC:
 			return new PPCFrontEnd(pBF, prog, pbff);
 		case MACHINE_MIPS:
@@ -490,6 +490,37 @@ Signature *FrontEnd::getLibSignature(const char *name) {
 	return signature;
 }
 
+std::vector<std::string> process_file_frontend(Prog* prog, ADDRESS address){
+	std::cout<<"----Processing Assembly File---- \n";
+		char **vinit= new char*[100];
+		std::ifstream infile(prog->getPath());
+		std::string line;
+		std::string temp ;
+		int count = 0;
+		int start, end;
+		if (address == 66676)
+		{
+			start = 0;
+			end = 18;
+		}
+		else
+		{	
+			start = 19;
+			end = 26;
+		}
+		int i = 0;
+		for( ; getline( infile, line );) 
+		{
+	    	if (i>=start && i <= end){
+	    		temp=line;
+	    		vinit[count]=(char*)temp.c_str();
+	    		count++;
+	    	}
+	    		i++;
+		}
+		std::vector<std::string> assemblySets(vinit,vinit+count);
+	return assemblySets ;
+}
 /*==============================================================================
  * FUNCTION:	  FrontEnd::processProc
  * OVERVIEW:	  Process a procedure, given a native (source machine) address.
@@ -536,25 +567,17 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	int nTotalBytes = 0;
 	ADDRESS startAddr = uAddr;
 	ADDRESS lastAddr = uAddr;
-
+	ADDRESS address = uAddr;
 	
-	const char *vinit[]	= {"save	%sp, -104, %sp", 
-						 "st	%i0, [%fp+68]",
-						 "st	%i1, [%fp+72]",	
-						 "st	%i2, [%fp+76]",
-						 "ld	[%fp-4], %g1",
-						 "add	%g1, 1, %g1",
-						 "ld	[%fp-4], %g1",
-						 "mov	%g1, %i0",
-						 "restore",
-						 "jmp	%o7+8"
-						};
-	std::vector<std::string> assemblySets(vinit,vinit+10) ;
+	std::vector<std::string> assemblySets;
+	if(ASS_FILE)
+	{	
+		assemblySets = process_file_frontend(prog,address);
+	}
+	std::cout<<"Start First Address \n" << address << std::endl;
 	int sizeSets = assemblySets.size();
-	std::cerr<<"size = "<< sizeSets << std::endl;
 	int line = 0;
-	std::cerr<<"line = "<< line << std::endl;
-	std::cout<<"line = "<< line << std::endl;
+
 	while ((uAddr = targetQueue.nextAddress(pCfg)) != NO_ADDRESS) {
 		// The list of RTLs for the current basic block
 		std::list<RTL*>* BB_rtls = new std::list<RTL*>();
@@ -570,8 +593,12 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				LOG << "*" << uAddr << "\t";
 
 			// Decode the inst at uAddr.
-			if(line < sizeSets)
-			inst = decodeAssemblyInstruction(uAddr,assemblySets.at(line));
+			if(ASS_FILE){
+				if(line < sizeSets)
+					inst = decodeAssemblyInstruction(uAddr,assemblySets.at(line));
+			}
+			else
+				inst = decodeInstruction(address);
 
 			// If invalid and we are speculating, just exit
 			if (spec && !inst.valid)
