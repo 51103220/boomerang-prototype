@@ -29,7 +29,8 @@ virtual DecodeResult& decodeAssembly (ADDRESS pc, std::string instr);
 virtual int			decodeAssemblyInstruction (ADDRESS pc, int delta);
 
 
-//private:
+private:
+		unsigned magic_process(std::string name);
 		/*
 		 * Various functions to decode the operands of an instruction into an Exp* representation.
 		 */

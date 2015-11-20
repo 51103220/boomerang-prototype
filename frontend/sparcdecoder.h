@@ -57,6 +57,7 @@ private:
 	 * Various functions to decode the operands of an instruction into
 	 * a SemStr representation.
 	 */
+	unsigned magic_process(std::string name);
 	Exp*	dis_Eaddr(ADDRESS pc, int size = 0);
 	Exp*	dis_RegImm(ADDRESS pc);
 	Exp*	dis_RegLhs(unsigned r);

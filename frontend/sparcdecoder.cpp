@@ -15,7 +15,91 @@ inline bool isInteger(const std::string & s) {
   strtol(s.c_str(), &p, 10) ;
   return (*p == 0) ;
 }
-unsigned magic_process(std::string name) {
+
+bool if_str(std::string name){
+  if (name.find("\"") != std::string::npos) {
+    return true;
+  }
+  return false;
+}
+char* process_str(std::string name){
+  name.erase(0,1);
+  name.erase(name.size()-1,1);
+  char *str =  new char[name.length() + 1];
+  strcpy(str, name.c_str());
+  return str;
+}
+/*
+ * Copyright (C) 1996-2001, The University of Queensland
+ *
+ * See the file "LICENSE.TERMS" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL
+ * WARRANTIES.
+ *
+ */
+
+/*==============================================================================
+ * FILE:     decoder.m
+ * OVERVIEW:   Implementation of the SPARC specific parts of the
+ *         SparcDecoder class.
+ *============================================================================*/
+
+/* $Revision: 1.24 $  
+ *
+ * 26 Apr 02 - Mike: Mods for boomerang
+ * 19 May 02 - Mike: Added many (int) casts: variables from toolkit are unsgnd
+ * 21 May 02 - Mike: SAVE and RESTORE have full semantics now
+ * 30 Oct 02 - Mike: dis_Eaddr mode indirectA had extra memof
+ * 22 Nov 02 - Mike: Support 32 bit V9 branches
+ * 04 Dec 02 - Mike: r[0] -> 0 automatically (rhs only)
+ * 30 May 02 - Mike: Also fixed r[0] -> 0 for store instructions
+ * 03 Nov 04 - Mike: DIS_FDS was returning numbers for the double precision registers
+*/
+
+/*==============================================================================
+ * Dependencies.
+ *============================================================================*/
+
+#include <assert.h>
+#include <cstring>
+#if defined(_MSC_VER) && _MSC_VER <= 1100
+#include "signature.h"
+#endif
+
+
+#include "decoder.h"
+#include "sparcdecoder.h"
+#include "exp.h"
+#include "prog.h"
+#include "proc.h"
+#include "rtl.h"
+#include "BinaryFile.h"   
+#include "boomerang.h"
+
+#define DIS_ROI   (dis_RegImm(roi))
+#define DIS_ADDR  (dis_Eaddr(addr))
+#define DIS_RD    (dis_RegLhs(rd))
+#define DIS_RDR   (dis_RegRhs(rd))
+#define DIS_RS1   (dis_RegRhs(rs1))
+#define DIS_FS1S  (dis_RegRhs(fs1s+32))
+#define DIS_FS2S  (dis_RegRhs(fs2s+32))
+
+
+#define DIS_FDS   (dis_RegLhs(fds+32))
+#define DIS_FS1D  (dis_RegRhs((fs1d>>1)+64))
+#define DIS_FS2D  (dis_RegRhs((fs2d>>1)+64))
+#define DIS_FDD   (dis_RegLhs((fdd>>1)+64))
+#define DIS_FDQ   (dis_RegLhs((fdq>>2)+80))
+#define DIS_FS1Q  (dis_RegRhs((fs1q>>2)+80))
+#define DIS_FS2Q  (dis_RegRhs((fs2q>>2)+80))
+
+/*==============================================================================
+ * FUNCTION:     unused
+ * OVERVIEW:     A dummy function to suppress "unused local variable" messages
+ * PARAMETERS:     x: integer variable to be "used"
+ * RETURNS:      Nothing
+ *============================================================================*/
+unsigned SparcDecoder::magic_process(std::string name) {
   std::transform(name.begin(), name.end(),name.begin(), ::tolower);
   std::string str = name;
   if (name == "%g0") return 0;
@@ -189,89 +273,7 @@ unsigned magic_process(std::string name) {
     else return 100 + i;
   }
 
-}
-bool if_str(std::string name){
-  if (name.find("\"") != std::string::npos) {
-    return true;
-  }
-  return false;
-}
-char* process_str(std::string name){
-  name.erase(0,1);
-  name.erase(name.size()-1,1);
-  char *str =  new char[name.length() + 1];
-  strcpy(str, name.c_str());
-  return str;
-}
-/*
- * Copyright (C) 1996-2001, The University of Queensland
- *
- * See the file "LICENSE.TERMS" for information on usage and
- * redistribution of this file, and for a DISCLAIMER OF ALL
- * WARRANTIES.
- *
- */
-
-/*==============================================================================
- * FILE:     decoder.m
- * OVERVIEW:   Implementation of the SPARC specific parts of the
- *         SparcDecoder class.
- *============================================================================*/
-
-/* $Revision: 1.24 $  
- *
- * 26 Apr 02 - Mike: Mods for boomerang
- * 19 May 02 - Mike: Added many (int) casts: variables from toolkit are unsgnd
- * 21 May 02 - Mike: SAVE and RESTORE have full semantics now
- * 30 Oct 02 - Mike: dis_Eaddr mode indirectA had extra memof
- * 22 Nov 02 - Mike: Support 32 bit V9 branches
- * 04 Dec 02 - Mike: r[0] -> 0 automatically (rhs only)
- * 30 May 02 - Mike: Also fixed r[0] -> 0 for store instructions
- * 03 Nov 04 - Mike: DIS_FDS was returning numbers for the double precision registers
-*/
-
-/*==============================================================================
- * Dependencies.
- *============================================================================*/
-
-#include <assert.h>
-#include <cstring>
-#if defined(_MSC_VER) && _MSC_VER <= 1100
-#include "signature.h"
-#endif
-
-#include "decoder.h"
-#include "exp.h"
-#include "prog.h"
-#include "proc.h"
-#include "sparcdecoder.h"
-#include "rtl.h"
-#include "BinaryFile.h"   
-#include "boomerang.h"
-
-#define DIS_ROI   (dis_RegImm(roi))
-#define DIS_ADDR  (dis_Eaddr(addr))
-#define DIS_RD    (dis_RegLhs(rd))
-#define DIS_RDR   (dis_RegRhs(rd))
-#define DIS_RS1   (dis_RegRhs(rs1))
-#define DIS_FS1S  (dis_RegRhs(fs1s+32))
-#define DIS_FS2S  (dis_RegRhs(fs2s+32))
-
-
-#define DIS_FDS   (dis_RegLhs(fds+32))
-#define DIS_FS1D  (dis_RegRhs((fs1d>>1)+64))
-#define DIS_FS2D  (dis_RegRhs((fs2d>>1)+64))
-#define DIS_FDD   (dis_RegLhs((fdd>>1)+64))
-#define DIS_FDQ   (dis_RegLhs((fdq>>2)+80))
-#define DIS_FS1Q  (dis_RegRhs((fs1q>>2)+80))
-#define DIS_FS2Q  (dis_RegRhs((fs2q>>2)+80))
-
-/*==============================================================================
- * FUNCTION:     unused
- * OVERVIEW:     A dummy function to suppress "unused local variable" messages
- * PARAMETERS:     x: integer variable to be "used"
- * RETURNS:      Nothing
- *============================================================================*/
+} 
 void SparcDecoder::unused(int x)
 {
 }
@@ -1095,7 +1097,7 @@ Exp* SparcDecoder::dis_RegImm(unsigned pc)
  *============================================================================*/
 Exp* SparcDecoder::dis_Eaddr(ADDRESS pc,int ignore)
 {
-  Exp* expr;
+  Exp* expr = NULL;
   return expr;
 }
 /*==============================================================================

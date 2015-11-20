@@ -7,6 +7,7 @@
 #include <string>
 #include <assert.h>
 #include <cstring>
+
 using namespace std;
 
 inline bool isInteger(const std::string & s) {
@@ -15,7 +16,28 @@ inline bool isInteger(const std::string & s) {
     strtol(s.c_str(), &p, 10) ;
     return (*p == 0) ;
 }
-unsigned magic_process(std::string name) {
+
+/*
+    Intel 8051 decoder
+    Created in 09/11/2015 at HCMUT by Dedo
+
+ *============================================================================*/
+
+#include <assert.h>
+#include <cstring>
+#if defined(_MSC_VER) && _MSC_VER <= 1100
+#include "signature.h"
+#endif
+#include "decoder.h"
+#include "exp.h"
+#include "prog.h"
+#include "proc.h"
+#include "_8051decoder.h"
+#include "rtl.h"
+#include "BinaryFile.h"     
+#include "boomerang.h"
+
+unsigned _8051Decoder::magic_process(std::string name) {
     std::string str = name;
     if (name == "R0") return 0;
     else if (name == "R1") return 1;
@@ -40,27 +62,6 @@ unsigned magic_process(std::string name) {
         else return 100 + i;
     }
 }
-/*
-    Intel 8051 decoder
-    Created in 09/11/2015 at HCMUT by Dedo
-
- *============================================================================*/
-
-#include <assert.h>
-#include <cstring>
-#if defined(_MSC_VER) && _MSC_VER <= 1100
-#include "signature.h"
-#endif
-#include "decoder.h"
-#include "exp.h"
-#include "prog.h"
-#include "proc.h"
-#include "_8051decoder.h"
-#include "rtl.h"
-#include "BinaryFile.h"     
-#include "boomerang.h"
-
-
 static DecodeResult result;
 
 
@@ -84,8 +85,10 @@ DecodeResult&  _8051Decoder::decodeInstruction (ADDRESS pc, int delta){
 DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
 {
     static DecodeResult result;
-    ADDRESS hostPC = pc+delta;
     int delta = 0;
+    ADDRESS hostPC = pc+delta;
+    unsigned u_constant = 4000000000u;
+
     result.reset();
     std::list<Statement*>* stmts = NULL;
     std::string sentence = line;
@@ -115,11 +118,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 }
                 else
                 if(op2 >= 100 )
-                {
-                    if(op2 < 4000000000)
+                {   
+                    unsigned new_constant = op2-4294967296;
+                    if(op2 < u_constant)
                     stmts = instantiate(pc, "MOV_RI0_IMM" , new Const(op2-100));
                     else
-                    stmts = instantiate(pc,  "MOV_RI0_IMM", new Const(op2-4294967296));
+                    stmts = instantiate(pc,  "MOV_RI0_IMM", new Const(new_constant));
                 }
             }
             else
@@ -136,11 +140,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 }
                 else
                 if(op2 >= 100 )
-                {
-                    if(op2 < 4000000000)
+                {   unsigned new_constant = op2-4294967296;
+                    if(op2 < u_constant  )
                     stmts = instantiate(pc, "MOV_RI1_IMM" , new Const(op2-100));
                     else
-                    stmts = instantiate(pc,  "MOV_RI1_IMM", new Const(op2-4294967296));
+                    stmts = instantiate(pc,  "MOV_RI1_IMM", new Const(new_constant));
                 }
             }
             else
@@ -171,12 +175,13 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 {
                     sstm << "_IMM";
                     name = sstm.str();
+                    unsigned new_constant = op2-4294967296;
                     char *name_ =  new char[name.length() + 1];
                     strcpy(name_, name.c_str());
-                    if(op2 < 4000000000)
+                    if(op2 < u_constant  )
                     stmts = instantiate(pc, name_ , new Const(op2-100));
                     else
-                    stmts = instantiate(pc, name_, new Const(op2-4294967296));
+                    stmts = instantiate(pc, name_, new Const(new_constant));
                 }
             }
             else
@@ -198,15 +203,17 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                     std::stringstream sstm;
                     sstm << name << op2;
                     name = sstm.str();
-                    stmts = instantiate(pc, name);
+                    char *name_ =  new char[name.length() + 1];
+                    strcpy(name_, name.c_str());
+                    stmts = instantiate(pc, name_);
                 }
                 else
                 if(op2 >= 100)
-                {
-                    if(op2 < 4000000000)
+                {   unsigned new_constant = op2-4294967296;
+                    if(op2 < u_constant  )
                     stmts = instantiate(pc, "MOV_A_IMM", new Const(op2-100));
                     else
-                    stmts = instantiate(pc, "MOV_A_IMM", new Const(op2-4294967296));
+                    stmts = instantiate(pc, "MOV_A_IMM", new Const(new_constant));
                 }
             }
             else
@@ -234,15 +241,16 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 }
                 else
                 if(op2 >= 100 )
-                {
+                {   
+                    unsigned new_constant = op2-4294967296;
                     sstm << "_IMM";
                     name = sstm.str();
                     char *name_ =  new char[name.length() + 1];
                     strcpy(name_, name.c_str());
-                    if(op2 < 4000000000)
+                    if(op2 < u_constant  )
                     stmts = instantiate(pc, name_ , Location::regOf(op1), new Const(op2-100));
                     else
-                    stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(op2-4294967296));
+                    stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
                 }
             }
         }
@@ -291,7 +299,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    if (tokens.at(0) == "ACALL"tokens.at(0) == "ACALL") {
+    if (tokens.at(0) == "ACALL" || tokens.at(0) == "ACALL") {
         unsigned address = magic_process(tokens.at(1));
         bool is_lib = false;
         if(tokens.at(1) == "PRINTF" || tokens.at(1) == "PUTS")
@@ -304,7 +312,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             address= 66752;
         }
         CallStatement* newCall = new CallStatement;
-        ADDRESS nativeDest = addr - delta;
+        ADDRESS nativeDest = address - delta;
         newCall->setDest(nativeDest);
         Proc* destProc;
         std::transform(tokens.at(1).begin(), tokens.at(1).end(),tokens.at(1).begin(), ::tolower);
@@ -359,15 +367,17 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         }
         else
         if(op2 >= 100)
-        {
+        {   
+            
+            unsigned new_constant = op2-4294967296;
             sstm << "IMM";
             name = sstm.str();
             char *name_ =  new char[name.length() + 1];
             strcpy(name_, name.c_str());
-            if(op2 < 4000000000)
+            if(op2 < u_constant  )
             stmts = instantiate(pc, name_, new Const(op2-100));
             else
-            stmts = instantiate(pc, name_, new Const(op2-4294967296));
+            stmts = instantiate(pc, name_, new Const(new_constant));
         }
     }
     if (tokens.at(0) == "NOP" ) {
@@ -383,7 +393,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         result.type = DD;
         jump->setDest(address);
     }
-    if (tokens.at(0) == "JMP"tokens.at(0) == "JMP") {
+    if (tokens.at(0) == "JMP" || tokens.at(0) == "JMP") {
         stmts = instantiate(pc,  "JMP_AADDDPTR");
     }
     if (tokens.at(0) == "RR" || tokens.at(0) == "RRC" || tokens.at(0) == "RLC") {
@@ -400,7 +410,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         }
     }
     if (tokens.at(0) == "DEC" || tokens.at(0) == "INC") {
-        unsigned o1 = magic_process(tokens.at(1));
+        unsigned op1 = magic_process(tokens.at(1));
         std::stringstream sstm;
         sstm << tokens.at(0) << "_";
         std::string name;
@@ -451,14 +461,15 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         else
         if(op1 >= 100)
         {
+            unsigned new_constant = op1-4294967296;
             sstm << "DIR";
             name = sstm.str();
             char *name_ =  new char[name.length() + 1];
             strcpy(name_, name.c_str());
-            if(op2 < 4000000000)
-            stmts = instantiate(pc, name_, new Const(op2-100));
+            if(op1 < u_constant  )
+            stmts = instantiate(pc, name_, new Const(op1-100));
             else
-            stmts = instantiate(pc, name_, new Const(op2-4294967296));
+            stmts = instantiate(pc, name_, new Const(new_constant));
         }
     }
     if (tokens.at(0) == "JNB" || tokens.at(0) == "JB" || tokens.at(0) == "JBC") {
@@ -467,15 +478,16 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         std::stringstream sstm;
         sstm << tokens.at(0) << "_DIR_IMM";
         std::string name;
+        unsigned new_constant = op2-4294967296;
         name = sstm.str();
         char *name_ =  new char[name.length() + 1];
         strcpy(name_, name.c_str());
-        if(op2 < 4000000000)
+        if(op2 < u_constant  )
         stmts = instantiate(pc, name_, Location::regOf(op1), new Const(op2-100));
         else
-        stmts = instantiate(pc, name_,  Location::regOf(op1),new Const(op2-4294967296));
+        stmts = instantiate(pc, name_,  Location::regOf(op1),new Const(new_constant));
     }
-    if (tokens.at(0) == "LCALL"tokens.at(0) == "LCALL") {
+    if (tokens.at(0) == "LCALL" || tokens.at(0) == "LCALL") {
         unsigned address = magic_process(tokens.at(1));
         bool is_lib = false;
         if(tokens.at(1) == "PRINTF" || tokens.at(1) == "PUTS")
@@ -488,7 +500,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             address= 66752;
         }
         CallStatement* newCall = new CallStatement;
-        ADDRESS nativeDest = addr - delta;
+        ADDRESS nativeDest = address - delta;
         newCall->setDest(nativeDest);
         Proc* destProc;
         std::transform(tokens.at(1).begin(), tokens.at(1).end(),tokens.at(1).begin(), ::tolower);
@@ -505,19 +517,21 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         result.rtl->appendStmt(new ReturnStatement);
         result.type = DD;
     }
-    if (tokens.at(0) == "JC"tokens.at(0) == "JC") {
+    if (tokens.at(0) == "JC" || tokens.at(0) == "JC") {
         unsigned op1 = magic_process(tokens.at(1));
-        if(op1 < 4000000000)
+        unsigned new_constant = op1-4294967296;
+        if(op1 < u_constant  )
         stmts = instantiate(pc, "JC_IMM", new Const(op1-100));
         else
-        stmts = instantiate(pc, "JC_IMM", new Const(op1-4294967296));
+        stmts = instantiate(pc, "JC_IMM", new Const(new_constant));
     }
-    if (tokens.at(0) == "JNC"tokens.at(0) == "JNC") {
+    if (tokens.at(0) == "JNC" || tokens.at(0) == "JNC") {
         unsigned op1 = magic_process(tokens.at(1));
-        if(op1 < 4000000000)
+        unsigned new_constant = op1-4294967296;
+        if(op1 < u_constant  )
         stmts = instantiate(pc, "JC_IMM", new Const(op1-100));
         else
-        stmts = instantiate(pc, "JC_IMM", new Const(op1-4294967296));
+        stmts = instantiate(pc, "JC_IMM", new Const(new_constant));
     }
     if (tokens.at(0) == "ORL" || tokens.at(0) == "ANL" || tokens.at(0) == "XRL") {
         unsigned op1 = magic_process(tokens.at(1));
@@ -565,14 +579,15 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             else
             if(op2 >= 100)
             {
+                unsigned new_constant = op2-4294967296;
                 sstm << "IMM";
                 name = sstm.str();
                 char *name_ =  new char[name.length() + 1];
                 strcpy(name_, name.c_str());
-                if(op2 < 4000000000)
+                if(op2 < u_constant  )
                 stmts = instantiate(pc, name_, new Const(op2-100));
                 else
-                stmts = instantiate(pc, name_, new Const(op2-4294967296));
+                stmts = instantiate(pc, name_, new Const(new_constant));
             }
             else
             if(op2 >= 13 && op2 <= 16)
@@ -591,19 +606,22 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             if(op2 == 8)
             {
                 sstm << "A";
+                char *name_ =  new char[name.length() + 1];
+                strcpy(name_, name.c_str());
                 stmts = instantiate(pc, name_, Location::regOf(op1));
             }
             else
             if(op2 >= 100)
             {
+                unsigned new_constant = op2-4294967296;
                 sstm << "IMM";
                 name = sstm.str();
                 char *name_ =  new char[name.length() + 1];
                 strcpy(name_, name.c_str());
-                if(op2 < 4000000000)
+                if(op2 < u_constant  )
                 stmts = instantiate(pc, name_,Location::regOf(op1), new Const(op2-100));
                 else
-                stmts = instantiate(pc, name_,Location::regOf(op1), new Const(op2-4294967296));
+                stmts = instantiate(pc, name_,Location::regOf(op1), new Const(new_constant));
             }
         }
     }
@@ -630,7 +648,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc,name_);
         }
     }
-    if (tokens.at(0) == "CPL"tokens.at(0) == "CPL") {
+    if (tokens.at(0) == "CPL" || tokens.at(0) == "CPL") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -644,13 +662,14 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         else
         if(op1 >= 100)
         {
-            if(op1 < 4000000000)
-            stmts = instantiate(pc, "CPL_DIR", new Const(op2-100));
+            unsigned new_constant = op1-4294967296;
+            if(op1 < u_constant  )
+            stmts = instantiate(pc, "CPL_DIR", new Const(op1-100));
             else
-            stmts = instantiate(pc, "CPL_DIR", new Const(op2-4294967296));
+            stmts = instantiate(pc, "CPL_DIR", new Const(new_constant));
         }
     }
-    if (tokens.at(0) == "CJNE"tokens.at(0) == "CJNE") {
+    if (tokens.at(0) == "CJNE" || tokens.at(0) == "CJNE") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         unsigned op3 = magic_process(tokens.at(3));
@@ -660,11 +679,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             {
                 int operand2 = 0;
                 int operand3 = 0;
-                if(op2 < 4000000000)
+                if(op2 < u_constant  )
                 operand2 = op2 -100;
                 else
                 operand2 = op2 - 4294967296;
-                if(op3 < 4000000000)
+                if(op3 < u_constant  )
                 operand3 = op3 -100;
                 else
                 operand3 = op3 - 4294967296;
@@ -678,11 +697,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             {
                 int operand2 = 0;
                 int operand3 = 0;
-                if(op2 < 4000000000)
+                if(op2 < u_constant  )
                 operand2 = op2 -100;
                 else
                 operand2 = op2 - 4294967296;
-                if(op3 < 4000000000)
+                if(op3 < u_constant  )
                 operand3 = op3 -100;
                 else
                 operand3 = op3 - 4294967296;
@@ -702,11 +721,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             {
                 int operand2 = 0;
                 int operand3 = 0;
-                if(op2 < 4000000000)
+                if(op2 < u_constant  )
                 operand2 = op2 -100;
                 else
                 operand2 = op2 - 4294967296;
-                if(op3 < 4000000000)
+                if(op3 < u_constant  )
                 operand3 = op3 -100;
                 else
                 operand3 = op3 - 4294967296;
@@ -720,11 +739,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             {
                 int operand2 = 0;
                 int operand3 = 0;
-                if(op2 < 4000000000)
+                if(op2 < u_constant  )
                 operand2 = op2 -100;
                 else
                 operand2 = op2 - 4294967296;
-                if(op3 < 4000000000)
+                if(op3 < u_constant  )
                 operand3 = op3 -100;
                 else
                 operand3 = op3 - 4294967296;
@@ -752,7 +771,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_, new Const(op1));
         }
     }
-    if (tokens.at(0) == "CLR"tokens.at(0) == "CLR") {
+    if (tokens.at(0) == "CLR" || tokens.at(0) == "CLR") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -768,9 +787,8 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, "CLR_DIR", new Const(op1-100));
         }
     }
-    if (tokens.at(0) == "SETB"tokens.at(0) == "SETB") {
+    if (tokens.at(0) == "SETB" || tokens.at(0) == "SETB") {
         unsigned op1 = magic_process(tokens.at(1));
-        else
         if(op1 == 10)
         {
             stmts = instantiate(pc, "SETB_C");
@@ -780,7 +798,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, "SETB_DIR", new Const(op1 - 100));
         }
     }
-    if (tokens.at(0) == "SWAP"tokens.at(0) == "SWAP") {
+    if (tokens.at(0) == "SWAP" || tokens.at(0) == "SWAP") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -831,14 +849,14 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    if (tokens.at(0) == "DA"tokens.at(0) == "DA") {
+    if (tokens.at(0) == "DA" || tokens.at(0) == "DA") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
             stmts = instantiate(pc, "DA");
         }
     }
-    if (tokens.at(0) == "RL"tokens.at(0) == "RL") {
+    if (tokens.at(0) == "RL" || tokens.at(0) == "RL") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {

@@ -150,7 +150,7 @@ loaders: lib
 #
 
 # Front end
-MACHS     = sparc pentium ppc st20 mips
+MACHS     = sparc pentium ppc st20 mips _8051
 MACH_LIBS = $(patsubst %, lib/libfront%.so, $(MACHS))
 MACH_OBJS = $(patsubst %, frontend/%decoder.o, $(MACHS))
 MACH_SRC  = $(patsubst %, frontend/%decoder.cpp, $(MACHS))
@@ -180,7 +180,7 @@ remote:
         transform/transformation-parser.cpp transform/transformation-scanner.cpp \
         transform/transformation-parser.h transform/transformation-scanner.h
 # Also touch the decoders, since the user won't have the NJMC toolkit
-	touch frontend/pentiumdecoder.cpp frontend/sparcdecoder.cpp frontend/ppcdecoder.cpp frontend/st20decoder.cpp frontend/mipsdecoder.cpp
+	touch frontend/pentiumdecoder.cpp frontend/sparcdecoder.cpp frontend/ppcdecoder.cpp frontend/_8051decoder.cpp frontend/st20decoder.cpp frontend/mipsdecoder.cpp
 
 #######################
 # Lots of object files
@@ -198,7 +198,7 @@ TRANSFORM_OBJS = transform/rdi.o transform/transformer.o transform/generic.o tra
 	transform/transformation-scanner.o
 FRONT_OBJS = frontend/frontend.o frontend/njmcDecoder.o frontend/sparcdecoder.o frontend/pentiumdecoder.o \
 	frontend/sparcfrontend.o frontend/pentiumfrontend.o frontend/ppcdecoder.o frontend/ppcfrontend.o \
-	frontend/st20decoder.o frontend/st20frontend.o frontend/mipsdecoder.o frontend/mipsfrontend.o
+	frontend/st20decoder.o frontend/st20frontend.o frontend/mipsdecoder.o frontend/mipsfrontend.o frontend/_8051frontend.o frontend/_8051decoder.o
 CODEGEN = codegen/chllcode.o codegen/syntax.o
 TYPEOBJS = type/constraint.o type/type.o type/dfa.o
 LOADER_OBJS = loader/BinaryFileFactory.o
@@ -556,7 +556,7 @@ frontend/frontend.o: include/frontend.h include/types.h include/sigenum.h includ
 frontend/frontend.o: include/operator.h include/type.h include/memo.h include/exphelp.h include/cfg.h
 frontend/frontend.o: include/basicblock.h include/managed.h include/dataflow.h include/proc.h include/hllcode.h
 frontend/frontend.o: include/statement.h include/register.h include/rtl.h include/decoder.h frontend/sparcfrontend.h
-frontend/frontend.o: frontend/pentiumfrontend.h frontend/ppcfrontend.h frontend/st20frontend.h frontend/mipsfrontend.h include/prog.h
+frontend/frontend.o: frontend/pentiumfrontend.h frontend/ppcfrontend.h frontend/_8051frontend.h frontend/st20frontend.h frontend/mipsfrontend.h include/prog.h
 frontend/frontend.o: include/cluster.h include/signature.h include/boomerang.h include/log.h c/ansi-c-parser.h
 frontend/njmcDecoder.o: include/rtl.h include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 frontend/njmcDecoder.o: include/exphelp.h include/register.h include/decoder.h include/cfg.h include/basicblock.h
@@ -579,6 +579,11 @@ frontend/ppcdecoder.o: include/prog.h include/BinaryFile.h include/frontend.h in
 frontend/ppcdecoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
 frontend/ppcdecoder.o: include/hllcode.h include/statement.h include/decoder.h include/rtl.h include/register.h
 frontend/ppcdecoder.o: frontend/ppcdecoder.h include/boomerang.h
+frontend/_8051decoder.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h include/exphelp.h
+frontend/_8051decoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
+frontend/_8051decoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
+frontend/_8051decoder.o: include/hllcode.h include/statement.h include/decoder.h include/rtl.h include/register.h
+frontend/_8051decoder.o: frontend/_8051decoder.h include/boomerang.h
 frontend/mipsdecoder.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h include/exphelp.h
 frontend/mipsdecoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/mipsdecoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
@@ -596,6 +601,12 @@ frontend/ppcfrontend.o: include/managed.h include/dataflow.h include/proc.h incl
 frontend/ppcfrontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/ppcfrontend.o: include/decoder.h frontend/ppcdecoder.h frontend/ppcfrontend.h include/boomerang.h
 frontend/ppcfrontend.o: include/signature.h
+frontend/_8051frontend.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h
+frontend/_8051frontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
+frontend/_8051frontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
+frontend/_8051frontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
+frontend/_8051frontend.o: include/decoder.h frontend/_8051decoder.h frontend/_8051frontend.h include/boomerang.h
+frontend/_8051frontend.o: include/signature.h
 frontend/sparcdecoder.o: include/decoder.h include/types.h include/rtl.h include/exp.h include/operator.h
 frontend/sparcdecoder.o: include/type.h include/memo.h include/exphelp.h include/register.h include/prog.h
 frontend/sparcdecoder.o: include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h include/proc.h
