@@ -54,6 +54,7 @@
 #include "ppcfrontend.h"
 #include "st20frontend.h"
 #include "mipsfrontend.h"
+#include "_8051frontend.h"
 #include "prog.h"
 #include "signature.h"
 #include "boomerang.h"
@@ -77,9 +78,15 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 		case MACHINE_PENTIUM:
 			return new PentiumFrontEnd(pBF, prog, pbff);
 		case MACHINE_SPARC:
-			std::cout<<"instantiate SPARC\n";
-			return new SparcFrontEnd(pBF, prog, pbff);
-			//return new _8051FrontEnd(pBf,prog,fbff);
+			
+			if (!_8051){
+				std::cout<<"instantiate SPARC\n";
+				return new SparcFrontEnd(pBF, prog, pbff);
+			}
+			else{
+				std::cout<<"instantiate 8051\n";
+				return new _8051FrontEnd(pBF,prog, pbff);
+			}
 		case MACHINE_PPC:
 			return new PPCFrontEnd(pBF, prog, pbff);
 		case MACHINE_MIPS:
