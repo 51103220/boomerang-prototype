@@ -79,7 +79,7 @@ Boomerang::Boomerang() : logger(NULL), vFlag(false), printRtl(false),
 	loadBeforeDecompile(false), saveBeforeDecompile(false),
 	noProve(false), noChangeSignatures(false), conTypeAnalysis(false), dfaTypeAnalysis(true),
 	propMaxDepth(3), generateCallGraph(false), generateSymbols(false), noGlobals(false), assumeABI(false),
-	experimental(false), minsToStopAfter(0),decompileAssembly(false) //donbinhvn :default for ass_file is false
+	experimental(false), minsToStopAfter(0),decompileAssembly(false),is_8051(false) //donbinhvn :default for ass_file is false
 {
 	progPath = "./";
 	outputPath = "./output/";
