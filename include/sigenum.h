@@ -10,7 +10,8 @@ enum platform {
 	PLAT_PPC,
 	PLAT_MIPS,
 	PLAT_ST20,
-	PLAT_GENERIC
+	PLAT_GENERIC,
+	PLAT_8051
 };
 
 enum callconv {

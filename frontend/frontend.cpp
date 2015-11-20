@@ -77,7 +77,7 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 		case MACHINE_PENTIUM:
 			return new PentiumFrontEnd(pBF, prog, pbff);
 		case MACHINE_SPARC:
-		std::cout<<"i'm here -MACHINE_SPARC\n";
+			std::cout<<"instantiate SPARC\n";
 			return new SparcFrontEnd(pBF, prog, pbff);
 		
 		case MACHINE_PPC:
@@ -96,9 +96,8 @@ FrontEnd* FrontEnd::Load(const char *fname, Prog* prog) {
 	BinaryFileFactory* pbff = new BinaryFileFactory;
 	if (pbff == NULL) return NULL;
 	std::cout<<"in frontend::load pBF =bff->load\n";
-	//donbinhvn:phai sua lai cho nay
 	BinaryFile *pBF = pbff->Load(fname);
-  	std::cout<<fname<<"\n";
+  	std::cout<< fname << "\n";
   	if(ASS_FILE)prog->m_path=fname;//donbinhvn: remember path for later processing
 	if (pBF == NULL) return NULL;
 	return instantiate(pBF, prog, pbff);

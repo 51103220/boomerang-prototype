@@ -932,8 +932,10 @@ int Boomerang::commandLine(int argc, const char **argv)
 			case 'a':
 				if(argv[i][2] == 's'){
 					decompileAssembly = true;
-					if(argv[i][3] == '8')
+					if(argv[i][3] == '8'){
+						std::cout<<"Machine 8051 detected \n";
 						is_8051 = true;
+					}
 				}
 				else
 				assumeABI = true;
@@ -1045,21 +1047,19 @@ Prog *Boomerang::loadAndDecodeAssembly(const char *fname, const char *pname)
  */
 Prog *Boomerang::loadAndDecode(const char *fname, const char *pname)
 {
-	std::cout << "loading...\n";
-	std::cout<<"fname= "<<fname<<"\n pname = `\n";
-	std::cout <<"wtf im standing here\n";
+	std::cout << "----PHASE LOAD AND DECODE-----\n";
+	std::cout<<"\tfname= "<<fname<<"\n\tpname = " << pname << std::endl;
 	Prog *prog = new Prog();
-	std::cout<<"creating a new Frontend \n";
-	//donbinhvn: doan nay se sua lai de khong load file binary len nua
+	std::cout<<"----Start creating a new Frontend \n";
 	FrontEnd *fe = FrontEnd::Load(fname, prog);
 	if (fe == NULL) {
 		std::cerr << "failed.\n";
 		return NULL;
 	}
-	std::cout<<"finish createing new frontend\n";
-	std::cout<<"set Frontend for prog variable\n";
+	std::cout<<"----Finish creating new Frontend\n";
+	std::cout<<"setting Frontend \n";
 	prog->setFrontEnd(fe);
-	std::cout<<"set frontend complete\n";
+	std::cout<<"setting Frontend completed\n";
 	// Add symbols from -s switch(es)
 	for (std::map<ADDRESS, std::string>::iterator it = symbols.begin();
 		 it != symbols.end(); it++) {

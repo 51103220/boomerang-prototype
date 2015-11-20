@@ -54,6 +54,7 @@ char* Signature::platformName(platform plat) {
 		case PLAT_PPC:		return const_cast<char *>("ppc");
 		case PLAT_MIPS:		return const_cast<char *>("mips");
 		case PLAT_ST20:		return const_cast<char *>("st20");
+		case PLAT_8051:		return const_cast<char *>("_8051");
 		default:			return const_cast<char *>("???");
 	}
 }
