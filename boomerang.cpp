@@ -930,8 +930,11 @@ int Boomerang::commandLine(int argc, const char **argv)
 					progPath += "\\";
 				break;
 			case 'a':
-				if(argv[i][2] == 's')
+				if(argv[i][2] == 's'){
 					decompileAssembly = true;
+					if(argv[i][3] == '8')
+						is_8051 = true;
+				}
 				else
 				assumeABI = true;
 				std::cout<<"Decode assembly \n";
