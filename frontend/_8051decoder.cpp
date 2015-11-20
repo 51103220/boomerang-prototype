@@ -55,7 +55,7 @@ unsigned magic_process(std::string name) {
 #include "exp.h"
 #include "prog.h"
 #include "proc.h"
-#include "_8051Decoder.h"
+#include "_8051decoder.h"
 #include "rtl.h"
 #include "BinaryFile.h"     
 #include "boomerang.h"

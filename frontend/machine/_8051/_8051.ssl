@@ -17,10 +17,10 @@ add_signed_pc(param) {
 NOP
   _;
 
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
-LJMP_addr16 i32
+LJMP_ADDR16 i32
   *32* %pc := i32;
 
 RR_A
@@ -28,7 +28,7 @@ RR_A
   *7* %a@[1:7] := %a@[0:6]
   *1* %a@[0:0] := bt;
 
-INC_dir r32
+INC_DIR  r32
   *8* m[r32] := m[r32]{8} + 1;
 
 INC_A
@@ -58,13 +58,13 @@ INC_R6
 INC_R7
   *8* %r7 := %r7 + 1;
 
-INC_Ri0
+INC_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* tmpb := tmpb - 1
   *8* m[tmp1] := tmpb;
 
-INC_Ri1
+INC_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* tmpb := tmpb - 1
@@ -72,7 +72,7 @@ INC_Ri1
 
 # 0x10
 
-JBC_dir_imm r32, i32
+JBC_DIR _IMM  r32, i32
   *32* %pc := %pc + 3
   *8* tmpb := m[r32]{8}
   add_signed_pc(i32)
@@ -80,13 +80,13 @@ JBC_dir_imm r32, i32
   *32* %pc := [tmpb = 1 ? %pc : tmp5];
 
 # ACALL
-ACALL_imm i32
+ACALL_IMM i32
   *32* %pc := %pc + 2
   *32* %sp := %pc
   *32* %pc := i32;
 
 # LCALL
-LCALL_addr16 i32
+LCALL_ADDR16 i32
   *32* %pc := %pc + 2
   *32* %sp := %sp + 1
   *32* m[%sp] := %pc
@@ -99,7 +99,7 @@ RRC_A
   *1* %a@[0:0] := bt;
 
 
-DEC_dir r32
+DEC_DIR  r32
   *8* m[r32] := m[r32]{8} - 1;
 
 DEC_A
@@ -129,13 +129,13 @@ DEC_R6
 DEC_R7
   *8* %r7 := %r7 - 1;
 
-DEC_Ri0
+DEC_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* tmpb := tmpb - 1
   *8* m[tmp1] := tmpb;
 
-DEC_Ri1
+DEC_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* tmpb := tmpb - 1
@@ -143,12 +143,12 @@ DEC_Ri1
 
 # 0x20
 
-JB_dir_imm r32, i32
+JB_DIR _IMM  r32, i32
   *32* %pc := %pc +3
   add_signed_pc(i32)
   *32* %pc := [m[r32]{8}=1? tmp5 : %pc];
 
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
 RET
@@ -164,15 +164,15 @@ RL_A
 ADD_A_IMM i32
   *8* %a := %a + i32@[0:7];
 
-ADD_A_dir r32
+ADD_A_DIR  r32
   *8* %a := %a + m[r32]{8};
 
-ADD_A_Ri0
+ADD_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a + tmpb;
 
-ADD_A_Ri1
+ADD_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a + tmpb;
@@ -203,7 +203,7 @@ ADD_A_R7
 
 # 0x30
 
-JNB_dir_imm r32, i32
+JNB_DIR _IMM  r32, i32
   *32* %pc := %pc +3
   add_signed_pc(i32)
   *32* %pc := [m[r32]=0? tmp5 : %pc];
@@ -222,15 +222,15 @@ RLC_A
 ADDC_A_IMM i32
   *8* %a := %a + i32@[0:7];
 
-ADDC_A_DIR r32
+ADDC_A_DIR  r32
   *8* %a := %a + m[r32]{8};
 
-ADDC_A_Ri0
+ADDC_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a + tmpb;
 
-ADDC_A_Ri1
+ADDC_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a + tmpb;
@@ -261,32 +261,32 @@ ADDC_A_R7
 
 # 0x40
 
-JC_imm i32
+JC_IMM i32
   *32* %pc := %pc + 2
   add_signed_pc(i32)
   *32* %pc := [%CF = 1 ? tmp5: %pc];
 
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
-ORL_dir_A r32
+ORL_DIR _A r32
   *8* m[r32] := %a | m[r32]{8};
 
-ORL_dir_imm r32, i32
+ORL_DIR _IMM  r32, i32
   *8* m[r32] := m[r32]{8} | i32@[0:7];
 
 ORL_A_IMM i32
   *8* %a := %a | i32@[0:7];
 
-ORL_A_dir r32
+ORL_A_DIR  r32
   *8* %a := %a | m[r32]{8};
 
-ORL_A_Ri0
+ORL_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a | tmpb;
 
-ORL_A_Ri1
+ORL_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a | tmpb;
@@ -317,22 +317,22 @@ ORL_A_R7
 
 # 0x50
 
-JNC_imm i32
+JNC_IMM i32
   *32* %pc := %pc + 2
   add_signed_pc(i32)
   *32* %pc := [%CF = 0 ? tmp5 : %pc];
 # ACALL
 
-ANL_dir_A r32
+ANL_DIR _A r32
   *8* m[r32] := %a & m[r32]{8};
 
-ANL_dir_imm r32, i32
+ANL_DIR _IMM  r32, i32
   *8* m[r32] := m[r32]{8} & i32@[0:7];
 
 ANL_A_IMM i32
   *8* %a := %a & i32@[0:7];
 
-ANL_A_dir r32
+ANL_A_DIR  r32
   *8* %a := %a & m[r32]{8};
 
 ANL_A_R0
@@ -359,35 +359,35 @@ ANL_A_R6
 ANL_A_R7
   *8* %a := %a & %r7;
 
-ANL_A_Ri0
+ANL_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a & tmpb;
 
-ANL_A_Ri1
+ANL_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a & tmpb;
 
 # 0x60
 
-JZ_imm i32
+JZ_IMM i32
   *32* %pc := %pc + 2
   add_signed_pc(i32)
   *32* %pc := [(%a = 0) ? tmp5 : %pc];
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
-XRL_dir_A r32
+XRL_DIR _A r32
   *8* %a := %a ^ m[r32]{8};
 
-XRL_dir_imm r32, i32
+XRL_DIR _IMM  r32, i32
   *8* m[r32] := m[r32]{8} ^ i32@[0:7];
 
 XRL_A_IMM i32
   *8* %a := %a ^ i32@[0:7];
 
-XRL_A_dir r32
+XRL_A_DIR  r32
   *8* %a := %a ^ m[r32]{8};
 
 XRL_A_R0
@@ -414,12 +414,12 @@ XRL_A_R6
 XRL_A_R7
   *8* %a := %a ^ %r7;
 
-XRL_A_Ri0
+XRL_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a ^ tmpb;
 
-XRL_A_Ri1
+XRL_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a ^ tmpb;
@@ -427,21 +427,21 @@ XRL_A_Ri1
 
 # 0x70
 
-JNZ_imm i32
+JNZ_IMM i32
   *32* %pc := %pc + 2
   add_signed_pc(i32)
   *32* %pc := [(%a ~= 0) ? tmp5 : %pc];
 
 # ACALL
-ORL_C_dir i32
+ORL_C_DIR  i32
   *1* %CF := m[i32]{1};
 
-JMP_AaddDPTR
+JMP_AADDDPTR 
   *32* tmp1 := zfill(16, 31, %dptr)
   *32* tmp2 := zfill(8, 31, %a)
   *32* %pc := tmp1 + tmp2;
 
-MOV_DIR_IMM r32, i32
+MOV_DIR _IMM  r32, i32
   *8* m[r32] := i32@[0:7];
 
 MOV_A_IMM i32
@@ -471,26 +471,26 @@ MOV_R6_IMM i32
 MOV_R7_IMM i32
   *8* %r7 := i32@[0:7];
 
-MOV_Ri0_IMM i32
+MOV_RI0_IMM i32
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[tmp1] := i32@[0:7];
 
-MOV_Ri1_IMM i32
+MOV_RI1_IMM i32
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := i32@[0:7];
 
 
 # 0x80
 
-SJMP_imm i32
+SJMP_IMM i32
   *32* %pc := %pc + 2
   add_signed_pc(i32)
   *32* %pc := tmp5;
 
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
-ANL_C_dir r32
+ANL_C_DIR  r32
   *1* %CF := m[r32]{1};
 
 MOVC_A_AaddPC
@@ -504,57 +504,57 @@ DIV_AB
   *8* %a := %a / %b
   *8* %b := %a % %b;
 
-MOV_dir_dir r32, rx32
+MOV_DIR _DIR  r32, rx32
   *8* m[r32] := m[rx32]{8};
 
-MOV_dir_Ri0 r32
+MOV_DIR _RI0 r32
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[tmp1] := m[r32]{8};
 
-MOV_dir_Ri1 r32
+MOV_DIR _RI1 r32
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := m[r32]{8};
 
-MOV_dir_Ri1 r32
+MOV_DIR _RI1 r32
   *8* m[r32] := %r1;
 
-MOV_dir_R0 r32
+MOV_DIR _R0 r32
   *8* m[r32] := %r0;
 
-MOV_dir_A r32
+MOV_DIR _A r32
   *8* m[r32] := %a;
 
-MOV_dir_R1 r32
+MOV_DIR _R1 r32
   *8* m[r32] := %r1;
 
-MOV_dir_R2 r32
+MOV_DIR _R2 r32
   *8* m[r32] := %r2;
 
-MOV_dir_R3 r32
+MOV_DIR _R3 r32
   *8* m[r32] := %r3;
 
-MOV_dir_R4 r32
+MOV_DIR _R4 r32
   *8* m[r32] := %r4;
 
-MOV_dir_R5 r32
+MOV_DIR _R5 r32
   *8* m[r32] := %r5;
 
-MOV_dir_R6 r32
+MOV_DIR _R6 r32
   *8* m[r32] := %r6;
 
-MOV_dir_R7 r32
+MOV_DIR _R7 r32
   *8* m[r32] := %r7;
 
 # 0x90
-MOV_dptr_addr16 i32
+MOV_dptr_ADDR16 i32
   *16* %dptr := i32@[0:15];
 
 # ACALL
 
-MOV_dir_C r32
+MOV_DIR _C r32
   *1* m[r32] := %CF;
 
-MOVC_A_AaddDPTR
+MOVC_A_AADDDPTR 
   *32* tmp1 := zfill(16, 31, %dptr)
   *32* tmp2 := zfill(8, 31, %a)
   *32* tmp1 := tmp1 + tmp2
@@ -563,7 +563,7 @@ MOVC_A_AaddDPTR
 SUBB_A_IMM i32
   *8* %a := %a - i32@[0:7];
 
-SUBB_A_dir r32
+SUBB_A_DIR  r32
   *8* %a := %a - m[r32]{8};
 
 SUBB_A_R0
@@ -590,25 +590,25 @@ SUBB_A_R6
 SUBB_A_R7
   *8* %a := %a - %r7;
 
-SUBB_A_Ri0
+SUBB_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a - tmpb;
 
-SUBB_A_Ri1
+SUBB_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *8* %a := %a - tmpb;
 
 # 0xA0
 
-ORL_C_cdir r32
+ORL_C_CDI  r r32
   *1* %CF :=  1 - m[r32]{1};
 
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
-MOV_C_dir r32
+MOV_C_DIR  r32
   *1* %CF := m[r32]{1};
 
 INC_DPTR
@@ -619,67 +619,67 @@ MUL_AB
   *8* %a := tmpw@[0:7]
   *8* %b := tmpw@[8:15];
 
-MOV_Ri0_dir r32
+MOV_RI0_DIR  r32
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[r32] := m[tmp1];
 
-MOV_Ri1_dir r32
+MOV_RI1_DIR  r32
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[r32] := m[tmp1];
 
-MOV_R0_dir r32
+MOV_R0_DIR  r32
   *8* %r0 := m[r32]{8};
 
-MOV_R1_dir r32
+MOV_R1_DIR  r32
   *8* %r1 := m[r32]{8};
 
-MOV_R2_dir r32
+MOV_R2_DIR  r32
   *8* %r2 := m[r32]{8};
 
-MOV_R3_dir r32
+MOV_R3_DIR  r32
   *8* %r3 := m[r32]{8};
 
-MOV_R4_dir r32
+MOV_R4_DIR  r32
   *8* %r4 := m[r32]{8};
 
-MOV_R5_dir r32
+MOV_R5_DIR  r32
   *8* %r5 := m[r32]{8};
 
-MOV_R6_dir r32
+MOV_R6_DIR  r32
   *8* %r6 := m[r32]{8};
 
-MOV_R7_dir r32
+MOV_R7_DIR  r32
   *8* %r7 := m[r32]{8};
 
 
 # 0xB0
 
-ANL_C_cdir r32
+ANL_C_CDI  r r32
   *1* %CF := 1 - m[r32]{1};
 
 # ACALL
 
-CPL_dir r32
+CPL_DIR  r32
   *1* m[r32] := 1 - m[r32]{1};
 
 CPL_C
   *1* %CF := 1 - %CF;
 
-CJNE_A_imm_imm i32, ix32
+CJNE_A_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%a = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_A_dir_imm r32, i32
+CJNE_A_DIR_IMM  r32, i32
   *8* tmpb := m[r32]{8}
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%a = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_Ri0_imm_imm i32, ix32
+CJNE_RI0_IMM_IMM i32, ix32
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
   *32* %pc := %pc + 3
@@ -687,7 +687,7 @@ CJNE_Ri0_imm_imm i32, ix32
   *32* %pc := [(i32@[0:7] = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_Ri1_imm_imm i32, ix32
+CJNE_RI1_IMM_IMM i32, ix32
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
   *32* %pc := %pc + 3
@@ -695,56 +695,56 @@ CJNE_Ri1_imm_imm i32, ix32
   *32* %pc := [(i32@[0:7] = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R0_imm_imm i32, ix32
+CJNE_R0_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r0 = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R1_imm_imm i32, ix32
+CJNE_R1_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r1 = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R2_imm_imm i32, ix32
+CJNE_R2_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r2 = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R3_imm_imm i32, ix32
+CJNE_R3_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r3 = tmpb) ? %pc : tmp5]
   *1* CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R4_imm_imm i32, ix32
+CJNE_R4_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r4 = tmpb) ? %pc : tmp5]
   *1* CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R5_imm_imm i32, ix32
+CJNE_R5_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r5 = tmpb) ? %pc : tmp5]
   *1* CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R6_imm_imm i32, ix32
+CJNE_R6_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%r6 = tmpb) ? %pc : tmp5]
   *1* CF := [(%a < tmpb) ? 1 : 0];
 
-CJNE_R7_imm_imm i32, ix32
+CJNE_R7_IMM_IMM i32, ix32
   *8* tmpb := i32@[0:7]
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
@@ -754,14 +754,14 @@ CJNE_R7_imm_imm i32, ix32
 
 # 0xC0
 
-PUSH_dir r32
+PUSH_DIR  r32
 *32* %sp := %sp + 1
 *32* m[%sp] := m[r32];
 
-AJMP_imm i32
+AJMP_IMM i32
   *32* %pc := i32;
 
-CLR_dir r32
+CLR_DIR  r32
   *8* m[r32]{8} := 0;
 
 CLR_C
@@ -773,7 +773,7 @@ SWAP_A
   *4* %a@[0:3] := %a@[4:7]
   *4* %a@[4:7] := bt4;
 
-XCH_A_dir r32
+XCH_A_DIR  r32
   *8* tmpb := %a
   *8* %a := m[r32]{8}
   *8* m[r32] := tmpb;
@@ -818,23 +818,23 @@ XCH_A_R7
   *8* %a := %r7
   *8* %r7 := tmpb;
 
-XCH_A_Ri0
+XCH_A_RI0
   *32* tmp1 := zfill(8, 31, %a)
   *8* %r0 := m[tmp1]{8};
 
-XCH_A_Ri1
+XCH_A_RI1
   *32* tmp1 := zfill(8, 31, %a)
   *8* %r1 := m[tmp1]{8};
 
 # 0xD0
 
-POP_dir r32
+POP_DIR  r32
 *32* m[r32] := m[%sp]
 *32* %sp := %sp - 1;
 
 # ACALL_addr11
 
-SETB_dir r32
+SETB_DIR  r32
   *8* m[r32] := 1;
 
 SETB_C
@@ -844,67 +844,67 @@ DA_A
   *4* %a@[0:3] := [((%a@[0:3] > 9) | (%AC = 1)) ? %a@[0:3] + 6 : %a@[0:3]]
   *4* %a@[4:7] := [((%a@[4:7] > 9) | (%CF = 1)) ? %a@[4:7] + 6 : %a@[4:7]];
 
-DJNZ_dir_imm r32, i32
+DJNZ_DIR_IMM  r32, i32
   *32* %pc := %pc + 3
   *8* m[r32] := m[r32]{8} - 1
   add_signed_pc(i32)
   *32* %pc := [(m[r32]{8} = 0) ? %pc : tmp5];
 
-XCHD_A_Ri0
+XCHD_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := %a
   *8* %a := m[tmp1]{8}
   *8* m[tmp1] := tmpb;
 
-XCHD_A_Ri1
+XCHD_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := %a
   *8* %a := m[tmp1]{8}
   *8* m[tmp1] := tmpb;
 
-DJNZ_R0_imm i32
+DJNZ_R0_IMM i32
   *32* %pc := %pc + 2
   *8* %r0 := %r0 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r0 = 0) ? %pc : tmp5];
 
-DJNZ_R1_imm i32
+DJNZ_R1_IMM i32
   *32* %pc := %pc + 2
   *8* %r1 := %r1 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r1 = 0) ? %pc : tmp5];
 
-DJNZ_R2_imm i32
+DJNZ_R2_IMM i32
   *32* %pc := %pc + 2
   *8* %r2 := %r2 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r2 = 0) ? %pc : tmp5];
 
-DJNZ_R3_imm i32
+DJNZ_R3_IMM i32
   *32* %pc := %pc + 2
   *8* %r3 := %r3 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r3 = 0) ? %pc : tmp5];
 
-DJNZ_R4_imm i32
+DJNZ_R4_IMM i32
   *32* %pc := %pc + 2
   *8* %r4 := %r4 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r4 = 0) ? %pc : tmp5];
 
-DJNZ_R5_imm i32
+DJNZ_R5_IMM i32
   *32* %pc := %pc + 2
   *8* %r5 := %r5 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r5 = 0) ? %pc : tmp5];
 
-DJNZ_R6_imm i32
+DJNZ_R6_IMM i32
   *32* %pc := %pc + 2
   *8* %r6 := %r6 - 1
   add_signed_pc(i32)
   *32* %pc := [(%r6 = 0) ? %pc : tmp5];
 
-DJNZ_R7_imm i32
+DJNZ_R7_IMM i32
   *32* %pc := %pc + 2
   *8* %r7 := %r7 - 1
   add_signed_pc(i32)
@@ -916,18 +916,18 @@ MOVX_A_DPTRA
   *32* tmp1 := zfill(16, 31, %dptr)
   *8* %a := m[tmp1]{8};
 
-MOVX_A_Ri0
+MOVX_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* %a := m[tmp1]{8};
 
-MOVX_A_Ri1
+MOVX_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* %a := m[tmp1]{8};
 
 CLR_A
   *8* %a := 0;
 
-MOV_A_dir r32
+MOV_A_DIR  r32
   *8* %a := m[r32]{8};
 
 MOV_A_R0
@@ -954,11 +954,11 @@ MOV_A_R6
 MOV_A_R7
   *8* %a := %r7;
 
-MOV_A_Ri0
+MOV_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* %a := m[tmp1]{8};
 
-MOV_A_Ri1
+MOV_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* %a := m[tmp1]{8};
 
@@ -971,22 +971,22 @@ MOVX_DPTRA_A
 
 # ACALL
 
-MOVX_Ri0_A
+MOVX_RI0_A
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[tmp1] := %a;
 
-MOVX_Ri1_A
+MOVX_RI1_A
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := %a;
 
 CPL_A
   *8* %a := 0 - %a;
 
-MOV_Ri0_A
+MOV_RI0_A
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[tmp1] := %a;
 
-MOV_Ri1_A
+MOV_RI1_A
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := %a;
 
