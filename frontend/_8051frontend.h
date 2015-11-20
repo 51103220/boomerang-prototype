@@ -23,7 +23,7 @@ public:
 	 */
 virtual ~_8051FrontEnd();
 
-virtual platform getFrontEndId() { return PLAT_8051; }
+virtual platform getFrontEndId() { return PLAT_SPARC; }
 
 virtual bool		processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bool frag = false,
 						bool spec = false);

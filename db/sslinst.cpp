@@ -179,19 +179,16 @@ bool RTLInstDict::readSSLFile(const std::string& SSLFileName)
 	reset();
 	
 	// Attempt to Parse the SSL file
-	SSLParser theParser(SSLFileName,
-#ifdef DEBUG_SSLPARSER
-	true
-#else
-	false
-#endif
-);
+	SSLParser theParser(SSLFileName,false);
+
 	if (theParser.theScanner == NULL)
 		return false;
 	addRegister( "%CTI", -1, 1, false );
 	addRegister( "%NEXT", -1, 32, false );
-	
+	std::cout << "Start Parsing " << std::endl;
 	theParser.yyparse(*this);
+	std::cout << "Complete Parsing " << std::endl;
+
 
 	fixupParams();
 

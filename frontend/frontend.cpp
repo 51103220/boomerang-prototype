@@ -84,7 +84,9 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 				return new SparcFrontEnd(pBF, prog, pbff);
 			}
 			else{
+				int c;
 				std::cout<<"instantiate 8051\n";
+				std::cin >> c;
 				return new _8051FrontEnd(pBF,prog, pbff);
 			}
 		case MACHINE_PPC:

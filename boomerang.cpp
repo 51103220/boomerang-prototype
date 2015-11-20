@@ -1048,7 +1048,7 @@ Prog *Boomerang::loadAndDecodeAssembly(const char *fname, const char *pname)
 Prog *Boomerang::loadAndDecode(const char *fname, const char *pname)
 {
 	std::cout << "----PHASE LOAD AND DECODE-----\n";
-	std::cout<<"\tfname= "<<fname<<"\n\tpname = " << pname << std::endl;
+	std::cout<<"\tfname= "<<fname<<"\n\tpname = " <<  std::endl;
 	Prog *prog = new Prog();
 	std::cout<<"----Start creating a new Frontend \n";
 	FrontEnd *fe = FrontEnd::Load(fname, prog);
