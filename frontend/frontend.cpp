@@ -594,7 +594,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 		// Keep decoding sequentially until a CTI without a fall through branch is decoded
 		//ADDRESS start = uAddr;
 		DecodeResult inst;
-		while (sequentialDecode) {
+		while (sequentialDecode && ((line<sizeSets)||(!ASS_FILE))) {
 
 
 			// Decode and classify the current source instruction
@@ -607,7 +607,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					inst = decodeAssemblyInstruction(uAddr,assemblySets.at(line));
 			}
 			else
-				inst = decodeInstruction(address);
+				inst = decodeInstruction(uAddr);
 
 			// If invalid and we are speculating, just exit
 			if (spec && !inst.valid)
@@ -707,8 +707,10 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					if (dest != NO_ADDRESS) {
 						proc = prog->findProc(dest);
 						if (proc == NULL) {
-							if (pBF->IsDynamicLinkedProc(dest))
-								proc = prog->setNewProc(dest);
+							if(!ASS_FILE){
+								if (pBF->IsDynamicLinkedProc(dest))
+									proc = prog->setNewProc(dest);
+							}
 						}
 						if (proc != NULL && proc != (Proc*)-1) {
 							s = new CallStatement();
@@ -748,13 +750,20 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
 						// Add the out edge if it is to a destination within the
 						// procedure
+
 						if (uDest < pBF->getLimitTextHigh()) {
 							targetQueue.visit(pCfg, uDest, pBB);
 							pCfg->addOutEdge(pBB, uDest, true);
 						}
 						else {
-							LOG << "Error: Instruction at " << uAddr << " branches beyond end of section, to "
-								<< uDest << "\n";
+							if (!ASS_FILE)
+								LOG << "Error: Instruction at " << uAddr << " branches beyond end of section, to "
+									<< uDest << "\n";
+							else{
+								targetQueue.visit(pCfg, uDest, pBB);
+								pCfg->addOutEdge(pBB, uDest, true);
+							} 
+
 						}
 					}
 					break;
@@ -779,8 +788,10 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 							LOG << "jump to a library function: " << stmt_jump << ", replacing with a call/ret.\n";
 						// jump to a library function
 						// replace with a call ret
+						// TODO: 
 						std::string func = pBF->GetDynamicProcName(
 							((Const*)stmt_jump->getDest()->getSubExp1())->getAddr());
+						//------------------------------------
 						CallStatement *call = new CallStatement;
 						call->setDest(stmt_jump->getDest()->clone());
 						LibProc *lp = pProc->getProg()->getLibraryProc(func.c_str());
@@ -852,8 +863,13 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 							pCfg->addOutEdge(pBB, uDest, true);
 						}
 						else {
-							LOG << "Error: Instruction at " << uAddr << " branches beyond end of section, to "
-								<< uDest << "\n";
+							if (!ASS_FILE)
+								LOG << "Error: Instruction at " << uAddr << " branches beyond end of section, to "
+									<< uDest << "\n";
+							else {
+								targetQueue.visit(pCfg, uDest, pBB);
+								pCfg->addOutEdge(pBB, uDest, true);
+							}
 						}
 
 						// Add the fall-through outedge
@@ -869,6 +885,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					CallStatement* call = static_cast<CallStatement*>(s);
 					
 					// Check for a dynamic linked library function
+					// TODO: solution dont use pBF 
 					if (call->getDest()->getOper() == opMemOf &&
 							call->getDest()->getSubExp1()->getOper() == opIntConst &&
 							pBF->IsDynamicLinkedProcPointer(((Const*)call->getDest()->getSubExp1())->getAddr())) {
@@ -881,6 +898,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
 					// Is the called function a thunk calling a library function?
 					// A "thunk" is a function which only consists of: "GOTO library_function"
+					// Should i modify
 					if(	call &&	call->getFixedDest() != NO_ADDRESS ) {
 						// Get the address of the called function.
 						ADDRESS callAddr=call->getFixedDest();
@@ -898,6 +916,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 									GotoStatement* stmt_jump = static_cast<GotoStatement*>(first_statement);
 									// In fact it's a computed (looked up) jump, so the jump seems to be a case
 									// statement.
+									//TODO :solution dont use pBF
 									if ( first_statement->getKind() == STMT_CASE &&
 										stmt_jump->getDest()->getOper() == opMemOf &&
 										stmt_jump->getDest()->getSubExp1()->getOper() == opIntConst &&
@@ -906,6 +925,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 									{
 										// Yes, it's a library function. Look up it's name.
 										ADDRESS a = ((Const*)stmt_jump->getDest()->getSubExp1())->getAddr();
+										// TODO : solution use global map ADDRESS,string
 										const char *nam = pBF->GetDynamicProcName(a);
 										// Assign the proc to the call
 										Proc *p = pProc->getProg()->getLibraryProc(nam);
@@ -970,10 +990,12 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
  						// Check if this is the _exit or exit function. May prevent us from attempting to decode
 						// invalid instructions, and getting invalid stack height errors
+						// TODO: still dont know
 						const char* name = pBF->SymbolByAddress(uNewAddr);
 						if (name == NULL && call->getDest()->isMemOf() && 
 											call->getDest()->getSubExp1()->isIntConst()) {
 							ADDRESS a = ((Const*)call->getDest()->getSubExp1())->getInt();
+							//TODO: still dont know
 							if (pBF->IsDynamicLinkedProcPointer(a))
 								name = pBF->GetDynamicProcName(a);
 						}	
@@ -1082,6 +1104,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				if (!pCfg->isIncomplete(uAddr))
 					sequentialDecode = false;
 			}
+			line = line +1 ;
 		}	// while sequentialDecode
 
 		// Add this range to the coverage
@@ -1089,7 +1112,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
 		// Must set sequentialDecode back to true
 		sequentialDecode = true;
-		line = line +1 ;
+		
 
 	}	// while nextAddress() != NO_ADDRESS
 
@@ -1103,18 +1126,33 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 		ADDRESS dest = (*it)->getFixedDest();
 		// Don't speculatively decode procs that are outside of the main text section, apart from dynamically
 		// linked ones (in the .plt)
-		if (pBF->IsDynamicLinkedProc(dest) || !spec || (dest < pBF->getLimitTextHigh())) {
-			pCfg->addCall(*it);
-			// Don't visit the destination of a register call
-			Proc *np = (*it)->getDestProc();
-			if (np == NULL && dest != NO_ADDRESS) {
-				//np = newProc(pProc->getProg(), dest);
-				np = pProc->getProg()->setNewProc(dest);
+		// TODO: change pBF pointers
+		if (!ASS_FILE)
+			if (pBF->IsDynamicLinkedProc(dest) || !spec || (dest < pBF->getLimitTextHigh())) {
+				pCfg->addCall(*it);
+				// Don't visit the destination of a register call
+				Proc *np = (*it)->getDestProc();
+				if (np == NULL && dest != NO_ADDRESS) {
+					//np = newProc(pProc->getProg(), dest);
+					np = pProc->getProg()->setNewProc(dest);
+				}
+				if (np != NULL) {
+					np->setFirstCaller(pProc);
+					pProc->addCallee(np);
+				}			
 			}
-			if (np != NULL) {
-				np->setFirstCaller(pProc);
-				pProc->addCallee(np);
-			}			
+		else{
+				pCfg->addCall(*it);
+				// Don't visit the destination of a register call
+				Proc *np = (*it)->getDestProc();
+				if (np == NULL && dest != NO_ADDRESS) {
+					//np = newProc(pProc->getProg(), dest);
+					np = pProc->getProg()->setNewProc(dest);
+				}
+				if (np != NULL) {
+					np->setFirstCaller(pProc);
+					pProc->addCallee(np);
+				}			
 		}
 	}
 
