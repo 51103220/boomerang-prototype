@@ -1,0 +1,4 @@
+MOV R1, 120
+MOV A, R1
+ADD A, 100
+RET

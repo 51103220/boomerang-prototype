@@ -5,7 +5,7 @@ ADDRESSBITS := 8;
 INTEGER
 [%r0, %r1, %r2, %r3, %r4, %r5, %r6, %r7, %a, %b][8] -> 0..9,
 [%dptr][16] -> 10,#0..15,
-[%CF][1] -> -1,  # Standard flags
+[%CF, %AC, %OV][1] -> -1,  # Standard flags
 [%pc][32] -> -1,
 %sp[32] -> 88;
 
@@ -163,7 +163,7 @@ RL_A
 
 
 ADD_A_IMM i32
-  *8* %a := %a + i32@[0:7];
+  *8* %a := %a + i32;
 
 ADD_A_DIR  z32
   *8* %a := %a + m[z32]{8};
@@ -446,13 +446,13 @@ MOV_DIR_IMM  z32, i32
   *8* m[z32] := i32@[0:7];
 
 MOV_A_IMM i32
-  *8* %a := i32@[0:7];
+  *8* %a := i32;
 
 MOV_R0_IMM i32
   *8* %r0 := i32@[0:7];
 
 MOV_R1_IMM i32
-  *8* %r1 := i32@[0:7];
+  *8* %r1 := i32;
 
 MOV_R2_IMM i32
   *8* %r2 := i32@[0:7];

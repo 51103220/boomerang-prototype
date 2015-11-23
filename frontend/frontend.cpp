@@ -586,6 +586,8 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	std::cout<<"Start First Address \n" << address << std::endl;
 	int sizeSets = assemblySets.size();
 	int line = 0;
+	std::cout << "Size Set = " << sizeSets << std::endl;
+	std::cout << "Spec: " << spec << std::endl;
 
 	while ((uAddr = targetQueue.nextAddress(pCfg)) != NO_ADDRESS) {
 		// The list of RTLs for the current basic block
@@ -594,7 +596,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 		// Keep decoding sequentially until a CTI without a fall through branch is decoded
 		//ADDRESS start = uAddr;
 		DecodeResult inst;
-		while (sequentialDecode && ((line<sizeSets)||(!ASS_FILE))) {
+		while (sequentialDecode && ((line < sizeSets)||(!ASS_FILE))) {
 
 
 			// Decode and classify the current source instruction
@@ -620,6 +622,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
 			RTL* pRtl = inst.rtl;
 			if (inst.valid == false) {
+				
 				// Alert the watchers to the problem
 				Boomerang::get()->alert_baddecode(uAddr);
 
@@ -641,7 +644,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 			// alert the watchers that we have decoded an instruction
 			Boomerang::get()->alert_decode(uAddr, inst.numBytes);
 			nTotalBytes += inst.numBytes;			
-	
+			
 			// Check if this is an already decoded jump instruction (from a previous pass with propagation etc)
 			// If so, we throw away the just decoded RTL (but we still may have needed to calculate the number
 			// of bytes.. ick.)
@@ -656,7 +659,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					uAddr += inst.numBytes;
 				continue;
 			}
-
+			std::cout << "DEBUG2\n";
 			// Display RTL representation if asked
 			if (Boomerang::get()->printRtl) {
 				std::ostringstream st;
@@ -1081,6 +1084,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				// Special case: redecode the last instruction, without advancing uAddr by numBytes
 				continue;
 			uAddr += inst.numBytes;
+			std::cout << "DEBUG3\n";
 			if (uAddr > lastAddr)
 				lastAddr = uAddr;
 
@@ -1104,6 +1108,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				if (!pCfg->isIncomplete(uAddr))
 					sequentialDecode = false;
 			}
+			std::cout << "DEBUG4\n";
 			line = line +1 ;
 		}	// while sequentialDecode
 
@@ -1127,7 +1132,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 		// Don't speculatively decode procs that are outside of the main text section, apart from dynamically
 		// linked ones (in the .plt)
 		// TODO: change pBF pointers
-		if (!ASS_FILE)
+		if (!ASS_FILE){
 			if (pBF->IsDynamicLinkedProc(dest) || !spec || (dest < pBF->getLimitTextHigh())) {
 				pCfg->addCall(*it);
 				// Don't visit the destination of a register call
@@ -1141,6 +1146,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					pProc->addCallee(np);
 				}			
 			}
+		}
 		else{
 				pCfg->addCall(*it);
 				// Don't visit the destination of a register call

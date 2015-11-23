@@ -299,7 +299,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    if (tokens.at(0) == "ACALL" || tokens.at(0) == "ACALL") {
+    else if (tokens.at(0) == "ACALL" || tokens.at(0) == "ACALL") {
         unsigned address = magic_process(tokens.at(1));
         bool is_lib = false;
         if(tokens.at(1) == "PRINTF" || tokens.at(1) == "PUTS")
@@ -324,7 +324,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         result.rtl->appendStmt(newCall);
         result.type = SD;
     }
-    if (tokens.at(0) == "ADD" || tokens.at(0) == "ADDC" || tokens.at(0) == "SUBB") {
+    else if (tokens.at(0) == "ADD" || tokens.at(0) == "ADDC" || tokens.at(0) == "SUBB") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         std::stringstream sstm;
@@ -380,11 +380,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_, new Const(new_constant));
         }
     }
-    if (tokens.at(0) == "NOP" ) {
+    else if (tokens.at(0) == "NOP" ) {
         result.type = NOP;
         stmts = instantiate(pc,  "NOP");
     }
-    if (tokens.at(0) == "LJMP" || tokens.at(0) == "AJMP" || tokens.at(0) == "SJMP") {
+    else if (tokens.at(0) == "LJMP" || tokens.at(0) == "AJMP" || tokens.at(0) == "SJMP") {
         unsigned address = magic_process(tokens.at(1));
         CaseStatement* jump = new CaseStatement;
         jump->setIsComputed();
@@ -393,10 +393,10 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         result.type = DD;
         jump->setDest(address);
     }
-    if (tokens.at(0) == "JMP" || tokens.at(0) == "JMP") {
+    else if (tokens.at(0) == "JMP" || tokens.at(0) == "JMP") {
         stmts = instantiate(pc,  "JMP_AADDDPTR");
     }
-    if (tokens.at(0) == "RR" || tokens.at(0) == "RRC" || tokens.at(0) == "RLC") {
+    else if (tokens.at(0) == "RR" || tokens.at(0) == "RRC" || tokens.at(0) == "RLC") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -409,7 +409,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc,  name_);
         }
     }
-    if (tokens.at(0) == "DEC" || tokens.at(0) == "INC") {
+    else if (tokens.at(0) == "DEC" || tokens.at(0) == "INC") {
         unsigned op1 = magic_process(tokens.at(1));
         std::stringstream sstm;
         sstm << tokens.at(0) << "_";
@@ -472,7 +472,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_, new Const(new_constant));
         }
     }
-    if (tokens.at(0) == "JNB" || tokens.at(0) == "JB" || tokens.at(0) == "JBC") {
+    else if (tokens.at(0) == "JNB" || tokens.at(0) == "JB" || tokens.at(0) == "JBC") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         std::stringstream sstm;
@@ -487,7 +487,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         else
         stmts = instantiate(pc, name_,  Location::regOf(op1),new Const(new_constant));
     }
-    if (tokens.at(0) == "LCALL" || tokens.at(0) == "LCALL") {
+    else if (tokens.at(0) == "LCALL" || tokens.at(0) == "LCALL") {
         unsigned address = magic_process(tokens.at(1));
         bool is_lib = false;
         if(tokens.at(1) == "PRINTF" || tokens.at(1) == "PUTS")
@@ -512,12 +512,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         result.rtl->appendStmt(newCall);
         result.type = SD;
     }
-    if (tokens.at(0) == "RET" || tokens.at(0) == "RETI") {
+    else if (tokens.at(0) == "RET" || tokens.at(0) == "RETI") {
         result.rtl = new RTL(pc, stmts);
         result.rtl->appendStmt(new ReturnStatement);
         result.type = DD;
     }
-    if (tokens.at(0) == "JC" || tokens.at(0) == "JC") {
+    else if (tokens.at(0) == "JC" || tokens.at(0) == "JC") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned new_constant = op1-4294967296;
         if(op1 < u_constant  )
@@ -525,7 +525,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         else
         stmts = instantiate(pc, "JC_IMM", new Const(new_constant));
     }
-    if (tokens.at(0) == "JNC" || tokens.at(0) == "JNC") {
+    else if (tokens.at(0) == "JNC" || tokens.at(0) == "JNC") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned new_constant = op1-4294967296;
         if(op1 < u_constant  )
@@ -533,7 +533,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         else
         stmts = instantiate(pc, "JC_IMM", new Const(new_constant));
     }
-    if (tokens.at(0) == "ORL" || tokens.at(0) == "ANL" || tokens.at(0) == "XRL") {
+    else if (tokens.at(0) == "ORL" || tokens.at(0) == "ANL" || tokens.at(0) == "XRL") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         std::stringstream sstm;
@@ -625,7 +625,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    if (tokens.at(0) == "JZ" || tokens.at(0) == "JNZ") {
+    else if (tokens.at(0) == "JZ" || tokens.at(0) == "JNZ") {
         unsigned address = magic_process(tokens.at(1));
         std::stringstream sstm;
         sstm << tokens.at(0) << "_IMM";
@@ -635,7 +635,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         strcpy(name_, name.c_str());
         stmts = instantiate(pc,name_, new Const(address));
     }
-    if (tokens.at(0) == "DIV" || tokens.at(0) == "MUL") {
+    else if (tokens.at(0) == "DIV" || tokens.at(0) == "MUL") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 12)
         {
@@ -648,7 +648,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc,name_);
         }
     }
-    if (tokens.at(0) == "CPL" || tokens.at(0) == "CPL") {
+    else if (tokens.at(0) == "CPL" || tokens.at(0) == "CPL") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -669,7 +669,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, "CPL_DIR", new Const(new_constant));
         }
     }
-    if (tokens.at(0) == "CJNE" || tokens.at(0) == "CJNE") {
+    else if (tokens.at(0) == "CJNE" || tokens.at(0) == "CJNE") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         unsigned op3 = magic_process(tokens.at(3));
@@ -754,7 +754,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    if (tokens.at(0) == "PUSH" || tokens.at(0) == "POP") {
+    else if (tokens.at(0) == "PUSH" || tokens.at(0) == "POP") {
         unsigned op1 = magic_process(tokens.at(1));
         std::stringstream sstm;
         sstm << tokens.at(0) << "_DIR";
@@ -771,7 +771,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_, new Const(op1));
         }
     }
-    if (tokens.at(0) == "CLR" || tokens.at(0) == "CLR") {
+    else if (tokens.at(0) == "CLR" || tokens.at(0) == "CLR") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -787,7 +787,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, "CLR_DIR", new Const(op1-100));
         }
     }
-    if (tokens.at(0) == "SETB" || tokens.at(0) == "SETB") {
+    else if (tokens.at(0) == "SETB" || tokens.at(0) == "SETB") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 10)
         {
@@ -798,14 +798,14 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, "SETB_DIR", new Const(op1 - 100));
         }
     }
-    if (tokens.at(0) == "SWAP" || tokens.at(0) == "SWAP") {
+    else if (tokens.at(0) == "SWAP" || tokens.at(0) == "SWAP") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
             stmts = instantiate(pc,"SWAP_A");
         }
     }
-    if (tokens.at(0) == "XCH" || tokens.at(0) == "XCHD") {
+    else if (tokens.at(0) == "XCH" || tokens.at(0) == "XCHD") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         std::stringstream sstm;
@@ -849,14 +849,14 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    if (tokens.at(0) == "DA" || tokens.at(0) == "DA") {
+    else if (tokens.at(0) == "DA" || tokens.at(0) == "DA") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
             stmts = instantiate(pc, "DA");
         }
     }
-    if (tokens.at(0) == "RL" || tokens.at(0) == "RL") {
+    else if (tokens.at(0) == "RL" || tokens.at(0) == "RL") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
@@ -865,11 +865,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
     }
     else
     {
+        std::cout << "ELSE\n";
         stmts = NULL;
         result.valid = false;
         result.numBytes = 4;
     }
-    result.numBytes = nextPC - hostPC;
+    result.numBytes = 4;
     if(result.valid && result.rtl == 0)
     result.rtl = new RTL(pc, stmts);
     return result;
