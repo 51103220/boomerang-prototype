@@ -23,8 +23,10 @@ out edges:
 00010474
 00010478
 0001047c
-00010480    4 RET *8* a := 220
-              Modifieds: *8* a,  *8* r1
-              Reaching definitions: r1=120,   a=220,   r9=argv,   r10=envp
+00010480
+00010484
+00010488    6 RET *8* a := 0xfffff830
+              Modifieds: *8* a,  *8* r1,  *8* r9
+              Reaching definitions: r1=-120,   a=0xfffff830,   r9=100,   r10=envp
 
 

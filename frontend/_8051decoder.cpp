@@ -253,6 +253,17 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                     stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
                 }
             }
+            else {
+
+                    std::string name = "MOV_REG_IMM";
+                    char *name_ =  new char[name.length() + 1];
+                    strcpy(name_, name.c_str());
+                    unsigned new_constant = op2-4294967296;
+                    if(op2 < u_constant  )
+                    stmts = instantiate(pc, name_ , Location::regOf(op1), new Const(op2-100));
+                    else
+                    stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
+            }
         }
         else
         if(tokens.at(0) == "MOVC")

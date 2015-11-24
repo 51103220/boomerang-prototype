@@ -616,13 +616,14 @@ INC_DPTR
   *16* %dptr := %dptr + 1;
 
 MUL_AB
-  *16* tmpw := %a * %b
-  *8* %a := tmpw@[0:7]
-  *8* %b := tmpw@[8:15];
+  *16* %a := %a * %b;
 
 MOV_RI0_DIR  z32
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[z32] := m[tmp1];
+
+MOV_REG_IMM z32, i32
+  *8* z32 := i32;
 
 MOV_RI1_DIR  z32
   *32* tmp1 := zfill(8, 31, %r1)

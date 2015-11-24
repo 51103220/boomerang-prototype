@@ -659,7 +659,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					uAddr += inst.numBytes;
 				continue;
 			}
-			std::cout << "DEBUG2\n";
+			
 			// Display RTL representation if asked
 			if (Boomerang::get()->printRtl) {
 				std::ostringstream st;
@@ -1084,7 +1084,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				// Special case: redecode the last instruction, without advancing uAddr by numBytes
 				continue;
 			uAddr += inst.numBytes;
-			std::cout << "DEBUG3\n";
+			
 			if (uAddr > lastAddr)
 				lastAddr = uAddr;
 
@@ -1108,7 +1108,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				if (!pCfg->isIncomplete(uAddr))
 					sequentialDecode = false;
 			}
-			std::cout << "DEBUG4\n";
+			
 			line = line +1 ;
 		}	// while sequentialDecode
 
