@@ -448,42 +448,42 @@ JMP_AADDDPTR
   *32* %pc := tmp1 + tmp2;
 
 MOV_DIR_IMM  z32, i32
-  *8* m[z32] := i32@[0:7];
+  *8* m[z32] := i32;
 
 MOV_A_IMM i32
   *8* %a := i32;
 
 MOV_R0_IMM i32
-  *8* %r0 := i32@[0:7];
+  *8* %r0 := i32;
 
 MOV_R1_IMM i32
   *8* %r1 := i32;
 
 MOV_R2_IMM i32
-  *8* %r2 := i32@[0:7];
+  *8* %r2 := i32;
 
 MOV_R3_IMM i32
-  *8* %r3 := i32@[0:7];
+  *8* %r3 := i32;
 
 MOV_R4_IMM i32
-  *8* %r4 := i32@[0:7];
+  *8* %r4 := i32;
 
 MOV_R5_IMM i32
-  *8* %r5 := i32@[0:7];
+  *8* %r5 := i32;
 
 MOV_R6_IMM i32
-  *8* %r6 := i32@[0:7];
+  *8* %r6 := i32;
 
 MOV_R7_IMM i32
-  *8* %r7 := i32@[0:7];
+  *8* %r7 := i32;
 
 MOV_RI0_IMM i32
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[tmp1] := i32@[0:7];
+  *8* m[tmp1] := i32;
 
 MOV_RI1_IMM i32
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[tmp1] := i32@[0:7];
+  *8* m[tmp1] := i32;
 
 
 # 0x80
@@ -957,7 +957,7 @@ MOV_A_R7
 
 MOV_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* %a := m[tmp1]{8};
+  *8* %a := m[tmp1];
 
 MOV_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)

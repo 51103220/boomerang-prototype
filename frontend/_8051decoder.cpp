@@ -62,6 +62,32 @@ unsigned _8051Decoder::magic_process(std::string name) {
         else return 100 + i;
     }
 }
+
+unsigned map_sfr(std::string name){
+    if (name == "A") return 224;
+    else if (name == "B") return 240;
+    else if (name == "P0") return 128;
+    else if (name == "P1") return 144;
+    else if (name == "P2") return 160;
+    else if (name == "P3") return 176;
+    else if (name == "SP") return 129;
+    else if (name == "DPL") return 130;
+    else if (name == "DPH") return 131;
+    else if (name == "PCON") return 135;
+    else if (name == "TCON") return 136;
+    else if (name == "TMOD") return 137;
+    else if (name == "TL0") return 138;
+    else if (name == "TL1") return 139;
+    else if (name == "TH0") return 140;
+    else if (name == "TH1") return 141;
+    else if (name == "SCON") return 152;
+    else if (name == "SBUF") return 153;
+    else if (name == "IE") return 168;
+    else if (name == "IP") return 184;
+    else if (name == "PSW") return 208;
+    else
+    return 0;
+}
 static DecodeResult result;
 
 
@@ -214,6 +240,16 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                     stmts = instantiate(pc, "MOV_A_IMM", new Const(op2-100));
                     else
                     stmts = instantiate(pc, "MOV_A_IMM", new Const(new_constant));
+                }
+                else {
+                    std::string name = "MOV_REG_IMM";
+                    char *name_ =  new char[name.length() + 1];
+                    strcpy(name_, name.c_str());
+                    unsigned new_constant = op2-4294967296;
+                    if(op2 < u_constant  )
+                    stmts = instantiate(pc, name_ , Location::regOf(op1), new Const(op2-100));
+                    else
+                    stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
                 }
             }
             else
