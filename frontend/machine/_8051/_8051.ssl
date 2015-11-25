@@ -680,7 +680,7 @@ CJNE_A_IMM_IMM i32, ix32
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
 CJNE_A_DIR_IMM  z32, i32
-  *8* tmpb := m[z32]{8}
+  *8* tmpb := z32
   *32* %pc := %pc + 3
   add_signed_pc(ix32)
   *32* %pc := [(%a = tmpb) ? %pc : tmp5]

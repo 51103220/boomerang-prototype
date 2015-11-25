@@ -249,7 +249,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 }
             }
             else
-            if(op1 >= 13 && op1 <= 16 )
+            if(op1 >= 9 && op1 <= 16 )
             {
                 std::string name = "MOV_DIR_";
                 std::stringstream sstm;
@@ -285,7 +285,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                     stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
                 }
             }
-            else {
+            /*else {
 
                     std::string name = "MOV_REG_IMM";
                     char *name_ =  new char[name.length() + 1];
@@ -295,7 +295,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                     stmts = instantiate(pc, name_ , Location::regOf(op1), new Const(op2-100));
                     else
                     stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
-            }
+            }*/
         }
         else
         if(tokens.at(0) == "MOVC")
@@ -562,7 +562,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         result.rtl->appendStmt(new ReturnStatement);
         result.type = DD;
     }
-    else if (tokens.at(0) == "JC" || tokens.at(0) == "JC") {
+    else if (tokens.at(0) == "JC") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned new_constant = op1-4294967296;
         if(op1 < u_constant  )
@@ -570,7 +570,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         else
         stmts = instantiate(pc, "JC_IMM", new Const(new_constant));
     }
-    else if (tokens.at(0) == "JNC" || tokens.at(0) == "JNC") {
+    else if (tokens.at(0) == "JNC") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned new_constant = op1-4294967296;
         if(op1 < u_constant  )
@@ -635,7 +635,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 stmts = instantiate(pc, name_, new Const(new_constant));
             }
             else
-            if(op2 >= 13 && op2 <= 16)
+            if(op2 >= 9 && op2 <= 16)
             {
                 sstm << "DIR";
                 name = sstm.str();
@@ -645,7 +645,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
         else
-        if(op1 >= 13 && op1 <= 16 )
+        if(op1 >= 9 && op1 <= 16 )
         {
             sstm << "DIR_";
             if(op2 == 8)
@@ -714,7 +714,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, "CPL_DIR", new Const(new_constant));
         }
     }
-    else if (tokens.at(0) == "CJNE" || tokens.at(0) == "CJNE") {
+    else if (tokens.at(0) == "CJNE") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
         unsigned op3 = magic_process(tokens.at(3));
@@ -796,6 +796,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
             else
             {
+                int operand3 = 0;
+                if(op3 < u_constant  )
+                operand3 = op3 -100;
+                else
+                operand3 = op3 - 4294967296;
+                stmts = instantiate(pc, "CJNE_A_DIR_IMM", Location::regOf(op2), new Const(operand3));
             }
         }
     }
@@ -816,7 +822,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_, new Const(op1));
         }
     }
-    else if (tokens.at(0) == "CLR" || tokens.at(0) == "CLR") {
+    else if (tokens.at(0) == "CLR") {
         unsigned op1 = magic_process(tokens.at(1));
         if(op1 == 8)
         {
