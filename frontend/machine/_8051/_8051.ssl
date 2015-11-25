@@ -394,7 +394,7 @@ XRL_A_IMM i32
   *8* %a := %a ^ i32;
 
 XRL_A_DIR  z32
-  *8* %a := %a ^ m[z32]{8};
+  *8* %a := %a ^ z32;
 
 XRL_A_R0
   *8* %a := %a ^ %r0;
@@ -448,7 +448,7 @@ JMP_AADDDPTR
   *32* %pc := tmp1 + tmp2;
 
 MOV_DIR_IMM  z32, i32
-  *8* m[z32] := i32;
+  *8* z32 := i32;
 
 MOV_A_IMM i32
   *8* %a := i32;

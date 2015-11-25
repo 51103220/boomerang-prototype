@@ -1,72 +1,30 @@
 got filename elf-init.c for main
-### type analysis for _cal ###
-### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure _cal ###
-finding final parameters for _cal
-potential param r8
-found new parameter r8
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-### type analysis for _cal ###
-### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure _cal ###
 *forced* { int r8 } main(int argc r8, char *[] * argv r9, char *[] * envp r10)
 in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
 end locals
 symbols:
-  r8 maps to a type __size8
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
 end symbols
 live variables: 
 end live variables
-Call BB:
+Ret BB:
 in edges: 
-out edges: 1047c 
-00000000    0 *i32* argc := -
-            0 *[c*]** argv := -
-            0 *[c*]** envp := -
+out edges: 
+00000000
 00010474
-00010478    2 *8* a := CALL _cal(
-                *8* a := 5
-              )
-              Reaching definitions: r8=5
-              Live variables: a
-Ret BB:
-in edges: 10478 
-out edges: 
+00010478
 0001047c
-00010480
-00010484    5 RET *8* a := a + 2
-              Modifieds: *8* a
-              Reaching definitions: a=a + 2
-
-
-void _cal(__size8 param1 r8)
-in cluster sparcbinary
-parameters: 8 param1
-end parameters
-locals:
-end locals
-symbols:
-  r8{0} maps to param1 type __size8
-end symbols
-live variables: r8
-end live variables
-Ret BB:
-in edges: 
-out edges: 
-00000000    0 *8* param1 := -
-000104c0
-000104c4
-000104c8
-000104cc    4 RET *8* a := param1 + 3
-              Modifieds: *v* a
-              Reaching definitions: a=param1 + 3
+00010480    4 RET *8* a := 0
+              Modifieds: *8* a,  *8* r9
+              Reaching definitions: a=0,   r9=20,   r10=envp
 
 

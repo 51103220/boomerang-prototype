@@ -510,7 +510,7 @@ std::vector<std::string> process_file_frontend(Prog* prog, ADDRESS address){
 		if (address == 66676)
 		{
 			start = 0;
-			end = 4;
+			end = 17;
 		}
 		else
 		{	

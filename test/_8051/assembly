@@ -1,19 +1,4 @@
-	clr	C
-	mov	A, R1
-	subb A, R0
-	INC R1
-	mov	A, R1
-	xrl	A, 80
-	INC R0
-	mov	B, R0
-	xrl	B, 80
-	SUBB A,B
-	jnc	24
-	inc	R0
-	CLR	A
-	CJNE A,R0,16
-	inc	 R0
-	sjmp 8
-	mov	R0, R1
-	mov	R2, R0  
-	ret
+MOV B, 20
+MOV A, 20
+XRL A, B
+ret
