@@ -9,7 +9,7 @@ INTEGER
 [ %p0, %p1, %p2 , %p3, 
   %dpl, %dph, %pcon, %tcon, 
   %tmod, %tl0, %tl1, %th0, %th1, 
-  %scon, %sbuf, %ie, %ip, %psw ][8] -> 12..29, #sfr 
+  %scon, %sbuf, %ie, %ip, %psw ][8] -> 13..30, #sfr 
 [%CF, %AC, %OV][1] -> -1,  # Standard flags
 [%pc][32] -> -1,
 %sp[32] -> 88;
@@ -567,7 +567,7 @@ MOVC_A_AADDDPTR
   *8* %a := m[tmp1]{8};
 
 SUBB_A_IMM i32
-  *8* %a := %a - i32@[0:7];
+  *8* %a := %a - i32;
 
 SUBB_A_DIR  z32
   *8* %a := %a - m[z32]{8};
@@ -961,7 +961,7 @@ MOV_A_RI0
 
 MOV_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* %a := m[tmp1]{8};
+  *8* %a := m[tmp1];
 
 
 # 0xF0

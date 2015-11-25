@@ -510,12 +510,12 @@ std::vector<std::string> process_file_frontend(Prog* prog, ADDRESS address){
 		if (address == 66676)
 		{
 			start = 0;
-			end = 18;
+			end = 4;
 		}
 		else
 		{	
-			start = 19;
-			end = 26;
+			start = 5;
+			end = 8;
 		}
 		int i = 0;
 		for( ; getline( infile, line );) 
@@ -888,63 +888,77 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					CallStatement* call = static_cast<CallStatement*>(s);
 					
 					// Check for a dynamic linked library function
-					// TODO: solution dont use pBF 
-					if (call->getDest()->getOper() == opMemOf &&
-							call->getDest()->getSubExp1()->getOper() == opIntConst &&
-							pBF->IsDynamicLinkedProcPointer(((Const*)call->getDest()->getSubExp1())->getAddr())) {
-						// Dynamic linked proc pointers are treated as static.
-						const char *nam = pBF->GetDynamicProcName( ((Const*)call->getDest()->getSubExp1())->getAddr());
-						Proc *p = pProc->getProg()->getLibraryProc(nam);
-						call->setDestProc(p);
-						call->setIsComputed(false);
+					// TODO: solution dont use pBF
+					if (!ASS_FILE){ 
+						if (call->getDest()->getOper() == opMemOf &&
+								call->getDest()->getSubExp1()->getOper() == opIntConst &&
+								pBF->IsDynamicLinkedProcPointer(((Const*)call->getDest()->getSubExp1())->getAddr())) {
+							// Dynamic linked proc pointers are treated as static.
+							const char *nam = pBF->GetDynamicProcName( ((Const*)call->getDest()->getSubExp1())->getAddr());
+							Proc *p = pProc->getProg()->getLibraryProc(nam);
+							call->setDestProc(p);
+							call->setIsComputed(false);
+						}
+					}
+					else {
+						if (call->getDest()->getOper() == opMemOf &&
+								call->getDest()->getSubExp1()->getOper() == opIntConst &&
+								funcsType.find(((Const*)call->getDest()->getSubExp1())->getAddr())->second) {
+							// Dynamic linked proc pointers are treated as static.
+							const char *nam = namesList.find(((Const*)call->getDest()->getSubExp1())->getAddr())->second;
+							Proc *p = pProc->getProg()->getLibraryProc(nam);
+							call->setDestProc(p);
+							call->setIsComputed(false);
+						}
 					}
 
 					// Is the called function a thunk calling a library function?
 					// A "thunk" is a function which only consists of: "GOTO library_function"
 					// Should i modify
-					if(	call &&	call->getFixedDest() != NO_ADDRESS ) {
-						// Get the address of the called function.
-						ADDRESS callAddr=call->getFixedDest();
-						// It should not be in the PLT either, but getLimitTextHigh() takes this into account
-						if (callAddr < pBF->getLimitTextHigh()) {
-							// Decode it.
-							DecodeResult decoded=decodeInstruction(callAddr);
-							if (decoded.valid) { // is the instruction decoded succesfully?
-								// Yes, it is. Create a Statement from it.
-								RTL *rtl = decoded.rtl;
-								Statement* first_statement = *rtl->getList().begin();
-								if (first_statement) {
-									first_statement->setProc(pProc);
-									first_statement->simplify();
-									GotoStatement* stmt_jump = static_cast<GotoStatement*>(first_statement);
-									// In fact it's a computed (looked up) jump, so the jump seems to be a case
-									// statement.
-									//TODO :solution dont use pBF
-									if ( first_statement->getKind() == STMT_CASE &&
-										stmt_jump->getDest()->getOper() == opMemOf &&
-										stmt_jump->getDest()->getSubExp1()->getOper() == opIntConst &&
-										pBF->IsDynamicLinkedProcPointer(((Const*)stmt_jump->getDest()->getSubExp1())->
-											getAddr())) // Is it an "DynamicLinkedProcPointer"?
-									{
-										// Yes, it's a library function. Look up it's name.
-										ADDRESS a = ((Const*)stmt_jump->getDest()->getSubExp1())->getAddr();
-										// TODO : solution use global map ADDRESS,string
-										const char *nam = pBF->GetDynamicProcName(a);
-										// Assign the proc to the call
-										Proc *p = pProc->getProg()->getLibraryProc(nam);
-										if (call->getDestProc()) {
-											// prevent unnecessary __imp procs
-											prog->removeProc(call->getDestProc()->getName());
+					if (!ASS_FILE){
+						if(	call &&	call->getFixedDest() != NO_ADDRESS ) {
+							// Get the address of the called function.
+							ADDRESS callAddr=call->getFixedDest();
+							// It should not be in the PLT either, but getLimitTextHigh() takes this into account
+							if (callAddr < pBF->getLimitTextHigh()) {
+								// Decode it.
+								DecodeResult decoded=decodeInstruction(callAddr);
+								if (decoded.valid) { // is the instruction decoded succesfully?
+									// Yes, it is. Create a Statement from it.
+									RTL *rtl = decoded.rtl;
+									Statement* first_statement = *rtl->getList().begin();
+									if (first_statement) {
+										first_statement->setProc(pProc);
+										first_statement->simplify();
+										GotoStatement* stmt_jump = static_cast<GotoStatement*>(first_statement);
+										// In fact it's a computed (looked up) jump, so the jump seems to be a case
+										// statement.
+										//TODO : We dont handle this case
+										if ( first_statement->getKind() == STMT_CASE &&
+											stmt_jump->getDest()->getOper() == opMemOf &&
+											stmt_jump->getDest()->getSubExp1()->getOper() == opIntConst &&
+											pBF->IsDynamicLinkedProcPointer(((Const*)stmt_jump->getDest()->getSubExp1())->
+												getAddr())) // Is it an "DynamicLinkedProcPointer"?
+										{
+											// Yes, it's a library function. Look up it's name.
+											ADDRESS a = ((Const*)stmt_jump->getDest()->getSubExp1())->getAddr();
+											// TODO : We dont handle this case
+											const char *nam = pBF->GetDynamicProcName(a);
+											// Assign the proc to the call
+											Proc *p = pProc->getProg()->getLibraryProc(nam);
+											if (call->getDestProc()) {
+												// prevent unnecessary __imp procs
+												prog->removeProc(call->getDestProc()->getName());
+											}
+											call->setDestProc(p);
+											call->setIsComputed(false);
+											call->setDest(Location::memOf(new Const(a)));
 										}
-										call->setDestProc(p);
-										call->setIsComputed(false);
-										call->setDest(Location::memOf(new Const(a)));
 									}
 								}
 							}
 						}
 					}
-
 					// Treat computed and static calls separately
 					if (call->isComputed()) {
 						BB_rtls->push_back(pRtl);
@@ -993,14 +1007,19 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
  						// Check if this is the _exit or exit function. May prevent us from attempting to decode
 						// invalid instructions, and getting invalid stack height errors
-						// TODO: still dont know
-						const char* name = pBF->SymbolByAddress(uNewAddr);
-						if (name == NULL && call->getDest()->isMemOf() && 
-											call->getDest()->getSubExp1()->isIntConst()) {
-							ADDRESS a = ((Const*)call->getDest()->getSubExp1())->getInt();
-							//TODO: still dont know
-							if (pBF->IsDynamicLinkedProcPointer(a))
-								name = pBF->GetDynamicProcName(a);
+						
+						const char* name;
+						if (!ASS_FILE){
+							name = pBF->SymbolByAddress(uNewAddr);
+							if (name == NULL && call->getDest()->isMemOf() && 
+												call->getDest()->getSubExp1()->isIntConst()) {
+								ADDRESS a = ((Const*)call->getDest()->getSubExp1())->getInt();
+								if (pBF->IsDynamicLinkedProcPointer(a))
+									name = pBF->GetDynamicProcName(a);
+							}
+						}
+						else {
+							name = namesList.find(uNewAddr)->second;
 						}	
 						if (name && noReturnCallDest(name)) {
 							// Make sure it has a return appended (so there is only one exit from the function)

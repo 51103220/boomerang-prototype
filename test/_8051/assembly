@@ -1,3 +1,9 @@
-MOV B, 155
-MOV A, B
+MOV A, 5
+LCALL _cal
+INC	A
+INC	A
+RET
+INC A
+INC A
+INC A
 RET

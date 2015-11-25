@@ -61,7 +61,8 @@ enum INSTTYPE {
 	I_COMPJUMP,				 // computed jump
 	I_COMPCALL				 // computed call
 };
-
+static std::map<ADDRESS,char*> namesList;
+static std::map<ADDRESS,bool> funcsType;
 // Put the target queue logic into this small class
 class TargetQueue {
 		std::queue<ADDRESS> targets;
@@ -109,7 +110,8 @@ typedef bool (*PHELPER)(ADDRESS dest, ADDRESS addr, std::list<RTL*>* lrtl);
 class FrontEnd {
 protected:
 //	  const int NOP_SIZE;			// Size of a no-op instruction (in bytes)
-//	  const int NOP_INST;			// No-op pattern
+//	  const int NOP_INST;
+					// No-op pattern
 		NJMCDecoder	*decoder;		// The decoder
 		BinaryFile	*pBF;			// The binary file
 		BinaryFileFactory* pbff;	// The binary file factory (for closing properly)
@@ -123,6 +125,7 @@ protected:
 		// Map from address to previously decoded RTLs for decoded indirect control transfer instructions
 		std::map<ADDRESS, RTL*> previouslyDecoded;
 public:
+		
 		/*
 		 * Constructor. Takes some parameters to save passing these around a lot
 		 */

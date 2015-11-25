@@ -133,8 +133,8 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         {
             if(tokens.at(1) == "@R0")
             {
-                if(op2 < 8)
-                {
+                if(op2 >= 13 && op2 <= 16) //TODO:
+                {   
                     stmts = instantiate(pc, "MOV_RI0_DIR", Location::regOf(op2));
                 }
                 else
@@ -155,7 +155,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             else
             if(tokens.at(1) == "@R1")
             {
-                if(op2 < 8)
+                if(op2 < op2 >= 13 && op2 <= 16) //TODO:
                 {
                     stmts = instantiate(pc, "MOV_RI1_DIR", Location::regOf(op2));
                 }
@@ -241,15 +241,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                     else
                     stmts = instantiate(pc, "MOV_A_IMM", new Const(new_constant));
                 }
-                else {
-                    std::string name = "MOV_REG_IMM";
+                else{
+                    std::string name = "MOV_A_DIR";
                     char *name_ =  new char[name.length() + 1];
                     strcpy(name_, name.c_str());
-                    unsigned new_constant = op2-4294967296;
-                    if(op2 < u_constant  )
-                    stmts = instantiate(pc, name_ , Location::regOf(op1), new Const(op2-100));
-                    else
-                    stmts = instantiate(pc, name_,  Location::regOf(op1), new Const(new_constant));
+                    stmts = instantiate(pc, name_ , Location::regOf(op2));
                 }
             }
             else
@@ -279,7 +275,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
                 if(op2 >= 100 )
                 {   
                     unsigned new_constant = op2-4294967296;
-                    sstm << "_IMM";
+                    sstm << "IMM";
                     name = sstm.str();
                     char *name_ =  new char[name.length() + 1];
                     strcpy(name_, name.c_str());
@@ -346,7 +342,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             }
         }
     }
-    else if (tokens.at(0) == "ACALL" || tokens.at(0) == "ACALL") {
+    else if (tokens.at(0) == "ACALL" || tokens.at(0) == "LCALL") {
         unsigned address = magic_process(tokens.at(1));
         bool is_lib = false;
         if(tokens.at(1) == "PRINTF" || tokens.at(1) == "PUTS")
@@ -365,6 +361,8 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         std::transform(tokens.at(1).begin(), tokens.at(1).end(),tokens.at(1).begin(), ::tolower);
         char *name =  new char[tokens.at(1).length() + 1];
         strcpy(name, tokens.at(1).c_str());
+        namesList[address] = name;
+        funcsType[address] = is_lib;
         destProc = prog->newProc(name, nativeDest, is_lib);
         newCall->setDestProc(destProc);
         result.rtl = new RTL(pc, stmts);
