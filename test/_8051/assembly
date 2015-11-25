@@ -1,9 +1,21 @@
-MOV A, 5
-LCALL _cal
-INC	A
-INC	A
-RET
-INC A
-INC A
-INC A
-RET
+	clr	C
+	mov	A, R1
+	subb A, R0
+	INC R1
+	mov	A, R1
+	xrl	A, 80
+	INC R0
+	mov	B, R0
+	xrl	B, 80
+	SUBB A,B
+	jnc	00102$
+	inc	R0
+	CLR	A
+	CJNE A,R0,00103$
+	inc	 R0+1
+	sjmp 00103$
+00102$:
+	mov	R0, R1
+00103$:
+	mov	R2, R0  
+	ret

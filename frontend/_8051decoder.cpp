@@ -402,7 +402,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_);
         }
         else
-        if(op2 >= 13 && op2 <= 16)
+        if(op2 >= 9 && op2 <= 16)
         {
             sstm << "DIR";
             name = sstm.str();
