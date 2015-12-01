@@ -118,5 +118,11 @@ public:
 	~AssemblyProgram(){}
 };
 
-
+class AssHandler{
+public:
+	AssHandler(){
+	}
+	AssemblyProgram* process(const char* name);
+	~AssHandler(){}
+};
 

@@ -202,7 +202,8 @@ FRONT_OBJS = frontend/frontend.o frontend/njmcDecoder.o frontend/sparcdecoder.o 
 CODEGEN = codegen/chllcode.o codegen/syntax.o
 TYPEOBJS = type/constraint.o type/type.o type/dfa.o
 LOADER_OBJS = loader/BinaryFileFactory.o
-STATIC_OBJS = $(CODEGEN) $(UTIL_OBJS) $(DB_OBJS) $(FRONT_OBJS) $(TYPEOBJS) $(LOADER_OBJS) $(TRANSFORM_OBJS)
+ASSEMBLY_OBJS = db/AssHandler.o db/AssScanner.o  
+STATIC_OBJS = $(CODEGEN) $(UTIL_OBJS) $(DB_OBJS) $(FRONT_OBJS) $(TYPEOBJS) $(LOADER_OBJS) $(TRANSFORM_OBJS) $(ASSEMBLY_OBJS)
 
 ####################
 # Conditional rules
@@ -301,9 +302,10 @@ db/CfgTest.o:              	EXTRA = -Ifrontend
 type/dfa.o:                	EXTRA = -fno-strict-aliasing
 type/TypeTest.o:           	EXTRA = -Ifrontend
 frontend/pentiumdecoder.o: 	EXTRA = -fno-exceptions
-
+db/AssScanner.o:            EXTRA = -lfl  
+db/AssHandler.o:			EXTRA = -lfl  
 boomerang$(EXEEXT): driver.o $(STATIC_OBJS) $(GENSSL)
-	$(CXX) $(CXXFLAGS) -o $@ driver.o $(STATIC_OBJS) $(RUNPATH) -Llib $(LINKGC) $(LDL) $(LDFLAGS) $(LOADERLIBS) -lexpat
+	$(CXX) $(CXXFLAGS) -o $@ driver.o $(STATIC_OBJS)  $(RUNPATH) -lfl -Llib $(LINKGC) $(LDL) $(LDFLAGS) $(LOADERLIBS) -lexpat
 
 bffDump$(EXEEXT): loader/bffDump.o
 	$(CXX) $(CXXFLAGS) -o $@ loader/bffDump.o loader/BinaryFileFactory.o -Llib -lgc $(LDL) $(LOADERLIBS) \
@@ -312,7 +314,6 @@ bffDump$(EXEEXT): loader/bffDump.o
 # Compile ordinary files
 $(STATIC_OBJS): %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $@ $(EXTRA) $<
-
 # driver.o is special because it contains main() and is not wanted for bigtest (the unit test program)
 driver.o: driver.cpp include/boomerang.h
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c -o $@ $(EXTRA) $<
@@ -412,6 +413,8 @@ db/CfgTest.o: db/CfgTest.h include/cfg.h include/types.h include/exphelp.h inclu
 db/CfgTest.o: include/dataflow.h include/BinaryFile.h include/frontend.h include/sigenum.h include/proc.h include/exp.h
 db/CfgTest.o: include/operator.h include/type.h include/memo.h include/hllcode.h include/statement.h include/prog.h
 db/CfgTest.o: include/cluster.h frontend/pentiumfrontend.h
+db/AssHandler.o: include/AssemblyInfo.h db/AssParser.cpp
+db/AssScanner.o: db/AssParser.h
 db/DfaTest.o: db/DfaTest.h include/type.h include/memo.h include/types.h include/log.h include/boomerang.h
 db/ExpTest.o: db/ExpTest.h include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 db/ExpTest.o: include/exphelp.h include/statement.h include/managed.h include/dataflow.h include/visitor.h
@@ -606,7 +609,7 @@ frontend/_8051frontend.o: include/exphelp.h include/register.h include/rtl.h inc
 frontend/_8051frontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/_8051frontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/_8051frontend.o: include/decoder.h frontend/_8051decoder.h frontend/_8051frontend.h include/boomerang.h
-frontend/_8051frontend.o: include/signature.h
+frontend/_8051frontend.o: include/signature.h include/AssemblyInfo.h
 frontend/sparcdecoder.o: include/decoder.h include/types.h include/rtl.h include/exp.h include/operator.h
 frontend/sparcdecoder.o: include/type.h include/memo.h include/exphelp.h include/register.h include/prog.h
 frontend/sparcdecoder.o: include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h include/proc.h

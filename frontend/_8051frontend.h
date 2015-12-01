@@ -8,6 +8,7 @@
 #include "decoder.h"
 #include "exp.h"			// Ugh... just for enum OPER
 #include "frontend.h"		// In case included bare, e.g. ProcTest.cpp
+#include "AssemblyInfo.h"
 
 class FrontEnd;
 class _8051Decoder;

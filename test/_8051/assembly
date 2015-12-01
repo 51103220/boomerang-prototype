@@ -1,4 +1,7 @@
-MOV B, 20
+MOV R0, 20
 MOV A, 20
-XRL A, B
+CMP P0
+JB  P0, 66696
+ADD A, R0
+ADD A, 30
 ret

@@ -517,10 +517,14 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
             stmts = instantiate(pc, name_, new Const(new_constant));
         }
     }
+    else if (tokens.at(0) == "CMP"){
+        unsigned op1 = magic_process(tokens.at(1));
+        stmts = instantiate(pc, "JB_DIR_IMM", Location::regOf(op1), new Const(100));
+    }
     else if (tokens.at(0) == "JNB" || tokens.at(0) == "JB" || tokens.at(0) == "JBC") {
         unsigned op1 = magic_process(tokens.at(1));
         unsigned op2 = magic_process(tokens.at(2));
-        std::stringstream sstm;
+        /*std::stringstream sstm;
         sstm << tokens.at(0) << "_DIR_IMM";
         std::string name;
         unsigned new_constant = op2-4294967296;
@@ -528,10 +532,17 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
         char *name_ =  new char[name.length() + 1];
         strcpy(name_, name.c_str());
         if(op2 < u_constant  )
-        stmts = instantiate(pc, name_, Location::regOf(op1), new Const(op2-100));
+        stmts = instantiate(pc, name_, new Const(op1), new Const(op2-100));
         else
-        stmts = instantiate(pc, name_,  Location::regOf(op1),new Const(new_constant));
+        stmts = instantiate(pc, name_,  new Const(op1),new Const(new_constant));*/
+        result.rtl = new RTL(pc, stmts); 
+        BranchStatement* jump = new BranchStatement; 
+        result.rtl->appendStmt(jump); 
+        result.numBytes = 4; 
+        jump->setDest(op2-100);
+        jump->setCondType(BRANCH_JE);
     }
+
     else if (tokens.at(0) == "LCALL" || tokens.at(0) == "LCALL") {
         unsigned address = magic_process(tokens.at(1));
         bool is_lib = false;

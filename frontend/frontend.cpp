@@ -861,18 +861,18 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					else {
 
 						// Add the out edge if it is to a destination within the procedure
-						if (uDest < pBF->getLimitTextHigh()) {
-							targetQueue.visit(pCfg, uDest, pBB);
-							pCfg->addOutEdge(pBB, uDest, true);
-						}
-						else {
-							if (!ASS_FILE)
-								LOG << "Error: Instruction at " << uAddr << " branches beyond end of section, to "
-									<< uDest << "\n";
-							else {
+						if (!ASS_FILE){
+							if (uDest < pBF->getLimitTextHigh()) {
 								targetQueue.visit(pCfg, uDest, pBB);
 								pCfg->addOutEdge(pBB, uDest, true);
 							}
+							else
+								LOG << "Error: Instruction at " << uAddr << " branches beyond end of section, to "
+									<< uDest << "\n";
+						}
+						else {
+								targetQueue.visit(pCfg, uDest, pBB);
+								pCfg->addOutEdge(pBB, uDest, true);
 						}
 
 						// Add the fall-through outedge

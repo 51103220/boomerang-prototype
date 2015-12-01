@@ -150,9 +150,11 @@ DEC_RI1
 # 0x20
 
 JB_DIR_IMM  z32, i32
-  *32* %pc := %pc +3
-  add_signed_pc(i32)
-  *32* %pc := [m[z32]{8}=1? tmp5 : %pc];
+  #*32* %pc := %pc +3
+  #add_signed_pc(i32)
+  #*1* %CF := [m[z32]{8}=1? 1 : 0];
+  *v* %flags := m[z32]{8}  ~= 1;
+
 
 AJMP_IMM i32
   *32* %pc := i32;
