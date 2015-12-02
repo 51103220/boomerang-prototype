@@ -85,11 +85,9 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 				return new SparcFrontEnd(pBF, prog, pbff);
 			}
 			else{
-				int c;
 				std::cout<<"instantiate 8051\n";
 				ass_handler = new AssHandler();
 				AssProgram = ass_handler->process(prog->getPath());
-				std::cin >> c;
 				return new _8051FrontEnd(pBF,prog, pbff);
 			}
 		case MACHINE_PPC:
@@ -601,8 +599,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	list<AssemblyLine*>::iterator li;
 	if (temp_lines->size()>0)
 		li = temp_lines->begin();
-	int c;
-	std::cin >> c;
+	
 	//---------------------------------------------------------------------------------------
 	while ((uAddr = targetQueue.nextAddress(pCfg)) != NO_ADDRESS) {
 		// The list of RTLs for the current basic block

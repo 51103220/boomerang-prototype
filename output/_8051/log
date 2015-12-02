@@ -10,50 +10,125 @@ parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 __size8 a r8
-unsigned short dptr r11
 end locals
 symbols:
   r8 maps to a type __size8
-  r11 maps to dptr type unsigned short
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
 end symbols
-live variables: 
+live variables: r1
 end live variables
 Twoway BB:
 in edges: 
-out edges: 1049c 10484 
+out edges: 104e0 1047c 
 00000000
-00010474    1 *8* a := 56
-00010478    2 *u16* dptr := 484
-0001047c    3 *8* m[986] := 1
-00010480    5 BRANCH 0x1049c, condition equals
-High level: m[986] ~= 1
+00010474
+00010478    3 BRANCH 0x104e0, condition equals
+High level: m[630] ~= 0
 Twoway BB:
-in edges: 10480 
-out edges: 10494 1048c 
-00010484    7 *8* m[484] := 56
-00010488    9 BRANCH 0x10494, condition equals
-High level: m[0x3f7] ~= 0
+in edges: 10478 
+out edges: 104b8 10494 
+0001047c
+00010480    6 *8* a := m[0x3ee]
+00010484    7 *8* m[223] := 1
+00010488    9 *8* m[0x3ee] := a
+0001048c   10 *8* m[0x405] := 0
+00010490   12 BRANCH 0x104b8, condition equals
+High level: m[0x405] ~= 1
+Twoway BB:
+in edges: 10490 
+out edges: 104a4 104a0 
+00010494
+00010498
+0001049c   17 BRANCH 0x104a4, condition equals
+High level: m[223] ~= 0
 Fall BB:
-in edges: 10488 
-out edges: 10494 
-0001048c   10 *u16* dptr := 100
-00010490   11 *j8* m[9] := m[9] | 5
-L2: Fall BB:
-in edges: 10488 10490 
-out edges: 1049c 
+in edges: 1049c 
+out edges: 104a4 
+000104a0
+L3: Fall BB:
+in edges: 1049c 104a0 
+out edges: 104b8 
+000104a4
+000104a8   20 *8* a := m[883]
+000104ac   21 *8* m[158] := 0
+000104b0   22 *8* m[962] := 0
+000104b4   24 *8* m[883] := a
+L2: Twoway BB:
+in edges: 10490 104b4 
+out edges: 104c8 104c4 
 00000000
-00010494   12 *8* m[986] := 0
-00010498   14 *8* a := m[zfill(16,31,dptr)]
-L1: Ret BB:
-in edges: 10480 10498 
+000104b8
+000104bc
+000104c0   29 BRANCH 0x104c8, condition equals
+High level: m[223] ~= 0
+Fall BB:
+in edges: 104c0 
+out edges: 104c8 
+000104c4
+L4: Fall BB:
+in edges: 104c0 104c4 
+out edges: 104e0 
+000104c8
+000104cc   32 *8* a := m[992]
+000104d0   33 *8* m[158] := 0
+000104d4   34 *8* m[962] := 0
+000104d8   36 *8* m[992] := a
+000104dc
+L1: Twoway BB:
+in edges: 10478 104dc 
+out edges: 10544 104e8 
+00000000
+000104e0   37 *j8* a := m[56]
+000104e4   39 BRANCH 0x10548, condition equals
+High level: m[962] ~= 1
+Synthetic out edge(s) to L7 
+Twoway BB:
+in edges: 104e4 
+out edges: 10514 104f0 
+000104e8
+000104ec   42 BRANCH 0x10514, condition equals
+High level: m[167] ~= 1
+Fall BB:
+in edges: 104ec 
+out edges: 10514 
+000104f0
+000104f4   45 *j8* a := m[0x3fb]
+000104f8
+000104fc   47 *j8* m[9] := a & 192
+00010500
+00010504   50 *j8* a := m[992]
+00010508
+0001050c   52 *j8* a := (a & 192) | m[9]
+00010510   54 *j8* m[992] := a
+L6: Twoway BB:
+in edges: 104ec 10510 
+out edges: 10544 10520 
+00000000
+00010514
+00010518   57 *j8* a := m[897]
+0001051c   59 BRANCH 0x10544, condition equals
+High level: m[235] ~= 1
+Fall BB:
+in edges: 1051c 
+out edges: 10544 
+00010520
+00010524   62 *j8* a := m[0x3fb]
+00010528
+0001052c   64 *j8* m[9] := a & 192
+00010530
+00010534   67 *j8* a := m[992]
+00010538
+0001053c   69 *j8* a := (a & 192) | m[9]
+00010540   71 *j8* m[992] := a
+L7: Ret BB:
+in edges: 1051c 10540 104e4 
 out edges: 
 00000000
-0001049c   15 RET *8* a := a
-              Modifieds: *8* a,  *16* dptr
-              Reaching definitions: a=a,   r9=argv,   r10=envp,   dptr=dptr,   tmp1=tmp1,   %flags=%flags,   %ZF=%ZF,
-                %CF=%CF
+00010544   72 RET *j8* a := a
+              Modifieds: *8* a,  *16* r11
+              Reaching definitions: r1=r1,   a=a,   r9=argv,   r10=envp,   r11=r11,   tmp1=tmp1,   %flags=%flags,
+                %ZF=%ZF,   %CF=%CF
 
 

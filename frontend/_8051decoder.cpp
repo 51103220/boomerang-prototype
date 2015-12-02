@@ -631,16 +631,19 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                 break;
         }
     }
+    else if (opcode == "NOP") {
+
+    }
     else
     {
-        std::cout << "ELSE\n";
+        std::cout << "ELSE " << opcode << std::endl;
         stmts = NULL;
         result.valid = false;
         result.numBytes = 4;
     }
     result.numBytes = 4;
     if(result.valid && result.rtl == 0)
-    result.rtl = new RTL(pc, stmts);
+        result.rtl = new RTL(pc, stmts);
     return result;
 }
 
