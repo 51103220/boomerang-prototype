@@ -502,7 +502,7 @@ Signature *FrontEnd::getLibSignature(const char *name) {
 	return signature;
 }
 
-std::vector<std::string> process_file_frontend(Prog* prog, ADDRESS address){
+/*std::vector<std::string> process_file_frontend(Prog* prog, ADDRESS address){
 	std::cout<<"----Processing Assembly File---- \n";
 		char **vinit= new char*[100];
 		std::ifstream infile(prog->getPath());
@@ -532,7 +532,7 @@ std::vector<std::string> process_file_frontend(Prog* prog, ADDRESS address){
 		}
 		std::vector<std::string> assemblySets(vinit,vinit+count);
 	return assemblySets ;
-}
+}*/
 /*==============================================================================
  * FUNCTION:	  FrontEnd::processProc
  * OVERVIEW:	  Process a procedure, given a native (source machine) address.
@@ -552,7 +552,8 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	std::cout<<"Entering Processing Proc\n"; 
 	// just in case you missed it
 	int c;
-	std::cout <<"Name Of Progmram" << AssProgram->name << std::endl;
+	if (AssProgram)
+		std::cout <<"Name Of Program : " << AssProgram->name << std::endl;
 	std::cin >> c;
 	Boomerang::get()->alert_new(pProc);
 
@@ -583,18 +584,24 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	ADDRESS startAddr = uAddr;
 	ADDRESS lastAddr = uAddr;
 	ADDRESS address = uAddr;
-	
-	std::vector<std::string> assemblySets;
-	if(ASS_FILE)
-	{	
-		assemblySets = process_file_frontend(prog,address);
+
+	//------IMPORTANT------------------------------------------------------------------------
+	list<AssemblyLabel*>::iterator lbi;
+	list<AssemblyLine*>* temp_lines;
+	if (AssProgram){
+		for(lbi = AssProgram->labelList->begin(); lbi != AssProgram->labelList->end(); ++lbi ){
+			if((*lbi)->address == uAddr){
+				temp_lines = (*lbi)->lineList;
+				std::cout << "***DECODE LABEL: " << (*lbi)->name << std::endl;
+				std::cout << "***AT ADDRESS: " << (*lbi)->address << std::endl;
+				std::cout << "***NUMBER OF INSTRUCTION: " << (*lbi)->lineList->size() << std::endl;
+				break;
+			}
+		}
 	}
-	std::cout<<"Start First Address \n" << address << std::endl;
-	int sizeSets = assemblySets.size();
-	int line = 0;
-	std::cout << "Size Set = " << sizeSets << std::endl;
-	std::cout << "Spec: " << spec << std::endl;
-	AssemblyLine* Line;
+	list<AssemblyLine*>::iterator li;
+	std::cin >> c;
+	//---------------------------------------------------------------------------------------
 	while ((uAddr = targetQueue.nextAddress(pCfg)) != NO_ADDRESS) {
 		// The list of RTLs for the current basic block
 		std::list<RTL*>* BB_rtls = new std::list<RTL*>();
@@ -602,8 +609,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 		// Keep decoding sequentially until a CTI without a fall through branch is decoded
 		//ADDRESS start = uAddr;
 		DecodeResult inst;
-		while (sequentialDecode && ((line < sizeSets)||(!ASS_FILE))) {
-
+		while (sequentialDecode) {
 
 			// Decode and classify the current source instruction
 			if (Boomerang::get()->traceDecoder)
@@ -611,8 +617,8 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 
 			// Decode the inst at uAddr.
 			if(ASS_FILE){
-				if(line < sizeSets)
-					inst = decodeAssemblyInstruction(uAddr,assemblySets.at(line),Line);
+				if(li != temp_lines->end())
+					inst = decodeAssemblyInstruction(uAddr,"assemblySets.at(line)", (*li));
 			}
 			else
 				inst = decodeInstruction(uAddr);
@@ -1134,7 +1140,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 					sequentialDecode = false;
 			}
 			
-			line = line +1 ;
+			++ li ;
 		}	// while sequentialDecode
 
 		// Add this range to the coverage
