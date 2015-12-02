@@ -110,15 +110,13 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
 
     result.reset();
     std::list<Statement*>* stmts = NULL;
-    //-----TO BE DELETED------------------------------------------------------------------------
-
-    //-------------------------------------------------------------------------------------------
 
     //-------USELESS-----------
     ADDRESS nextPC = NO_ADDRESS;
     //ADDRESS nextPC = NO_ADDRESS;
     dword MATCH_p = hostPC;
     //-------------------------
+
     std::string opcode(Line->name);
     list<AssemblyExpression*>::iterator ei;
 
@@ -460,6 +458,23 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         result.rtl = new RTL(pc, stmts);
         result.rtl->appendStmt(new ReturnStatement);
         result.type = DD;
+    }
+    else if (opcode == "JNB" || opcode == "JB" || opcode == "JBC") {
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();      
+        if (opcode == "JB")
+            stmts = instantiate(pc, "JB_DIR_IMM", new Const(arg1->value.i), new Const(100));
+        else if (opcode == "JNB")
+            stmts = instantiate(pc, "JNB_DIR_IMM", new Const(arg1->value.i), new Const(100));
+        else if (opcode == "JBC") //TODO: 
+            stmts = instantiate(pc, "JBC_DIR_IMM", new Const(arg1->value.i), new Const(100));
+ 
+        result.rtl = new RTL(pc, stmts); 
+        BranchStatement* jump = new BranchStatement; 
+        result.rtl->appendStmt(jump); 
+        result.numBytes = 4; 
+        jump->setDest(pc + (Line->offset+1)*4);
+        jump->setCondType(BRANCH_JE);
     }
     else
     {

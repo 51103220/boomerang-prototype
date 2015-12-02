@@ -212,9 +212,10 @@ ADD_A_R7
 # 0x30
 
 JNB_DIR_IMM  z32, i32
-  *32* %pc := %pc +3
-  add_signed_pc(i32)
-  *32* %pc := [m[z32]=0? tmp5 : %pc];
+  #*32* %pc := %pc +3
+  #add_signed_pc(i32)
+  #*32* %pc := [m[z32]=0? tmp5 : %pc];
+  *v* %flags := m[z32]{8}  ~= 0;
 # ACALL
 
 RETI retaddr

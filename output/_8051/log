@@ -19,16 +19,26 @@ symbols:
 end symbols
 live variables: 
 end live variables
-Ret BB:
+Twoway BB:
 in edges: 
+out edges: 10488 10480 
+00000000
+00010474    1 *8* a := 56
+00010478
+0001047c    4 BRANCH 0x10488, condition equals
+High level: m[986] ~= 1
+Fall BB:
+in edges: 1047c 
+out edges: 10488 
+00010480    6 *8* m[484] := 56
+00010484    8 *8* a := m[484]
+L1: Ret BB:
+in edges: 1047c 10484 
 out edges: 
 00000000
-00010474
-00010478
-0001047c    4 *8* m[484] := 56
-00010480    6 *8* a := m[484]
-00010484    7 RET *8* a := a
+00010488    9 RET *8* a := a
               Modifieds: *8* a,  *16* r11
-              Reaching definitions: a=a,   r9=argv,   r10=envp,   r11=484,   tmp1=484
+              Reaching definitions: a=a,   r9=argv,   r10=envp,   r11=484,   tmp1=tmp1,   %flags=m[986] ~= 1,   %ZF=%ZF
+                %CF=%CF
 
 

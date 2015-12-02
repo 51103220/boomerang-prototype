@@ -2,7 +2,7 @@ PUBLIC bb
 bb:
 	MOV A, #38H
 	MOV DPTR, #whatever + 1H
-	JNB ACC.8, cc
+	JB ACC.8, cc
 	RET
 	
 cc: 
