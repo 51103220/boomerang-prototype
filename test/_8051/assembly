@@ -1,17 +1,8 @@
 PUBLIC bb
 bb:
-	MOV A, dedorewan + 0
-	MOV AA, dedorewan + 3
-	MOV X, #yeah + 0
-	MOV X, #yeah + 100
-	ADD 1, 2
-	CLR DRAB
-	CLR ACC.8
-	JNB ACC.8, cc
-	MOV A, dedorewan + 250
-	ADD a
-	Add b
-
+	MOV A, #100
+	RET
+	
 cc: 
 	MOV A, #yeah + 450
 	MOV A, #yeah + 1000

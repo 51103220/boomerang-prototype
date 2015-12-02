@@ -554,7 +554,7 @@ MOV_DIR_R7 z32
   *8* m[z32] := %r7;
 
 # 0x90
-MOV_dptr_ADDR16 i32
+MOV_DPTR_ADDR16 i32
   *16* %dptr := i32@[0:15];
 
 # ACALL
