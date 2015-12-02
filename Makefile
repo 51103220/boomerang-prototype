@@ -545,72 +545,72 @@ db/xmlprogparser.o: include/hllcode.h include/statement.h include/rtl.h include/
 db/xmlprogparser.o: include/xmlprogparser.h include/boomerang.h include/log.h
 frontend/FrontPentTest.o: include/types.h include/rtl.h include/exp.h include/operator.h include/type.h include/memo.h
 frontend/FrontPentTest.o: include/exphelp.h include/register.h frontend/FrontPentTest.h include/BinaryFile.h
-frontend/FrontPentTest.o: include/decoder.h include/prog.h include/frontend.h include/sigenum.h include/cluster.h
+frontend/FrontPentTest.o: include/decoder.h include/AssemblyInfo.h include/prog.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/FrontPentTest.o: frontend/pentiumfrontend.h include/BinaryFileStub.h
 frontend/FrontSparcTest.o: include/types.h frontend/FrontSparcTest.h include/BinaryFile.h include/proc.h include/exp.h
 frontend/FrontSparcTest.o: include/operator.h include/type.h include/memo.h include/exphelp.h include/cfg.h
 frontend/FrontSparcTest.o: include/basicblock.h include/managed.h include/dataflow.h include/hllcode.h
 frontend/FrontSparcTest.o: include/statement.h include/prog.h include/frontend.h include/sigenum.h include/cluster.h
-frontend/FrontSparcTest.o: frontend/sparcfrontend.h include/decoder.h include/rtl.h include/register.h
+frontend/FrontSparcTest.o: frontend/sparcfrontend.h include/decoder.h include/AssemblyInfo.h include/rtl.h include/register.h
 frontend/FrontSparcTest.o: include/BinaryFileStub.h
 frontend/FrontendTest.o: frontend/FrontendTest.h include/BinaryFile.h include/types.h include/prog.h include/frontend.h
 frontend/FrontendTest.o: include/sigenum.h include/type.h include/memo.h include/cluster.h
-frontend/frontend.o: include/frontend.h include/types.h include/sigenum.h include/BinaryFile.h include/exp.h
+frontend/frontend.o: include/frontend.h include/types.h include/sigenum.h include/BinaryFile.h include/exp.h 
 frontend/frontend.o: include/operator.h include/type.h include/memo.h include/exphelp.h include/cfg.h
 frontend/frontend.o: include/basicblock.h include/managed.h include/dataflow.h include/proc.h include/hllcode.h
-frontend/frontend.o: include/statement.h include/register.h include/rtl.h include/decoder.h frontend/sparcfrontend.h
+frontend/frontend.o: include/statement.h include/register.h include/rtl.h include/decoder.h include/AssemblyInfo.h frontend/sparcfrontend.h
 frontend/frontend.o: frontend/pentiumfrontend.h frontend/ppcfrontend.h frontend/_8051frontend.h frontend/st20frontend.h frontend/mipsfrontend.h include/prog.h
 frontend/frontend.o: include/cluster.h include/signature.h include/boomerang.h include/log.h c/ansi-c-parser.h
 frontend/njmcDecoder.o: include/rtl.h include/exp.h include/operator.h include/types.h include/type.h include/memo.h
-frontend/njmcDecoder.o: include/exphelp.h include/register.h include/decoder.h include/cfg.h include/basicblock.h
+frontend/njmcDecoder.o: include/exphelp.h include/register.h include/decoder.h include/AssemblyInfo.h include/cfg.h include/basicblock.h
 frontend/njmcDecoder.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/njmcDecoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/njmcDecoder.o: include/boomerang.h
 frontend/pentiumdecoder.o: include/rtl.h include/exp.h include/operator.h include/types.h include/type.h include/memo.h
-frontend/pentiumdecoder.o: include/exphelp.h include/register.h include/decoder.h frontend/pentiumdecoder.h
+frontend/pentiumdecoder.o: include/exphelp.h include/register.h include/decoder.h include/AssemblyInfo.h frontend/pentiumdecoder.h
 frontend/pentiumdecoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/pentiumdecoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
 frontend/pentiumdecoder.o: include/hllcode.h include/statement.h include/boomerang.h
 frontend/pentiumfrontend.o: include/types.h include/BinaryFile.h include/frontend.h include/sigenum.h
 frontend/pentiumfrontend.o: frontend/pentiumfrontend.h include/rtl.h include/exp.h include/operator.h include/type.h
-frontend/pentiumfrontend.o: include/memo.h include/exphelp.h include/register.h include/decoder.h
+frontend/pentiumfrontend.o: include/memo.h include/exphelp.h include/register.h include/decoder.h include/AssemblyInfo.h
 frontend/pentiumfrontend.o: frontend/pentiumdecoder.h include/cfg.h include/basicblock.h include/managed.h
 frontend/pentiumfrontend.o: include/dataflow.h include/proc.h include/hllcode.h include/statement.h include/signature.h
-frontend/pentiumfrontend.o: include/prog.h include/cluster.h include/boomerang.h include/log.h
+frontend/pentiumfrontend.o: include/prog.h include/cluster.h include/boomerang.h include/log.h 
 frontend/ppcdecoder.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h include/exphelp.h
 frontend/ppcdecoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/ppcdecoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
-frontend/ppcdecoder.o: include/hllcode.h include/statement.h include/decoder.h include/rtl.h include/register.h
+frontend/ppcdecoder.o: include/hllcode.h include/statement.h include/decoder.h include/AssemblyInfo.h include/rtl.h include/register.h
 frontend/ppcdecoder.o: frontend/ppcdecoder.h include/boomerang.h
 frontend/_8051decoder.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h include/exphelp.h
 frontend/_8051decoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/_8051decoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
-frontend/_8051decoder.o: include/hllcode.h include/statement.h include/decoder.h include/rtl.h include/register.h
+frontend/_8051decoder.o: include/hllcode.h include/statement.h include/decoder.h include/AssemblyInfo.h include/rtl.h include/register.h
 frontend/_8051decoder.o: frontend/_8051decoder.h include/boomerang.h
 frontend/mipsdecoder.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h include/exphelp.h
 frontend/mipsdecoder.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
 frontend/mipsdecoder.o: include/proc.h include/cfg.h include/basicblock.h include/managed.h include/dataflow.h
-frontend/mipsdecoder.o: include/hllcode.h include/statement.h include/decoder.h include/rtl.h include/register.h
+frontend/mipsdecoder.o: include/hllcode.h include/statement.h include/decoder.h  include/AssemblyInfo.h include/rtl.h include/register.h
 frontend/mipsdecoder.o: frontend/mipsdecoder.h include/boomerang.h
 frontend/mipsfrontend.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 frontend/mipsfrontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
 frontend/mipsfrontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/mipsfrontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
-frontend/mipsfrontend.o: include/decoder.h frontend/mipsdecoder.h frontend/mipsfrontend.h include/boomerang.h
+frontend/mipsfrontend.o: include/decoder.h include/AssemblyInfo.h frontend/mipsdecoder.h frontend/mipsfrontend.h include/boomerang.h
 frontend/mipsfrontend.o: include/signature.h
 frontend/ppcfrontend.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 frontend/ppcfrontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
 frontend/ppcfrontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/ppcfrontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
-frontend/ppcfrontend.o: include/decoder.h frontend/ppcdecoder.h frontend/ppcfrontend.h include/boomerang.h
+frontend/ppcfrontend.o: include/decoder.h include/AssemblyInfo.h frontend/ppcdecoder.h frontend/ppcfrontend.h include/boomerang.h
 frontend/ppcfrontend.o: include/signature.h
 frontend/_8051frontend.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 frontend/_8051frontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
 frontend/_8051frontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/_8051frontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
-frontend/_8051frontend.o: include/decoder.h frontend/_8051decoder.h frontend/_8051frontend.h include/boomerang.h
-frontend/_8051frontend.o: include/signature.h include/AssemblyInfo.h
-frontend/sparcdecoder.o: include/decoder.h include/types.h include/rtl.h include/exp.h include/operator.h
+frontend/_8051frontend.o: include/decoder.h include/AssemblyInfo.h frontend/_8051decoder.h frontend/_8051frontend.h include/boomerang.h
+frontend/_8051frontend.o: include/signature.h 
+frontend/sparcdecoder.o: include/decoder.h include/AssemblyInfo.h include/types.h include/rtl.h include/exp.h include/operator.h
 frontend/sparcdecoder.o: include/type.h include/memo.h include/exphelp.h include/register.h include/prog.h
 frontend/sparcdecoder.o: include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h include/proc.h
 frontend/sparcdecoder.o: include/cfg.h include/basicblock.h include/managed.h include/dataflow.h include/hllcode.h
@@ -619,20 +619,20 @@ frontend/sparcfrontend.o: include/exp.h include/operator.h include/types.h inclu
 frontend/sparcfrontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
 frontend/sparcfrontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/sparcfrontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
-frontend/sparcfrontend.o: include/decoder.h frontend/sparcdecoder.h frontend/sparcfrontend.h include/boomerang.h
+frontend/sparcfrontend.o: include/decoder.h include/AssemblyInfo.h frontend/sparcdecoder.h frontend/sparcfrontend.h include/boomerang.h
 frontend/sparcfrontend.o: include/signature.h include/log.h
 frontend/st20decoder.o: include/rtl.h include/exp.h include/operator.h include/types.h include/type.h include/memo.h
-frontend/st20decoder.o: include/exphelp.h include/register.h include/decoder.h frontend/st20decoder.h include/proc.h
+frontend/st20decoder.o: include/exphelp.h include/register.h include/decoder.h include/AssemblyInfo.h frontend/st20decoder.h include/proc.h
 frontend/st20decoder.o: include/cfg.h include/basicblock.h include/managed.h include/dataflow.h include/hllcode.h
 frontend/st20decoder.o: include/statement.h include/boomerang.h
 frontend/st20frontend.o: include/exp.h include/operator.h include/types.h include/type.h include/memo.h
 frontend/st20frontend.o: include/exphelp.h include/register.h include/rtl.h include/cfg.h include/basicblock.h
 frontend/st20frontend.o: include/managed.h include/dataflow.h include/proc.h include/hllcode.h include/statement.h
 frontend/st20frontend.o: include/prog.h include/BinaryFile.h include/frontend.h include/sigenum.h include/cluster.h
-frontend/st20frontend.o: include/decoder.h frontend/st20decoder.h frontend/st20frontend.h include/boomerang.h
+frontend/st20frontend.o: include/decoder.h include/AssemblyInfo.h frontend/st20decoder.h frontend/st20frontend.h include/boomerang.h
 frontend/st20frontend.o: include/signature.h
 frontend/testFront.o: frontend/FrontSparcTest.h include/BinaryFile.h include/types.h frontend/FrontPentTest.h
-frontend/testFront.o: include/decoder.h include/rtl.h include/exp.h include/operator.h include/type.h include/memo.h
+frontend/testFront.o: include/decoder.h include/AssemblyInfo.h include/rtl.h include/exp.h include/operator.h include/type.h include/memo.h
 frontend/testFront.o: include/exphelp.h include/register.h include/prog.h include/frontend.h include/sigenum.h
 frontend/testFront.o: include/cluster.h
 transform/generic.o: include/types.h include/statement.h include/memo.h include/exphelp.h include/managed.h

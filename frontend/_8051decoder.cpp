@@ -7,7 +7,6 @@
 #include <string>
 #include <assert.h>
 #include <cstring>
-
 using namespace std;
 
 inline bool isInteger(const std::string & s) {
@@ -108,7 +107,7 @@ DecodeResult&  _8051Decoder::decodeInstruction (ADDRESS pc, int delta){
   return result;
 }
 
-DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line)
+DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, AssemblyLine* Line)
 {
     static DecodeResult result;
     int delta = 0;

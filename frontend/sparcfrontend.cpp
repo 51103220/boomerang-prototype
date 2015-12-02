@@ -823,6 +823,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 		// is decoded
 		//ADDRESS start = address;
 		DecodeResult inst;
+		AssemblyLine * Line;
 		while (sequentialDecode && ((line<sizeSets)||(!ASS_FILE))) {//donbinhvn: hack herre
 
 			if (Boomerang::get()->traceDecoder)
@@ -846,7 +847,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 			{
 				if(ASS_FILE){
 					if(line<sizeSets){
-								inst = decodeAssemblyInstruction(new_address,assemblySets.at(line));//donbinhvn: decode assembly inst instead of binary	
+								inst = decodeAssemblyInstruction(new_address,assemblySets.at(line),Line);//donbinhvn: decode assembly inst instead of binary	
 							
 					}
 				}
@@ -975,7 +976,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 				// This includes "call" and "ba". If a "call", it might be a move_call_move idiom, or a call to .stret4
 				DecodeResult delay_inst;
 				if(ASS_FILE){
-					delay_inst = decodeAssemblyInstruction(new_address+4,assemblySets.at(line+1));
+					delay_inst = decodeAssemblyInstruction(new_address+4,assemblySets.at(line+1),Line);
 					line = line + 1;	
 				}
 				else
@@ -1127,7 +1128,7 @@ bool SparcFrontEnd::processProc(ADDRESS address, UserProc* proc, std::ofstream &
 
 			case DD: {
 				DecodeResult delay_inst;
-				if (ASS_FILE) delay_inst = decodeAssemblyInstruction(new_address+4,assemblySets.at(line+1));
+				if (ASS_FILE) delay_inst = decodeAssemblyInstruction(new_address+4,assemblySets.at(line+1), Line);
 				else if (inst.numBytes == 4) {
 					// Ordinary instruction. Look at the delay slot
 					delay_inst = decodeInstruction(address+4);

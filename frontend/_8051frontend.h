@@ -8,7 +8,6 @@
 #include "decoder.h"
 #include "exp.h"			// Ugh... just for enum OPER
 #include "frontend.h"		// In case included bare, e.g. ProcTest.cpp
-#include "AssemblyInfo.h"
 
 class FrontEnd;
 class _8051Decoder;
@@ -18,6 +17,7 @@ class CallStatement;
 class _8051FrontEnd : public FrontEnd
 {
 public:
+	
 				_8051FrontEnd(BinaryFile *pBF, Prog* prog, BinaryFileFactory* pbff);
 	/**
 	 * Virtual destructor.

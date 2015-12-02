@@ -60,7 +60,8 @@
 #include "boomerang.h"
 #include "log.h"
 #include "ansi-c-parser.h"
-
+AssemblyProgram* AssProgram;
+AssHandler* ass_handler;
 /*==============================================================================
  * FUNCTION:	  FrontEnd::FrontEnd
  * OVERVIEW:	  Construct the FrontEnd object
@@ -86,6 +87,8 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 			else{
 				int c;
 				std::cout<<"instantiate 8051\n";
+				ass_handler = new AssHandler();
+				AssProgram = ass_handler->process(prog->getPath());
 				std::cin >> c;
 				return new _8051FrontEnd(pBF,prog, pbff);
 			}
@@ -422,7 +425,7 @@ DecodeResult& FrontEnd::decodeInstruction(ADDRESS pc) {
 	return decoder->decodeInstruction(pc, pBF->getTextDelta());
 }
 
-DecodeResult& FrontEnd::decodeAssemblyInstruction(ADDRESS pc,std::string line) {
+DecodeResult& FrontEnd::decodeAssemblyInstruction(ADDRESS pc,std::string line, AssemblyLine* Line) {
 		 //donbinhvn for test only
 		/*DecodeResult test = decoder->decodeAssembly(pc,line);
 		RTL* pRtl = test.rtl;
@@ -432,7 +435,7 @@ DecodeResult& FrontEnd::decodeAssemblyInstruction(ADDRESS pc,std::string line) {
 		std::cerr<<"after print"<<std::endl;
 		
 		std::cerr<<"TEST RTL "<< st.str().c_str() <<std::endl;*/
-	return decoder->decodeAssembly(pc,line);
+	return decoder->decodeAssembly(pc,line, Line);
 }
 
 /*==============================================================================
@@ -548,6 +551,9 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	std::cerr<<"Entering Processing Proc" << std::endl;
 	std::cout<<"Entering Processing Proc\n"; 
 	// just in case you missed it
+	int c;
+	std::cout <<"Name Of Progmram" << AssProgram->name << std::endl;
+	std::cin >> c;
 	Boomerang::get()->alert_new(pProc);
 
 	// We have a set of CallStatement pointers. These may be disregarded if this is a speculative decode
@@ -588,7 +594,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	int line = 0;
 	std::cout << "Size Set = " << sizeSets << std::endl;
 	std::cout << "Spec: " << spec << std::endl;
-
+	AssemblyLine* Line;
 	while ((uAddr = targetQueue.nextAddress(pCfg)) != NO_ADDRESS) {
 		// The list of RTLs for the current basic block
 		std::list<RTL*>* BB_rtls = new std::list<RTL*>();
@@ -606,7 +612,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 			// Decode the inst at uAddr.
 			if(ASS_FILE){
 				if(line < sizeSets)
-					inst = decodeAssemblyInstruction(uAddr,assemblySets.at(line));
+					inst = decodeAssemblyInstruction(uAddr,assemblySets.at(line),Line);
 			}
 			else
 				inst = decodeInstruction(uAddr);

@@ -1,7 +1,31 @@
-MOV R0, 20
-MOV A, 20
-CMP P0
-JB  P0, 66696
-ADD A, R0
-ADD A, 30
-ret
+PUBLIC bb
+bb:
+	MOV A, dedorewan + 0
+	MOV AA, dedorewan + 3
+	MOV X, #yeah + 0
+	MOV X, #yeah + 100
+	ADD 1, 2
+	CLR DRAB
+	CLR ACC.8
+	JNB ACC.8, cc
+	MOV A, dedorewan + 250
+	ADD a
+	Add b
+
+cc: 
+	MOV A, #yeah + 450
+	MOV A, #yeah + 1000
+	SETB ACC.8
+	JB DRAB, dd
+	YEAH finish
+	JMP ff
+
+dd: 
+	aa bb, cc	
+
+ee:
+	done finish
+
+ff: 
+	what ever
+	

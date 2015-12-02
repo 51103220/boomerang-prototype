@@ -34,7 +34,6 @@
 #include "types.h"
 #include "sigenum.h"   // For enums platform and cc
 #include "BinaryFile.h"
-
 class UserProc;
 class Proc;
 class RTL;
@@ -49,8 +48,7 @@ struct DecodeResult;
 class Signature;
 class Statement;
 class CallStatement;
-
-
+class AssemblyLine;
 // Control flow types
 enum INSTTYPE {
 	I_UNCOND,				 // unconditional branch
@@ -124,6 +122,7 @@ protected:
 		std::map<ADDRESS, std::string> refHints;
 		// Map from address to previously decoded RTLs for decoded indirect control transfer instructions
 		std::map<ADDRESS, RTL*> previouslyDecoded;
+
 public:
 		
 		/*
@@ -168,7 +167,7 @@ static	bool		noReturnCallDest(const char *name);
 virtual	int			getInst(int addr);
 
 virtual DecodeResult& decodeInstruction(ADDRESS pc);
-virtual DecodeResult& decodeAssemblyInstruction(ADDRESS pc, std::string line);
+virtual DecodeResult& decodeAssemblyInstruction(ADDRESS pc, std::string line, AssemblyLine* Line);
 
 virtual void extraProcessCall(CallStatement *call, std::list<RTL*> *BB_rtls) { }
 

@@ -45,7 +45,7 @@ virtual DecodeResult& decodeInstruction (ADDRESS pc, int delta);
 	 * Disassembles the machine instruction at pc and returns the number of
 	 * bytes disassembled. Assembler output goes to global _assembly
 	 */
-virtual DecodeResult& decodeAssembly (ADDRESS pc, std::string instr);
+virtual DecodeResult& decodeAssembly (ADDRESS pc, std::string instr,AssemblyLine* line);
 virtual int decodeAssemblyInstruction (ADDRESS pc, int delta);
 
 	/*

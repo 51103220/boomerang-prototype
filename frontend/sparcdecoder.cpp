@@ -398,7 +398,7 @@ RTL* SparcDecoder::createBranchRtl(ADDRESS pc,std::list<Statement*>* stmts,const
  *          interpreter
  * RETURNS:      a DecodeResult structure containing all the information gathered during decoding
  *============================================================================*/
-DecodeResult& SparcDecoder::decodeAssembly (ADDRESS pc, std::string line)
+DecodeResult& SparcDecoder::decodeAssembly (ADDRESS pc, std::string line,AssemblyLine* Line)
 {
   int delta = 0;
   static DecodeResult result;
