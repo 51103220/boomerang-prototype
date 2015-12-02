@@ -5,11 +5,11 @@ ADDRESSBITS := 8;
 INTEGER
 [%r0, %r1, %r2, %r3, %r4, %r5, %r6, %r7, %a, %b][8] -> 0..9,
 [%c][8] -> 10,
-[%dptr][16] -> 11,#0..15,
-[ %p0, %p1, %p2 , %p3, 
+[%dptr][16] -> 11,#0..15
+[ %ab, %p0, %p1, %p2 , %p3, 
   %dpl, %dph, %pcon, %tcon, 
   %tmod, %tl0, %tl1, %th0, %th1, 
-  %scon, %sbuf, %ie, %ip, %psw ][8] -> 13..30, #sfr 
+  %scon, %sbuf, %ie, %ip, %psw ][8] -> 12..30, #sfr 
 [%CF, %AC, %OV][1] -> -1,  # Standard flags
 [%pc][32] -> -1,
 %sp[32] -> 88;
@@ -450,7 +450,7 @@ JMP_AADDDPTR
   *32* %pc := tmp1 + tmp2;
 
 MOV_DIR_IMM  z32, i32
-  *8* z32 := i32;
+  *8* m[z32] := i32;
 
 MOV_A_IMM i32
   *8* %a := i32;
@@ -555,7 +555,7 @@ MOV_DIR_R7 z32
 
 # 0x90
 MOV_DPTR_ADDR16 i32
-  *16* %dptr := i32@[0:15];
+  *16* %dptr := i32;
 
 # ACALL
 
@@ -976,6 +976,10 @@ MOVX_DPTRA_A
 
 MOVX_RI0_A
   *32* tmp1 := zfill(8, 31, %r0)
+  *8* m[tmp1] := %a;
+
+MOVX_RI1_A
+  *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := %a;
 
 MOVX_RI1_A

@@ -551,10 +551,9 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	std::cerr<<"Entering Processing Proc" << std::endl;
 	std::cout<<"Entering Processing Proc\n"; 
 	// just in case you missed it
-	int c;
+	
 	if (AssProgram)
 		std::cout <<"Name Of Program : " << AssProgram->name << std::endl;
-	std::cin >> c;
 	Boomerang::get()->alert_new(pProc);
 
 	// We have a set of CallStatement pointers. These may be disregarded if this is a speculative decode
@@ -600,6 +599,9 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 		}
 	}
 	list<AssemblyLine*>::iterator li;
+	if (temp_lines->size()>0)
+		li = temp_lines->begin();
+	int c;
 	std::cin >> c;
 	//---------------------------------------------------------------------------------------
 	while ((uAddr = targetQueue.nextAddress(pCfg)) != NO_ADDRESS) {
@@ -616,9 +618,11 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 				LOG << "*" << uAddr << "\t";
 
 			// Decode the inst at uAddr.
+			
 			if(ASS_FILE){
-				if(li != temp_lines->end())
+				if(li != temp_lines->end()){
 					inst = decodeAssemblyInstruction(uAddr,"assemblySets.at(line)", (*li));
+				}
 			}
 			else
 				inst = decodeInstruction(uAddr);

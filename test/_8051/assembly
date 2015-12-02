@@ -1,22 +1,10 @@
 PUBLIC bb
 bb:
-	MOV A, #100
+	MOV A, #38H
+	MOV DPTR, #whatever + 1H
+	JNB ACC.8, cc
 	RET
 	
 cc: 
-	MOV A, #yeah + 450
-	MOV A, #yeah + 1000
-	SETB ACC.8
-	JB DRAB, dd
-	YEAH finish
-	JMP ff
-
-dd: 
-	aa bb, cc	
-
-ee:
-	done finish
-
-ff: 
-	what ever
-	
+	MOVX @DPTR, A
+	MOVX A, @DPTR
