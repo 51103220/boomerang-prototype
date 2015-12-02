@@ -10,9 +10,11 @@ parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 __size8 a r8
+unsigned short dptr r11
 end locals
 symbols:
   r8 maps to a type __size8
+  r11 maps to dptr type unsigned short
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
@@ -21,24 +23,37 @@ live variables:
 end live variables
 Twoway BB:
 in edges: 
-out edges: 10488 10480 
+out edges: 1049c 10484 
 00000000
 00010474    1 *8* a := 56
-00010478
-0001047c    4 BRANCH 0x10488, condition equals
+00010478    2 *u16* dptr := 484
+0001047c    3 *8* m[986] := 1
+00010480    5 BRANCH 0x1049c, condition equals
 High level: m[986] ~= 1
+Twoway BB:
+in edges: 10480 
+out edges: 10494 1048c 
+00010484    7 *8* m[484] := 56
+00010488    9 BRANCH 0x10494, condition equals
+High level: m[0x3f7] ~= 0
 Fall BB:
-in edges: 1047c 
-out edges: 10488 
-00010480    6 *8* m[484] := 56
-00010484    8 *8* a := m[484]
+in edges: 10488 
+out edges: 10494 
+0001048c   10 *u16* dptr := 100
+00010490   11 *j8* m[9] := m[9] | 5
+L2: Fall BB:
+in edges: 10488 10490 
+out edges: 1049c 
+00000000
+00010494   12 *8* m[986] := 0
+00010498   14 *8* a := m[zfill(16,31,dptr)]
 L1: Ret BB:
-in edges: 1047c 10484 
+in edges: 10480 10498 
 out edges: 
 00000000
-00010488    9 RET *8* a := a
-              Modifieds: *8* a,  *16* r11
-              Reaching definitions: a=a,   r9=argv,   r10=envp,   r11=484,   tmp1=tmp1,   %flags=m[986] ~= 1,   %ZF=%ZF
+0001049c   15 RET *8* a := a
+              Modifieds: *8* a,  *16* dptr
+              Reaching definitions: a=a,   r9=argv,   r10=envp,   dptr=dptr,   tmp1=tmp1,   %flags=%flags,   %ZF=%ZF,
                 %CF=%CF
 
 

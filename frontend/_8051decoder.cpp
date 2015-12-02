@@ -476,6 +476,161 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         jump->setDest(pc + (Line->offset+1)*4);
         jump->setCondType(BRANCH_JE);
     }
+    else if (opcode == "SETB"){
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        stmts = instantiate(pc, "SETB_DIR", new Const(arg1->value.i));
+    }
+    else if (opcode == "ORL" || opcode == "ANL" || opcode == "XRL") {
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        ei++;
+        AssemblyArgument* arg2 = (*ei)->argList.front();
+        unsigned op1, op2;
+
+        std::stringstream sstm;
+        sstm << opcode << "_";
+        std::string name;
+        switch(arg1->kind){
+            case 6: /* A, C, DIRECT */
+            {   op1 = magic_process(std::string(arg1->value.c));
+                if (op1 == 10){ /*C*/
+                    sstm << "C_DIR";
+                    name = sstm.str();
+                    char *name_ =  new char[name.length() + 1];
+                    strcpy(name_, name.c_str());
+                    stmts = instantiate(pc,name_, new Const(arg2->value.i));
+                }
+                else if (op1 == 8){ /*A*/
+                    sstm << "A_";
+                    switch(arg2->kind){
+                        case 3: /*A, INDIRECT*/
+                        {   op2 = magic_process(arg2->value.c);
+                            if (op2 == 0)
+                                sstm << "RI0";
+                            else if (op2 == 1)
+                                sstm << "RI1";
+                                name = sstm.str();
+                                char *name_ =  new char[name.length() + 1];
+                                strcpy(name_, name.c_str());
+                                stmts = instantiate(pc,name_);
+                            break;
+                        }
+                        case 6: /*A, Rn | DIRECT*/
+                        {   
+                            op2 = magic_process(arg2->value.c);
+                            if (op2 < 8){
+                                sstm << "R" << op2;
+                                name = sstm.str();
+                                char *name_ =  new char[name.length() + 1];
+                                strcpy(name_, name.c_str());
+                                stmts = instantiate(pc, name_);
+                            }
+                            else if (op2 >= 9){
+                                sstm << "DIR";
+                                name = sstm.str();
+                                char *name_ =  new char[name.length() + 1];
+                                strcpy(name_, name.c_str());
+                                stmts = instantiate(pc, name_, new Const(op2));
+                            }
+                            break;
+                        }
+                        case 1: /* A, DIRECT*/
+                        {   
+                            sstm << "DIR";
+                            name = sstm.str();
+                            char *name_ =  new char[name.length() + 1];
+                            strcpy(name_, name.c_str());
+                            stmts = instantiate(pc, name_, new Const(arg2->value.i));
+                            break;
+                        }
+                        case 4: /*A, IMM */
+                        {
+                            sstm << "IMM";
+                            name = sstm.str();
+                            char *name_ =  new char[name.length() + 1];
+                            strcpy(name_, name.c_str());
+                            stmts = instantiate(pc, name_, new Const(arg2->value.i));
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+                else if (op1 >= 9){ /*DIRECT*/
+                    sstm << "DIR_";
+                    switch(arg2->kind){
+                        case 6: /*JUST DIRECT, A*/
+                        {   sstm << "A";
+                            char *name_ =  new char[name.length() + 1];
+                            strcpy(name_, name.c_str());
+                            stmts = instantiate(pc, name_, new Const(op1));
+                            break;
+                        }
+                        case 4: /*DIRECT, IMM*/
+                        {
+                            sstm << "IMM";
+                            name = sstm.str();
+                            char *name_ =  new char[name.length() + 1];
+                            strcpy(name_, name.c_str());
+                            stmts = instantiate(pc, name_,new Const(op1), new Const(arg2->value.i));
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }    
+                break;
+            }
+            case 1 : /*DIRECT*/
+            {   sstm << "DIR_";
+                switch(arg2->kind){
+                    case 6: /*JUST DIRECT, A*/
+                    {   sstm << "A";
+                        char *name_ =  new char[name.length() + 1];
+                        strcpy(name_, name.c_str());
+                        stmts = instantiate(pc, name_, new Const(arg1->value.i));
+                        break;
+                    }
+                    case 4: /*DIRECT, IMM*/
+                    {
+                        sstm << "IMM";
+                        name = sstm.str();
+                        char *name_ =  new char[name.length() + 1];
+                        strcpy(name_, name.c_str());
+                        stmts = instantiate(pc, name_,new Const(arg1->value.i), new Const(arg2->value.i));
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    else if (opcode == "CLR") {
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        unsigned op1;
+        switch(arg1->kind){
+            case 6: /* A, C*/
+            {   op1 = magic_process(std::string(arg1->value.c));
+                if(op1 == 8)
+                    stmts = instantiate(pc, "CLR_A");
+                else if(op1 == 10)
+                    stmts = instantiate(pc, "CLR_C");
+                break;
+            }
+            case 1: /* DIRECT */
+            {   stmts = instantiate(pc, "CLR_DIR", new Const(arg1->value.i));  
+                break;
+            }
+            default:
+                break;
+        }
+    }
     else
     {
         std::cout << "ELSE\n";

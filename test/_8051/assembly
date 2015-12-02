@@ -2,9 +2,16 @@ PUBLIC bb
 bb:
 	MOV A, #38H
 	MOV DPTR, #whatever + 1H
+	SETB ACC.8
 	JB ACC.8, cc
 	RET
 	
 cc: 
 	MOVX @DPTR, A
+	JNB ACC.7, dd
+	CLR ACC.8
 	MOVX A, @DPTR
+	
+dd:
+	MOV DPTR, #100
+	ORL B, #5

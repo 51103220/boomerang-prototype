@@ -282,10 +282,10 @@ ORL_DIR_A z32
   *8* m[z32] := %a | m[z32]{8};
 
 ORL_DIR_IMM  z32, i32
-  *8* m[z32] := m[z32]{8} | i32@[0:7];
+  *8* m[z32] := m[z32]{8} | i32;
 
 ORL_A_IMM i32
-  *8* %a := %a | i32@[0:7];
+  *8* %a := %a | i32;
 
 ORL_A_DIR  z32
   *8* %a := %a | m[z32]{8};
@@ -336,10 +336,10 @@ ANL_DIR_A z32
   *8* m[z32] := %a & m[z32]{8};
 
 ANL_DIR_IMM  z32, i32
-  *8* m[z32] := m[z32]{8} & i32@[0:7];
+  *8* m[z32] := m[z32]{8} & i32;
 
 ANL_A_IMM i32
-  *8* %a := %a & i32@[0:7];
+  *8* %a := %a & i32;
 
 ANL_A_DIR  z32
   *8* %a := %a & m[z32]{8};
@@ -391,7 +391,7 @@ XRL_DIR_A z32
   *8* %a := %a ^ m[z32]{8};
 
 XRL_DIR_IMM  z32, i32
-  *8* m[z32] := m[z32]{8} ^ i32@[0:7];
+  *8* m[z32] := m[z32]{8} ^ i32;
 
 XRL_A_IMM i32
   *8* %a := %a ^ i32;
@@ -771,8 +771,8 @@ PUSH_DIR z32
 AJMP_IMM i32
   *32* %pc := i32;
 
-#CLR_DIR z32
-#  *8* m[z32]{8} := 0;
+CLR_DIR z32
+  *8* m[z32] := 0;
 
 #CLR_C
 #  *1* %CF := 0;
@@ -838,8 +838,8 @@ XCH_A_RI1
 
 # ACALL_addr11
 
-#SETB_DIR  z32
-#  *8* m[z32] := 1;
+SETB_DIR z32
+  *8* m[z32] := 1;
 
 #SETB_C
 #  *1* %CF := 1;
