@@ -794,7 +794,7 @@ void UserProc::initStatements() {
 				}
 			}
 		}
-		std::cerr<<"Debug after initialise"<<std::endl;
+		
 	}
 }
 
@@ -1327,7 +1327,7 @@ ProcSet* UserProc::middleDecompile(ProcList* path, int indent) {
 		if (theReturnStatement) {
 			theReturnStatement->updateModifieds();		// Everything including new arguments reaching the exit
 			theReturnStatement->updateReturns();
-			std::cout<<"----Out loop: "<<theReturnStatement->getNumReturns()<<"\n";
+			
 		}
 
 		printXML();
@@ -1587,13 +1587,13 @@ void UserProc::remUnusedStmtEtc() {
 
 	// Now remove any that have no used
 	if (!Boomerang::get()->noRemoveNull){
-		std::cout << "Remove No used Statement" << " ---\n";
+		
 		remUnusedStmtEtc(refCounts);
 	}
 	
 	// Remove null statements
 	if (!Boomerang::get()->noRemoveNull){
-		std::cout << "Remove Null Statement" << " ---\n";
+		
 		removeNullStatements();
 	}
 	
@@ -1609,7 +1609,6 @@ void UserProc::remUnusedStmtEtc() {
 	if (!Boomerang::get()->noParameterNames) {
 		// Replace the existing temporary parameters with the final ones:
 		//mapExpressionsToParameters();
-		std::cout << "Adding Parameters" << " ---\n";
 		addParameterSymbols();
 
 		if (VERBOSE) {

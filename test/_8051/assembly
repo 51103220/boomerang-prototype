@@ -1,4 +1,8 @@
-PUBLIC bb
+PUBLIC aa
+aa: 
+	ACALL bb
+	RET
+
 bb:
 	MOV A, #38H
 	MOV DPTR, #whatever + 1H

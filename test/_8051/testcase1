@@ -1,4 +1,8 @@
-PUBLIC          ABCDEFG
+PUBLIC          MAIN
+MAIN:
+        LCALL ABCDEFG
+        RET
+
 ABCDEFG:
                 MOV     A,OPTIONS+1
                 JNB     SMPDUP,NOP_K1ECROF

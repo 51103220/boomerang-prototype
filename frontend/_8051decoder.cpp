@@ -634,6 +634,30 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     else if (opcode == "NOP") {
 
     }
+    else if (opcode == "ACALL" || opcode == "LCALL") {
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        bool is_lib = false;
+        ADDRESS address;
+        std::map<ADDRESS, const char*>::iterator it;
+       
+        for(it = namesList.begin();it != namesList.end(); ++it ){
+            if (strcmp(it->second,arg1->value.c) == 0){
+                address = it->first;
+                break;
+            }
+        }
+        CallStatement* newCall = new CallStatement;
+        ADDRESS nativeDest = address - delta;
+        newCall->setDest(nativeDest);
+        Proc* destProc;
+        funcsType[address] = is_lib;
+        destProc = prog->newProc(arg1->value.c, nativeDest, is_lib);
+        newCall->setDestProc(destProc);
+        result.rtl = new RTL(pc, stmts);
+        result.rtl->appendStmt(newCall);
+        result.type = SD;
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;

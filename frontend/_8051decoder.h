@@ -8,7 +8,8 @@
 class Prog;
 class NJMCDecoder;
 struct DecodeResult;
-
+extern std::map<ADDRESS,const char*> namesList;
+extern std::map<ADDRESS,bool> funcsType;
 class _8051Decoder : public NJMCDecoder
 {
 public:

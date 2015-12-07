@@ -2045,10 +2045,10 @@ void CallStatement::setSigArguments() {
 
 	if (!procDest->isLib())
 		return;				// Using dataflow analysis now
-	std::cout << "Signature at setSigArguments : " << signature->prints() << "\n";
+	
 	int n = signature->getNumParams();
 	int i;
-	std::cout <<"Number or param : " << n << std::endl;
+	
 	arguments.clear();
 	for (i = 0; i < n; i++) {
 		Exp *e = signature->getArgumentExp(i);
@@ -2290,8 +2290,6 @@ void CallStatement::generateCode(HLLCode *hll, BasicBlock *pbb, int indLevel) {
 	LOG << "call: " << this;
 	LOG << " in proc " << proc->getName() << "\n";
 #endif
-	std::cout << " in proc " << proc->getName() << "\n";
-	std::cout <<"getNumReturns = " << procDest->getSignature()->getNumReturns() << std::endl;
 	assert(p);
 	if (Boomerang::get()->noDecompile) {
 		if (procDest->getSignature()->getNumReturns() > 0) {		
@@ -4619,11 +4617,11 @@ ArgSourceProvider::ArgSourceProvider(CallStatement* call) : call(call) {
 	Proc* procDest = call->getDestProc();
 	if (procDest && procDest->isLib()) {
 		src = SRC_LIB;
-		std::cout << "is Lib\n";
+		
 		callSig = call->getSignature();
-		std::cout << "Signature " << callSig->prints() << std::endl;
+		
 		n = callSig->getNumParams();
-		std::cout << "n = " << n << std::endl;
+		
 		i = 0;
 	} else if (call->getCalleeReturn() != NULL) {
 		src = SRC_CALLEE;
@@ -4705,14 +4703,14 @@ bool ArgSourceProvider::exists(Exp* e) {
 	bool allZero;
 	switch (src) {
 		case SRC_LIB:
-			std::cout << "LIB\n";
+			
 			if (callSig->hasEllipsis()){
 				// FIXME: for now, just don't check
-				std::cout << "has ellipsis\n";
+				
 				return true;
 			}
 			for (i=0; i < n; i++) {
-				std::cout << "i to n\n";
+				
 				Exp* sigParam = callSig->getParamExp(i)->clone();
 				sigParam->removeSubscripts(allZero);
 				call->localiseComp(sigParam);

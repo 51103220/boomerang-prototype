@@ -51,6 +51,7 @@ enum ICLASS {
 	DU,				// Dynamic Unconditional (not delayed)
 	NCTA			// Non Control Transfer, with following instr Anulled
 };
+
 /*==============================================================================
  * The DecodeResult struct contains all the information that results from
  * calling the decoder. This prevents excessive use of confusing
