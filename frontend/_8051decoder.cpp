@@ -479,7 +479,25 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     else if (opcode == "SETB"){
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
-        stmts = instantiate(pc, "SETB_DIR", new Const(arg1->value.i));
+        //stmts = instantiate(pc, "SETB_DIR", new Const(arg1->value.i));
+        CompoundType* ct = new CompoundType();
+        ct->addType(new IntegerType(32, 1), "newInt");  
+        ct->addType(new FloatType(32), "newFloat");
+        UnionType * ut = new UnionType();
+        ut->addType(new SizeType(8), "x");
+        ut->addType(ct,"m");
+        result.rtl = new RTL(pc, stmts);
+        ImpRefStatement * i_s = new ImpRefStatement((Type*) ut, Location::regOf(6));
+        std::cout << i_s->prints() << std::endl;
+        Assign * a_s = new Assign(new SizeType(8),(Exp *) new Binary(opMemberAccess,Location::regOf(5), new Const("x")),(Exp *) new Const(1), NULL);
+        //stmts = instantiate (pc,"SETB_DIR", new Binary(opMemberAccess,Location::regOf(6),new Const(6)));
+        Assign * a_ss = new Assign((Type *) ut,(Exp *) Location::regOf(6),(Exp *) new TypedExp((Type*) ut, (Exp*) Location::regOf(5)), NULL);
+        std::cout << a_ss->prints() <<  std::endl;
+        
+        result.rtl->appendStmt(a_ss);
+        result.rtl->appendStmt(i_s);
+        result.rtl->appendStmt(a_s);
+        //result.rtl->appendStmt(stmts);
     }
     else if (opcode == "ORL" || opcode == "ANL" || opcode == "XRL") {
         ei = Line->expList->begin();

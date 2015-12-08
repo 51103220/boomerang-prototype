@@ -1,170 +1,71 @@
 got filename elf-init.c for main
-after removing matching assigns (t[WILDSTR]).
-### type analysis for ABCDEFG ###
-### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure ABCDEFG ###
-finding final parameters for ABCDEFG
-potential param r11
-found new parameter r11
+### type analysis for cc ###
+finding final parameters for cc
+potential param r7
+found new parameter r7
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-### type analysis for ABCDEFG ###
-### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure ABCDEFG ###
-finding final parameters for ABCDEFG
+### type analysis for cc ###
 *forced* { int r8 } main(int argc r8, char *[] * argv r9, char *[] * envp r10)
 in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 __size8 a r8
+union { __size8 x; struct { int newInt; float newFloat; } m; } r5 r5
+__size8 r7 r7
 end locals
 symbols:
+  r5 maps to r5 type union { __size8 x; struct { int newInt; float newFloat; } m; }
+  r7 maps to r7 type __size8
   r8 maps to a type __size8
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
 end symbols
-live variables: r11
+live variables: r5,  r7
 end live variables
 Call BB:
 in edges: 
-out edges: 10478 
-00000000
-00010474    1 {*8* a, *16* r11} := CALL ABCDEFG(
+out edges: 1047c 
+00000000    0 *union* r5 := -
+            0 *8* r7 := -
+00010474      *union* IMP REF r5
+            3 *8* r5.x := 1
+00010478    4 *8* a := CALL cc(
+                *8* r7 := r7
               )
-              Reaching definitions: r8=r8{0},   r9=r9{0},   r10=r10{0},   r11=r11{0}
+              Reaching definitions: r5=r5{0},   r6=r5{0},   r7=r7{0},   r8=r8{0},   r9=r9{0},   r10=r10{0}
               Live variables: a
 Ret BB:
-in edges: 10474 
+in edges: 10478 
 out edges: 
-00010478    2 RET *8* a := a
-              Modifieds: *8* a,  *16* r11
-              Reaching definitions: a=a,   r9=argv,   r10=envp,   r11=r11
+0001047c    5 RET *8* a := a
+              Modifieds: *8* a,  *8* r6
+              Reaching definitions: r5=r5,   r6=r5,   r7=r7,   a=a,   r9=argv,   r10=envp
 
 
-void ABCDEFG()
+type failure: no type for subexp1 of r5.x
+void cc(__size8 param1 r7)
 in cluster sparcbinary
-parameters: 
+parameters: 8 param1
 end parameters
 locals:
-__size8 a r8
 end locals
 symbols:
-  r8 maps to a type __size8
-  r11{0} maps to param1 type NULL
+  r7{0} maps to param1 type __size8
 end symbols
-live variables: r1
+live variables: r7
 end live variables
-Twoway BB:
+Ret BB:
 in edges: 
-out edges: 104e8 10484 
-00000000
-0001047c
-00010480    3 BRANCH 0x104e8, condition equals
-High level: m[630] ~= 0
-Twoway BB:
-in edges: 10480 
-out edges: 104c0 1049c 
-00010484
-00010488    6 *8* a := m[0x3ee]
-0001048c    7 *8* m[223] := 1
-00010490    9 *8* m[0x3ee] := a
-00010494   10 *8* m[0x405] := 0
-00010498   12 BRANCH 0x104c0, condition equals
-High level: m[0x405] ~= 1
-Twoway BB:
-in edges: 10498 
-out edges: 104ac 104a8 
-0001049c
-000104a0
-000104a4   17 BRANCH 0x104ac, condition equals
-High level: m[223] ~= 0
-Fall BB:
-in edges: 104a4 
-out edges: 104ac 
-000104a8
-L3: Fall BB:
-in edges: 104a4 104a8 
-out edges: 104c0 
-000104ac
-000104b0   20 *8* a := m[883]
-000104b4   21 *8* m[158] := 0
-000104b8   22 *8* m[962] := 0
-000104bc   24 *8* m[883] := a
-L2: Twoway BB:
-in edges: 10498 104bc 
-out edges: 104d0 104cc 
-00000000
-000104c0
-000104c4
-000104c8   29 BRANCH 0x104d0, condition equals
-High level: m[223] ~= 0
-Fall BB:
-in edges: 104c8 
-out edges: 104d0 
-000104cc
-L4: Fall BB:
-in edges: 104c8 104cc 
-out edges: 104e8 
-000104d0
-000104d4   32 *8* a := m[992]
-000104d8   33 *8* m[158] := 0
-000104dc   34 *8* m[962] := 0
-000104e0   36 *8* m[992] := a
-000104e4
-L1: Twoway BB:
-in edges: 10480 104e4 
-out edges: 1054c 104f0 
-00000000
-000104e8   37 *j8* a := m[56]
-000104ec   39 BRANCH 0x10550, condition equals
-High level: m[962] ~= 1
-Synthetic out edge(s) to L7 
-Twoway BB:
-in edges: 104ec 
-out edges: 1051c 104f8 
-000104f0
-000104f4   42 BRANCH 0x1051c, condition equals
-High level: m[167] ~= 1
-Fall BB:
-in edges: 104f4 
-out edges: 1051c 
-000104f8
-000104fc   45 *j8* a := m[0x3fb]
-00010500
-00010504   47 *j8* m[9] := a & 192
-00010508
-0001050c   50 *j8* a := m[992]
-00010510
-00010514   52 *j8* a := (a & 192) | m[9]
-00010518   54 *j8* m[992] := a
-L6: Twoway BB:
-in edges: 104f4 10518 
-out edges: 1054c 10528 
-00000000
-0001051c
-00010520   57 *j8* a := m[897]
-00010524   59 BRANCH 0x1054c, condition equals
-High level: m[235] ~= 1
-Fall BB:
-in edges: 10524 
-out edges: 1054c 
-00010528
-0001052c   62 *j8* a := m[0x3fb]
-00010530
-00010534   64 *j8* m[9] := a & 192
-00010538
-0001053c   67 *j8* a := m[992]
-00010540
-00010544   69 *j8* a := (a & 192) | m[9]
-00010548   71 *j8* m[992] := a
-L7: Ret BB:
-in edges: 10524 10548 104ec 
 out edges: 
-00000000
-0001054c   72 RET *j8* a := a
-              Modifieds: *8* a,  *16* r11
-              Reaching definitions: r1=r1,   a=a,   r11=r11,   tmp1=tmp1,   %flags=%flags,   %ZF=%ZF,   %CF=%CF
+00000000    0 *8* param1 := -
+00010480
+00010484    2 RET *8* a := param1
+              Modifieds: *8* a
+              Reaching definitions: r7=param1,   a=param1
 
 

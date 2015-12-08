@@ -1,679 +1,126 @@
-got filename superstat.c for main
+got filename stattest.c for main
 after removing matching assigns (t[WILDSTR]).
 after removing matching assigns (%pc).
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 in proc main adding addrExp r28{0} - 108 to local table
-in proc main adding addrExp r28{0} - 104 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 96 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 92 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 88 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 84 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 80 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 72 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 76 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
 in proc main adding addrExp r28{0} - 64 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 60 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 56 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 52 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 44 to local table
-in proc main adding addrExp r28{0} - 36 to local table
 in proc main adding addrExp r28{0} - 4 to local table
+in proc main adding addrExp r28{0} - 8 to local table
 in proc main adding addrExp r28{0} - 112 to local table
 in proc main adding addrExp r28{0} - 116 to local table
 in proc main adding addrExp r28{0} - 120 to local table
 in proc main adding addrExp r28{0} - 124 to local table
 in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
 in proc main adding addrExp r28{0} - 116 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE ERROR: at address 0xffffff88, overlapping type union { __size32 x1; struct stat x2; } does not resolve to compound or array
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 116 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
 in proc main adding addrExp r28{0} - 120 to local table
 in proc main adding addrExp r28{0} - 124 to local table
 in proc main adding addrExp r28{0} - 128 to local table
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 in proc main adding addrExp r28{0} - 108 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff94 existing type union { __size32 x1; struct stat x2; } but added type union { /*signed?*/int x1; struct stat x2; }
-in proc main adding addrExp r28{0} - 104 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 96 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 92 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 88 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 84 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 80 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 72 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 76 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
 in proc main adding addrExp r28{0} - 64 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 60 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 56 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 52 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 44 to local table
-in proc main adding addrExp r28{0} - 36 to local table
 in proc main adding addrExp r28{0} - 4 to local table
 TYPE ERROR: at address 0xfffffffc, overlapping type __size32 does not resolve to compound or array
+in proc main adding addrExp r28{0} - 8 to local table
 in proc main adding addrExp r28{0} - 112 to local table
 in proc main adding addrExp r28{0} - 116 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff8c existing type /*signed?*/int but added type union { void * x7; /*signed?*/int x8; }
+TYPE DIFFERENCE (could be OK): At address 0xffffff8c existing type /*signed?*/int but added type union { void * x5; /*signed?*/int x6; }
 in proc main adding addrExp r28{0} - 120 to local table
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
 in proc main adding addrExp r28{0} - 124 to local table
 in proc main adding addrExp r28{0} - 128 to local table
 in proc main adding addrExp r28{0} - 116 to local table
 in proc main adding addrExp r28{0} - 120 to local table
-TYPE ERROR: at address 0xffffff88, overlapping type union { /*signed?*/int x1; struct stat x2; } does not resolve to compound or array
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 116 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
-in proc main adding addrExp r28{0} - 124 to local table
-in proc main adding addrExp r28{0} - 128 to local table
-in proc main adding addrExp r28{0} - 120 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff88 existing type char * but added type /*signed?*/int
 in proc main adding addrExp r28{0} - 124 to local table
 in proc main adding addrExp r28{0} - 128 to local table
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-could not set type for unknown parameter expression m[r28{0} + 8]
 in proc main adding addrExp r28{0} - 108 to local table
-TYPE DIFFERENCE (could be OK): At address 0xffffff94 existing type union { __size32 x1; struct stat x2; } but added type union { /*signed?*/int x1; struct stat x2; }
-in proc main adding addrExp r28{0} - 96 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 92 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 88 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 84 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 80 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 76 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
 in proc main adding addrExp r28{0} - 64 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 60 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 56 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 52 to local table
-TYPE ERROR: Existing type at address 0xffffff94 is not structure or array type
-in proc main adding addrExp r28{0} - 44 to local table
-in proc main adding addrExp r28{0} - 36 to local table
 could not set type for unknown parameter expression m[r28{0} + 4]
+could not set type for unknown parameter expression m[r28{0} + 8]
 could not set type for unknown parameter expression m[r28{0} + 12]
-in proc main adding addrExp r28{0} - 120 to local table
 local esp has type void * that doesn't agree with type of define void of a library, why?
 local eax has type /*signed?*/int that doesn't agree with type of define __size32 of a library, why?
 *forced* { int r24 } main(int argc m[r28 + 4], char *[] * argv m[r28 + 8], char *[] * envp m[r28 + 12])
-in cluster superstat
+in cluster stattest
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 __size32 eax r24
-union { /*signed?*/int x1; struct stat x2; } local0 m[esp - 108]
-/*signed?*/int local1 m[esp - 96]
-/*signed?*/int local10 m[esp - 52]
-/*signed?*/int local11 m[esp - 44]
-/*signed?*/int local12 m[esp - 36]
-char * local13 m[esp - 120]
-/*signed?*/int local2 m[esp - 92]
-/*signed?*/int local3 m[esp - 88]
-/*signed?*/int local4 m[esp - 84]
-/*signed?*/int local5 m[esp - 80]
-/*signed?*/int local6 m[esp - 76]
-/*signed?*/int local7 m[esp - 64]
-/*signed?*/int local8 m[esp - 60]
-/*signed?*/int local9 m[esp - 56]
+struct stat local0 m[esp - 108]
+/*signed?*/int local1 m[esp - 64]
 end locals
 symbols:
   r24 maps to eax type __size32
-  m[esp - 36] maps to local12 type /*signed?*/int
-  m[esp - 44] maps to local11 type /*signed?*/int
-  m[esp - 52] maps to local10 type /*signed?*/int
-  m[esp - 56] maps to local9 type /*signed?*/int
-  m[esp - 60] maps to local8 type /*signed?*/int
-  m[esp - 64] maps to local7 type /*signed?*/int
-  m[esp - 76] maps to local6 type /*signed?*/int
-  m[esp - 80] maps to local5 type /*signed?*/int
-  m[esp - 84] maps to local4 type /*signed?*/int
-  m[esp - 88] maps to local3 type /*signed?*/int
-  m[esp - 92] maps to local2 type /*signed?*/int
-  m[esp - 96] maps to local1 type /*signed?*/int
-  m[esp - 108] maps to local0 type union { /*signed?*/int x1; struct stat x2; }
-  m[esp - 120] maps to local13 type char *
+  m[esp - 64] maps to local1 type /*signed?*/int
+  m[esp - 108] maps to local0 type struct stat
   m[esp + 4]{0} maps to argc type int
   m[esp + 8]{0} maps to argv type char *[] *
   m[esp + 12]{0} maps to envp type char *[] *
 end symbols
-live variables: r25,  r28,  r29,  m[r28{-} + 8],  m[r28{-} - 36],  m[r28{-} - 44],  m[r28{-} - 52],  m[r28{-} - 56],  m[r28{-} - 60],  m[r28{-} - 64],  m[r28{-} - 72],  m[r28{-} - 76],  m[r28{-} - 80],  m[r28{-} - 84],  m[r28{-} - 88],  m[r28{-} - 92],  m[r28{-} - 96],  m[r28{-} - 104],  m[r28{-} - 108]
+live variables: r26,  r27,  r28,  r29,  m[r28{-} - 64],  m[r28{-} - 108]
 end live variables
 Call BB:
 in edges: 
 out edges: 8048377 
-00000000    0 *32* argv := -
-            0 *union* local0 := -
+00000000    0 *struct stat* local0 := -
             0 *j32* local1 := -
-            0 *j32* local2 := -
-            0 *j32* local3 := -
-            0 *j32* local4 := -
-            0 *j32* local5 := -
-            0 *j32* local6 := -
-            0 *j32* local7 := -
-            0 *j32* local8 := -
-            0 *j32* local9 := -
-            0 *j32* local10 := -
-            0 *j32* local11 := -
-            0 *j32* local12 := -
 0804835c
 0804835d
 0804835f
-08048362
-08048365
+08048360
+08048363
 08048366
-08048369
+08048367
 0804836a
-0804836d   13 *c** local13 := m[argv + 4]
+0804836b
 08048370
-08048372   20 {*j32* eax, *v* r25, *v* r26} := CALL __xstat(
-                *i32* local14 := 3
-                *c** local13 := local13
-                *union** local15 := a[local0]
+08048372   21 {*j32* eax, *v* r25, *v* r26} := CALL __xstat(
+                *i32* local2 := 3
+                *c** local3 := "test/source/stattest.c"
+                *struct stat** local4 := a[local0]
               )
-              Reaching definitions: r24=m[r28{0} + 8]{0},   r25=r25{0},   r26=r28{0} - 108,   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=r28{0} - 108,   m[r28{0} - 120]=m[r28{0} - 120]{13},   m[r28{0} - 124]=3,
-                m[r28{0} - 128]=%pc,   tmp1=r28{0} - 4,   %flags=SUBFLAGS32( r28{0} - 4, 104, r28{0} - 108 ),
-                %ZF=(r28{0} - 108) = 0,   %CF=(r28{0} - 4) <u 104
+              Reaching definitions: r25=r28{0} - 108,   r26=r26{0},   r27=r27{0},   r28=r28{0} - 128,   r29=r28{0} - 4,
+                m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},   m[r28{0} + 12]=m[r28{0} + 12]{0},
+                m[r28{0} - 4]=r29{0},   m[r28{0} - 8]=r27{0},   m[r28{0} - 64]=m[r28{0} - 64]{0},
+                m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r26{0},   m[r28{0} - 116]=r28{0} - 108,
+                m[r28{0} - 120]=0x8048448,   m[r28{0} - 124]=3,   m[r28{0} - 128]=%pc,   tmp1=r28{0} - 8,
+                %flags=SUBFLAGS32( r28{0} - 8, 100, r28{0} - 108 ),   %ZF=(r28{0} - 108) = 0,   %CF=(r28{0} - 8) <u 100
               Live variables: eax
 Call BB:
 in edges: 8048372 
-out edges: 8048384 
+out edges: 804838a 
 08048377
-08048378
-08048379
 0804837a
-0804837f   32 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "res: %i
+0804837d
+0804837e
+08048380
+08048385   35 {*32* eax, *32* r25, *32* r26} := CALL printf(
+                *c** local5 := "Stat returns %d; size of file is %d
 "
-                *j32* local17 := eax
+                *j32* local6 := eax
+                *j32* local7 := local1
               )
-              Reaching definitions: r24=r24{20},   r25=3,   r26=m[r28{0} - 120]{13},   r28=r28{0} - 128,
+              Reaching definitions: r24=r24{21},   r25=r25{21},   r26=r26{21},   r27=r24{21},   r28=r28{0} - 128,
                 r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=r28{0} - 108,   m[r28{0} - 120]=r24{20},   m[r28{0} - 124]=0x8048500,
-                m[r28{0} - 128]=%pc,   tmp1=r28{0} - 4,   %flags=SUBFLAGS32( r28{0} - 4, 104, r28{0} - 108 ),
-                %ZF=(r28{0} - 108) = 0,   %CF=(r28{0} - 4) <u 104
-              Live variables: 
-Call BB:
-in edges: 804837f 
-out edges: 8048397 
-08048384
-08048387
-0804838a
-0804838d
-08048392   45 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "dev: %i
-"
-                *union* local18 := local0
-              )
-              Reaching definitions: r24=r24{32},   r25=r25{32},   r26=r26{32},   r28=r28{0} - 128,   r29=r28{0} - 4,
-                m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},   m[r28{0} + 12]=m[r28{0} + 12]{0},
-                m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},   m[r28{0} - 44]=m[r28{0} - 44]{0},
-                m[r28{0} - 52]=m[r28{0} - 52]{0},   m[r28{0} - 56]=m[r28{0} - 56]{0},
-                m[r28{0} - 60]=m[r28{0} - 60]{0},   m[r28{0} - 64]=m[r28{0} - 64]{0},
-                m[r28{0} - 72]=m[r28{0} - 72]{0},   m[r28{0} - 76]=m[r28{0} - 76]{0},
-                m[r28{0} - 80]=m[r28{0} - 80]{0},   m[r28{0} - 84]=m[r28{0} - 84]{0},
-                m[r28{0} - 88]=m[r28{0} - 88]{0},   m[r28{0} - 92]=m[r28{0} - 92]{0},
-                m[r28{0} - 96]=m[r28{0} - 96]{0},   m[r28{0} - 104]=m[r28{0} - 104]{0},
-                m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},   m[r28{0} - 116]=m[r28{0} - 104]{0},
-                m[r28{0} - 120]=m[r28{0} - 108]{0},   m[r28{0} - 124]=0x804853a,   m[r28{0} - 128]=%pc,
-                tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 8048392 
-out edges: 80483a6 
-08048397
-08048398
-08048399
-0804839c
-080483a1   57 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "ino: %i
-"
-                *j32* local17 := local1
-              )
-              Reaching definitions: r24=0x804853a,   r25=r25{45},   r26=m[r28{0} - 108]{0},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 104]{0},   m[r28{0} - 120]=m[r28{0} - 96]{0},   m[r28{0} - 124]=0x8048509,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483a1 
-out edges: 80483b5 
-080483a6
-080483a7
-080483a8
-080483ab
-080483b0   69 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "mode: %i
-"
-                *j32* local17 := local2
-              )
-              Reaching definitions: r24=m[r28{0} - 96]{0},   r25=0x8048509,   r26=r26{57},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 104]{0},   m[r28{0} - 120]=m[r28{0} - 92]{0},   m[r28{0} - 124]=0x8048512,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483b0 
-out edges: 80483c4 
-080483b5
-080483b6
-080483b7
-080483ba
-080483bf   81 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "nlink: %i
-"
-                *j32* local17 := local3
-              )
-              Reaching definitions: r24=0x8048512,   r25=r25{69},   r26=m[r28{0} - 92]{0},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 104]{0},   m[r28{0} - 120]=m[r28{0} - 88]{0},   m[r28{0} - 124]=0x804851c,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483bf 
-out edges: 80483d3 
-080483c4
-080483c5
-080483c6
-080483c9
-080483ce   93 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "uid: %i
-"
-                *j32* local17 := local4
-              )
-              Reaching definitions: r24=m[r28{0} - 88]{0},   r25=0x804851c,   r26=r26{81},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 104]{0},   m[r28{0} - 120]=m[r28{0} - 84]{0},   m[r28{0} - 124]=0x8048527,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483ce 
-out edges: 80483e2 
-080483d3
-080483d4
-080483d5
-080483d8
-080483dd  105 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "gid: %i
-"
-                *j32* local17 := local5
-              )
-              Reaching definitions: r24=0x8048527,   r25=r25{93},   r26=m[r28{0} - 84]{0},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 104]{0},   m[r28{0} - 120]=m[r28{0} - 80]{0},   m[r28{0} - 124]=0x8048530,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483dd 
-out edges: 80483f5 
-080483e2
-080483e5
-080483e8
-080483eb
-080483f0  118 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "rdev: %i
-"
-                *j32* local17 := local6
-              )
-              Reaching definitions: r24=r24{105},   r25=r25{105},   r26=r26{105},   r28=r28{0} - 128,   r29=r28{0} - 4,
-                m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},   m[r28{0} + 12]=m[r28{0} + 12]{0},
-                m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},   m[r28{0} - 44]=m[r28{0} - 44]{0},
-                m[r28{0} - 52]=m[r28{0} - 52]{0},   m[r28{0} - 56]=m[r28{0} - 56]{0},
-                m[r28{0} - 60]=m[r28{0} - 60]{0},   m[r28{0} - 64]=m[r28{0} - 64]{0},
-                m[r28{0} - 72]=m[r28{0} - 72]{0},   m[r28{0} - 76]=m[r28{0} - 76]{0},
-                m[r28{0} - 80]=m[r28{0} - 80]{0},   m[r28{0} - 84]=m[r28{0} - 84]{0},
-                m[r28{0} - 88]=m[r28{0} - 88]{0},   m[r28{0} - 92]=m[r28{0} - 92]{0},
-                m[r28{0} - 96]=m[r28{0} - 96]{0},   m[r28{0} - 104]=m[r28{0} - 104]{0},
-                m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},   m[r28{0} - 116]=m[r28{0} - 72]{0},
-                m[r28{0} - 120]=m[r28{0} - 76]{0},   m[r28{0} - 124]=0x8048539,   m[r28{0} - 128]=%pc,
-                tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483f0 
-out edges: 8048404 
-080483f5
-080483f6
-080483f7
-080483fa
-080483ff  130 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "size: %i
-"
-                *j32* local17 := local7
-              )
-              Reaching definitions: r24=m[r28{0} - 76]{0},   r25=0x8048539,   r26=r26{118},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 72]{0},   m[r28{0} - 120]=m[r28{0} - 64]{0},   m[r28{0} - 124]=0x8048546,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 80483ff 
-out edges: 8048413 
-08048404
-08048405
-08048406
-08048409
-0804840e  142 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "blksize: %i
-"
-                *j32* local17 := local8
-              )
-              Reaching definitions: r24=0x8048546,   r25=r25{130},   r26=m[r28{0} - 64]{0},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 72]{0},   m[r28{0} - 120]=m[r28{0} - 60]{0},   m[r28{0} - 124]=0x8048543,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 804840e 
-out edges: 8048422 
-08048413
-08048414
-08048415
-08048418
-0804841d  154 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "blocks: %i
-"
-                *j32* local17 := local9
-              )
-              Reaching definitions: r24=m[r28{0} - 60]{0},   r25=0x8048543,   r26=r26{142},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 72]{0},   m[r28{0} - 120]=m[r28{0} - 56]{0},   m[r28{0} - 124]=0x8048550,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 804841d 
-out edges: 8048431 
-08048422
-08048423
-08048424
-08048427
-0804842c  166 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "atime: %i
-"
-                *j32* local17 := local10
-              )
-              Reaching definitions: r24=0x8048550,   r25=r25{154},   r26=m[r28{0} - 56]{0},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 72]{0},   m[r28{0} - 120]=m[r28{0} - 52]{0},   m[r28{0} - 124]=0x804855c,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 804842c 
-out edges: 8048440 
-08048431
-08048432
-08048433
-08048436
-0804843b  178 {*32* eax, *v* r25, *v* r26} := CALL printf(
-                *c** local16 := "mtime: %i
-"
-                *j32* local17 := local11
-              )
-              Reaching definitions: r24=m[r28{0} - 52]{0},   r25=0x804855c,   r26=r26{166},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 72]{0},   m[r28{0} - 120]=m[r28{0} - 44]{0},   m[r28{0} - 124]=0x8048567,
-                m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
-                %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
-              Live variables: 
-Call BB:
-in edges: 804843b 
-out edges: 804844f 
-08048440
-08048441
-08048442
-08048445
-0804844a  190 {*32* eax, *32* r25, *32* r26} := CALL printf(
-                *c** local16 := "ctime: %i
-"
-                *j32* local17 := local12
-              )
-              Reaching definitions: r24=0x8048567,   r25=r25{178},   r26=m[r28{0} - 44]{0},   r28=r28{0} - 128,
-                r29=r28{0} - 4,   m[r28{0} + 4]=m[r28{0} + 4]{0},   m[r28{0} + 8]=m[r28{0} + 8]{0},
-                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 36]=m[r28{0} - 36]{0},
-                m[r28{0} - 44]=m[r28{0} - 44]{0},   m[r28{0} - 52]=m[r28{0} - 52]{0},
-                m[r28{0} - 56]=m[r28{0} - 56]{0},   m[r28{0} - 60]=m[r28{0} - 60]{0},
-                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 72]=m[r28{0} - 72]{0},
-                m[r28{0} - 76]=m[r28{0} - 76]{0},   m[r28{0} - 80]=m[r28{0} - 80]{0},
-                m[r28{0} - 84]=m[r28{0} - 84]{0},   m[r28{0} - 88]=m[r28{0} - 88]{0},
-                m[r28{0} - 92]=m[r28{0} - 92]{0},   m[r28{0} - 96]=m[r28{0} - 96]{0},
-                m[r28{0} - 104]=m[r28{0} - 104]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r25{0},
-                m[r28{0} - 116]=m[r28{0} - 72]{0},   m[r28{0} - 120]=m[r28{0} - 36]{0},   m[r28{0} - 124]=0x8048572,
+                m[r28{0} + 12]=m[r28{0} + 12]{0},   m[r28{0} - 4]=r29{0},   m[r28{0} - 8]=r27{0},
+                m[r28{0} - 64]=m[r28{0} - 64]{0},   m[r28{0} - 108]=m[r28{0} - 108]{0},   m[r28{0} - 112]=r26{0},
+                m[r28{0} - 116]=m[r28{0} - 64]{0},   m[r28{0} - 120]=r24{21},   m[r28{0} - 124]=0x8048460,
                 m[r28{0} - 128]=%pc,   tmp1=(r28{0} - 128) + 4,   %flags=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),
                 %ZF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 ),   %CF=ADDFLAGS32( r28{0} - 124, 12, r28{0} - 112 )
               Live variables: 
 Ret BB:
-in edges: 804844a 
+in edges: 8048385 
 out edges: 
-0804844f
-08048451
-08048452  198 RET *32* eax := 0
-              Modifieds: *32* eax,  *v* r25,  *32* r26,  *v* esp
-              Reaching definitions: eax=0,   r25=r25,   r26=r26,   esp=esp + 4,   r29=r29,   m[esp + 4]=argc,
-                m[esp + 8]=argv,   m[esp + 12]=envp,   m[esp - 4]=r29,   local12=local12,   local11=local11,
-                local10=local10,   local9=local9,   local8=local8,   local7=local7,   m[esp - 72]=m[esp - 72],
-                local6=local6,   local5=local5,   local4=local4,   local3=local3,   local2=local2,   local1=local1,
-                m[esp - 104]=m[esp - 104],   local0=local0,   m[esp - 112]=r25,   local15=m[esp - 72],
-                local13=local12,   local14=0x8048572,   m[esp - 128]=%pc,   tmp1=esp,   %flags=LOGICALFLAGS32( 0 ),
-                %ZF=LOGICALFLAGS32( 0 ),   %CF=LOGICALFLAGS32( 0 )
+0804838a
+0804838c
+0804838f
+08048390   43 RET *j32* eax := eax
+              Modifieds: *v* eax,  *32* r25,  *v* r26,  *v* esp
+              Reaching definitions: eax=eax,   r25=r25,   r26=r26,   r27=r27,   esp=esp + 4,   r29=r29,
+                m[esp + 4]=argc,   m[esp + 8]=argv,   m[esp + 12]=envp,   m[esp - 4]=r29,   m[esp - 8]=r27,
+                local1=local1,   local0=local0,   m[esp - 112]=r26,   local4=local1,   local3=eax,   local2=0x8048460,
+                m[esp - 128]=%pc,   tmp1=esp,   %flags=ADDFLAGS32( esp, 12, esp + 12 ),
+                %ZF=ADDFLAGS32( esp, 12, esp + 12 ),   %CF=ADDFLAGS32( esp, 12, esp + 12 )
 
 

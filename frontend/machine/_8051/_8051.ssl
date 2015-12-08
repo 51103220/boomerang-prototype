@@ -839,7 +839,7 @@ XCH_A_RI1
 # ACALL_addr11
 
 SETB_DIR z32
-  *8* m[z32] := 1;
+  *8* z32 := 1 ;
 
 #SETB_C
 #  *1* %CF := 1;
