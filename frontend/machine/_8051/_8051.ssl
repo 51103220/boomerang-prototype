@@ -6,10 +6,10 @@ INTEGER
 [%r0, %r1, %r2, %r3, %r4, %r5, %r6, %r7, %a, %b][8] -> 0..9,
 [%c][8] -> 10,
 [%dptr][16] -> 11,#0..15
-[ %ab, %p0, %p1, %p2 , %p3, 
+[ %ab, %p0, %p1, %p2 , %p3, %sp, 
   %dpl, %dph, %pcon, %tcon, 
   %tmod, %tl0, %tl1, %th0, %th1, 
-  %scon, %sbuf, %ie, %ip, %psw ][8] -> 12..30, #sfr 
+  %scon, %sbuf, %ie, %ip, %psw ][8] -> 12..31, #sfr 
 [%CF, %AC, %OV][1] -> -1,  # Standard flags
 [%pc][32] -> -1,
 %sp[32] -> 88;
@@ -153,7 +153,7 @@ JB_DIR_IMM  z32, i32
   #*32* %pc := %pc +3
   #add_signed_pc(i32)
   #*1* %CF := [m[z32]{8}=1? 1 : 0];
-  *v* %flags := m[z32]{8}  ~= 1;
+  *v* %flags := z32{8}  ~= 1;
 
 
 AJMP_IMM i32
@@ -215,7 +215,7 @@ JNB_DIR_IMM  z32, i32
   #*32* %pc := %pc +3
   #add_signed_pc(i32)
   #*32* %pc := [m[z32]=0? tmp5 : %pc];
-  *v* %flags := m[z32]{8}  ~= 0;
+  *v* %flags := z32{8}  ~= 0;
 # ACALL
 
 RETI retaddr
@@ -772,7 +772,7 @@ AJMP_IMM i32
   *32* %pc := i32;
 
 CLR_DIR z32
-  *8* m[z32] := 0;
+  *8* z32 := 0;
 
 #CLR_C
 #  *1* %CF := 0;

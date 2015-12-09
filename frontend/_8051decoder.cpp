@@ -37,7 +37,7 @@ inline bool isInteger(const std::string & s) {
 #include "boomerang.h"
 
 unsigned _8051Decoder::magic_process(std::string name) {
-    std::string str = name;
+
     if (name == "R0") return 0;
     else if (name == "R1") return 1;
     else if (name == "R2") return 2;
@@ -55,32 +55,61 @@ unsigned _8051Decoder::magic_process(std::string name) {
     else if (name == "P1") return 14;
     else if (name == "P2") return 15;
     else if (name == "P3") return 16;
+    else if (name == "SP") return 17;
+    else if (name == "DPL") return 18;
+    else if (name == "DPH") return 19;
+    else if (name == "PCON") return 20;
+    else if (name == "TCON") return 21;
+    else if (name == "TMOD") return 22;
+    else if (name == "TL0") return 23;
+    else if (name == "TL1") return 24;
+    else if (name == "TH0") return 25;
+    else if (name == "TH1") return 26;
+    else if (name == "SCON") return 27;
+    else if (name == "SBUF") return 28;
+    else if (name == "IE") return 29;
+    else if (name == "IP") return 30;
+    else if (name == "PSW") return 31;
+    else 
+        return 999;
 }
 
 unsigned map_sfr(std::string name){
-    if (name == "A") return 224;
-    else if (name == "B") return 240;
-    else if (name == "P0") return 128;
-    else if (name == "P1") return 144;
-    else if (name == "P2") return 160;
-    else if (name == "P3") return 176;
-    else if (name == "SP") return 129;
-    else if (name == "DPL") return 130;
-    else if (name == "DPH") return 131;
-    else if (name == "PCON") return 135;
-    else if (name == "TCON") return 136;
-    else if (name == "TMOD") return 137;
-    else if (name == "TL0") return 138;
-    else if (name == "TL1") return 139;
-    else if (name == "TH0") return 140;
-    else if (name == "TH1") return 141;
-    else if (name == "SCON") return 152;
-    else if (name == "SBUF") return 153;
-    else if (name == "IE") return 168;
-    else if (name == "IP") return 184;
-    else if (name == "PSW") return 208;
-    else
-    return 0;
+
+    if (name == "R0") return 0;
+    else if (name == "R1") return 1;
+    else if (name == "R2") return 2;
+    else if (name == "R3") return 3;
+    else if (name == "R4") return 4;
+    else if (name == "R5") return 5;
+    else if (name == "R6") return 6;
+    else if (name == "R7") return 7;
+    else if (name == "A") return 8;
+    else if (name == "B") return 9;
+    else if (name == "C") return 10;
+    else if (name == "DPTR") return 11;
+    else if (name == "AB") return 12;
+    else if (name == "P0") return 13;
+    else if (name == "P1") return 14;
+    else if (name == "P2") return 15;
+    else if (name == "P3") return 16;
+    else if (name == "SP") return 17;
+    else if (name == "DPL") return 18;
+    else if (name == "DPH") return 19;
+    else if (name == "PCON") return 20;
+    else if (name == "TCON") return 21;
+    else if (name == "TMOD") return 22;
+    else if (name == "TL0") return 23;
+    else if (name == "TL1") return 24;
+    else if (name == "TH0") return 25;
+    else if (name == "TH1") return 26;
+    else if (name == "SCON") return 27;
+    else if (name == "SBUF") return 28;
+    else if (name == "IE") return 29;
+    else if (name == "IP") return 30;
+    else if (name == "PSW") return 31;
+    else 
+        return 999;
 }
 static DecodeResult result;
 
@@ -101,7 +130,72 @@ static DecodeResult result;
 DecodeResult&  _8051Decoder::decodeInstruction (ADDRESS pc, int delta){
   return result;
 }
+bool if_a_byte(char * reg){
+    std::list<char*>::iterator br;
+    for(br = bitReg.begin(); br != bitReg.end(); ++ br ){
+        if(strcmp(reg,(*br)) == 0)
+            return true;
+    }  
+    return false;
+}
+list<Statement*>* initial_bit_regs(){
+    std::list<Statement*>* stmts = NULL;
 
+    // Build a Union
+
+    CompoundType* ct = new CompoundType();
+    ct->addType(new SizeType(8), "bit0");  
+    ct->addType(new SizeType(8), "bit1");
+    ct->addType(new SizeType(8), "bit2");
+    ct->addType(new SizeType(8), "bit3");
+    ct->addType(new SizeType(8), "bit4");
+    ct->addType(new SizeType(8), "bit5");
+    ct->addType(new SizeType(8), "bit6");
+    ct->addType(new SizeType(8), "bit7");
+    UnionType * ut = new UnionType();
+    ut->addType(new SizeType(8), "x");
+    ut->addType(ct,"m");
+
+    // A Register will represent a Union variable, i choose Reg0
+
+    ImpRefStatement * i_s = new ImpRefStatement((Type*) ut, Location::regOf(0));
+    std::cout << i_s->prints() << std::endl;
+
+    // Now check in bitReg to match all Register that represents a byte
+    std::list<char*>::iterator br;
+    for(br = bitReg.begin(); br != bitReg.end(); ++ br ){
+        unsigned num = map_sfr(std::string(*br));
+        Assign * a_ss = new Assign((Type *) ut,(Exp *) Location::regOf(0),(Exp *) new TypedExp((Type*) ut, (Exp*) Location::regOf(num)), NULL);
+        std::cout << "REPRESENT A BYTE " << a_ss->prints() << std::endl;
+        stmts->push_back(a_ss);
+    }
+    
+    return stmts;
+}
+
+bool first_line = true;
+
+Exp* byte_present(char * reg){
+    Exp* exp = NULL;
+    unsigned num = map_sfr(reg);
+    exp = new Binary(opMemberAccess,Location::regOf(num), new Const("x"));
+    return exp;
+}
+Exp* access_bit(char * reg, unsigned pos){
+    Exp* exp = NULL;
+    unsigned num = map_sfr(reg);
+
+    std::stringstream sstm;
+    sstm << "bit" << pos;
+    std::string name = sstm.str();
+    char *bit =  new char[name.length() + 1];
+    strcpy(bit, name.c_str());
+
+    Exp * exp1 = new Binary(opMemberAccess,Location::regOf(num), new Const("x"));
+    Exp * exp2 = new Binary(opMemberAccess,exp1, new Const("m"));
+    exp = new Binary(opMemberAccess,exp2, new Const(bit));
+    return exp;
+}
 DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, AssemblyLine* Line)
 {
     static DecodeResult result;
@@ -463,11 +557,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();      
         if (opcode == "JB")
-            stmts = instantiate(pc, "JB_DIR_IMM", new Const(arg1->value.i), new Const(100));
+            stmts = instantiate(pc, "JB_DIR_IMM", access_bit(arg1->value.bit.reg,arg1->value.bit.pos), new Const(100));
         else if (opcode == "JNB")
-            stmts = instantiate(pc, "JNB_DIR_IMM", new Const(arg1->value.i), new Const(100));
-        else if (opcode == "JBC") //TODO: 
-            stmts = instantiate(pc, "JBC_DIR_IMM", new Const(arg1->value.i), new Const(100));
+            stmts = instantiate(pc, "JNB_DIR_IMM", access_bit(arg1->value.bit.reg,arg1->value.bit.pos), new Const(100));
+        else if (opcode == "JBC"){} //TODO: 
+            //stmts = instantiate(pc, "JBC_DIR_IMM", new Const(arg1->value.i), new Const(100));
  
         result.rtl = new RTL(pc, stmts); 
         BranchStatement* jump = new BranchStatement; 
@@ -479,25 +573,8 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     else if (opcode == "SETB"){
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
-        //stmts = instantiate(pc, "SETB_DIR", new Const(arg1->value.i));
-        CompoundType* ct = new CompoundType();
-        ct->addType(new IntegerType(32, 1), "newInt");  
-        ct->addType(new FloatType(32), "newFloat");
-        UnionType * ut = new UnionType();
-        ut->addType(new SizeType(8), "x");
-        ut->addType(ct,"m");
-        result.rtl = new RTL(pc, stmts);
-        ImpRefStatement * i_s = new ImpRefStatement((Type*) ut, Location::regOf(6));
-        std::cout << i_s->prints() << std::endl;
-        Assign * a_s = new Assign(new SizeType(8),(Exp *) new Binary(opMemberAccess,Location::regOf(5), new Const("x")),(Exp *) new Const(1), NULL);
-        //stmts = instantiate (pc,"SETB_DIR", new Binary(opMemberAccess,Location::regOf(6),new Const(6)));
-        Assign * a_ss = new Assign((Type *) ut,(Exp *) Location::regOf(6),(Exp *) new TypedExp((Type*) ut, (Exp*) Location::regOf(5)), NULL);
-        std::cout << a_ss->prints() <<  std::endl;
+        stmts = instantiate(pc, "SETB_DIR", access_bit(arg1->value.bit.reg,arg1->value.bit.pos));
         
-        result.rtl->appendStmt(a_ss);
-        result.rtl->appendStmt(i_s);
-        result.rtl->appendStmt(a_s);
-        //result.rtl->appendStmt(stmts);
     }
     else if (opcode == "ORL" || opcode == "ANL" || opcode == "XRL") {
         ei = Line->expList->begin();
@@ -641,8 +718,8 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                     stmts = instantiate(pc, "CLR_C");
                 break;
             }
-            case 1: /* DIRECT */
-            {   stmts = instantiate(pc, "CLR_DIR", new Const(arg1->value.i));  
+            case 8: /* BIT */
+            {   stmts = instantiate(pc, "CLR_DIR", access_bit(arg1->value.bit.reg,arg1->value.bit.pos));  
                 break;
             }
             default:
@@ -684,8 +761,20 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         result.numBytes = 4;
     }
     result.numBytes = 4;
+
     if(result.valid && result.rtl == 0)
         result.rtl = new RTL(pc, stmts);
+
+    //ADDED ONE-BYTE REGISTER at the first time
+    if(first_line){ 
+        std::list<Statement*>* temp = initial_bit_regs();
+        std::list<Statement*>::iterator li;
+        for(li = temp->begin(); li != temp->end(); ++li){
+            result.rtl->appendStmt((*li));
+        }
+
+        first_line = false;
+    }
     return result;
 }
 

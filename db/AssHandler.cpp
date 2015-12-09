@@ -6,7 +6,7 @@ unsigned int start_address = 66676;
 const int jsize = 2;
 const int bsize = 2;
 const int btsize = 4;
-const int rsize = 30;
+const int rsize = 32;
 const char *jmps[jsize] = {
                    "SJMP",
                    "JMP",
@@ -39,6 +39,7 @@ const char *registers[rsize] = {
                 "P1",
                 "P2",
                 "P3",
+                "SP",
                 "DPL",
                 "DPH",
                 "PCON",
@@ -46,6 +47,7 @@ const char *registers[rsize] = {
                 "TMOD",
                 "TL0",
                 "TL1",
+                "TH1",
                 "TH0",
                 "SCON",
                 "SBUF",
@@ -297,29 +299,38 @@ void handle_bit(AssemblyProgram* &ass_program){
 					if ((*li)->expList->size() > 0){
 						AssemblyExpression* temp_expr = (*li)->expList->front();
 						if(temp_expr->argList.size()>0){
+							bool check = false;
 							AssemblyArgument* temp_arg = temp_expr->argList.front();
+
 							switch(temp_arg->kind){
 								case 6: //ID
-									temp_arg->change(8,temp_arg->value);
+								{	std::string n(temp_arg->value.c);
+									if (n != "A" && n != "C" ){
+										temp_arg->change(8,temp_arg->value);
+										check = true;
+									}
 									break;
+								}	
 								default:
 									break;
 							}
 							//---WHOLE STUFF FOR BIT HANDLING
-							std::string temp(temp_arg->value.c);
-							char c =  temp.at(temp.size()-1);
-							int num = c - '0';
-							temp =  temp.substr(0, temp.size()-1);
-							temp =  temp.substr(0, temp.size()-1);
-							if (temp == "ACC")
-								temp = "A";
-							char *cstr = new char[temp.length() + 1];
-							strcpy(cstr, temp.c_str());
-							Arg a;
-							a.bit.reg = cstr;
-							a.bit.pos = num;
-							temp_arg->change(8,a);
-							ass_program->bitReg.push_back(cstr);
+							if (check){
+								std::string temp(temp_arg->value.c);
+								char c =  temp.at(temp.size()-1);
+								int num = c - '0';
+								temp =  temp.substr(0, temp.size()-1);
+								temp =  temp.substr(0, temp.size()-1);
+								if (temp == "ACC")
+									temp = "A";
+								char *cstr = new char[temp.length() + 1];
+								strcpy(cstr, temp.c_str());
+								Arg a;
+								a.bit.reg = cstr;
+								a.bit.pos = num;
+								temp_arg->change(8,a);
+								ass_program->bitReg.push_back(cstr);
+							}
 							//-------------------------------
 						}
 					}
