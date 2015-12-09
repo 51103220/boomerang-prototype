@@ -10,6 +10,7 @@ class NJMCDecoder;
 struct DecodeResult;
 extern std::map<ADDRESS,const char*> namesList;
 extern std::map<ADDRESS,bool> funcsType;
+extern std::list<char*> bitReg;
 class _8051Decoder : public NJMCDecoder
 {
 public:

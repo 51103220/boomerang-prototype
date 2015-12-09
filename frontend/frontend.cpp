@@ -64,6 +64,7 @@ AssemblyProgram* AssProgram;
 AssHandler* ass_handler;
 std::map<ADDRESS,const char*> namesList;
 std::map<ADDRESS,bool> funcsType;
+std::list<char*> bitReg;
 /*==============================================================================
  * FUNCTION:	  FrontEnd::FrontEnd
  * OVERVIEW:	  Construct the FrontEnd object
@@ -94,6 +95,7 @@ FrontEnd* FrontEnd::instantiate(BinaryFile *pBF, Prog* prog, BinaryFileFactory* 
 				for(lbi = AssProgram->labelList->begin(); lbi != AssProgram->labelList->end(); ++lbi ){
 					namesList[(*lbi)->address] = (*lbi)->name;
 				}
+				bitReg = AssProgram->bitReg;
 				return new _8051FrontEnd(pBF,prog, pbff);
 			}
 		case MACHINE_PPC:
