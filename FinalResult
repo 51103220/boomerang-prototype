@@ -1,7 +1,10 @@
 main
-		CLR
-					 A 
 		MOV
-					 R1 
-					 R0 + 1 
+					 A 
+					 R7 + 1 
+		SETB
+					 P1 
+		MOV
+					 P0 
+					 P1 
 		RET

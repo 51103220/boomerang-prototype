@@ -525,13 +525,13 @@ DIV_AB
 MOV_DIR_DIR  z32, rx32
   *8* m[z32] := m[rx32]{8};
 
-MOV_DIR_RI0 z32
+MOV_DIR_RI0 exp
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[tmp1] := m[z32]{8};
+  *8* m[tmp1] := exp{8};
 
-MOV_DIR_RI1 z32
+MOV_DIR_RI1 exp
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[tmp1] := m[z32]{8};
+  *8* m[tmp1] := exp{8};
 
 MOV_DIR_RI1 z32
   *8* m[z32] := %r1;
@@ -564,8 +564,8 @@ MOV_DIR_R7 z32
   *8* m[z32] := %r7;
 
 # 0x90
-MOV_DPTR_ADDR16 i32
-  *16* %dptr := i32;
+MOV_DPTR_ADDR16 exp, i32
+  *16* exp := i32;
 
 # ACALL
 
@@ -973,13 +973,13 @@ MOV_A_R6
 MOV_A_R7
   *8* %a := %r7;
 
-MOV_A_RI0
+MOV_A_RI0 exp
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* %a := m[tmp1];
+  *8* exp := m[tmp1];
 
 MOV_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* %a := m[tmp1];
+  *8* exp := m[tmp1];
 
 
 # 0xF0

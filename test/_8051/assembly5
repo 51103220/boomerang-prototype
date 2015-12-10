@@ -1,5 +1,6 @@
 PUBLIC main
 main:
-	CLR ACC.7
-	MOV @R1, #R0 + 1
+	MOV A, R7 + 1
+	SETB P1.8
+	MOV P0, P1 
 	RET
