@@ -459,7 +459,7 @@ MOV_A_IMM i32
   *8* %a := i32;
 
 MOV_R0_IMM i32
-  *8* r[8] := i32;
+  *8* r0 := i32;
 
 MOV_R1_IMM i32
   *8* %r1 := i32;
@@ -495,7 +495,7 @@ MOV_RI0_EXP exp
   *8* m[tmp1] := exp;
 
 MOV_RI1_EXP exp
-  *32* tmp1 := zfill(8, 31, %r0)
+  *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := exp;
 
 # 0x80

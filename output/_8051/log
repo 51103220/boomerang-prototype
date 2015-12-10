@@ -1,73 +1,40 @@
 got filename elf-init.c for main
-### type analysis for cc ###
-finding final parameters for cc
-potential param r7
-found new parameter r7
+after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-### type analysis for cc ###
 *forced* { int r8 } main(int argc r9, char *[] * argv r10, char *[] * envp r11)
 in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; } a r8
-__size8 a_1 r8
-__size8 r7 r7
+__size8 r0 r0
 end locals
 symbols:
-  r7 maps to r7 type __size8
+  r0 maps to r0 type __size8
   r8 maps to a type union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; }
-  r8 maps to a_1 type __size8
   r9{0} maps to argc type int
   r10{0} maps to argv type char *[] *
   r11{0} maps to envp type char *[] *
 end symbols
-live variables: r7,  r8
+live variables: r0,  r1,  r8
 end live variables
-Call BB:
-in edges: 
-out edges: 1047c 
-00000000    0 *union* a := -
-            0 *8* r7 := -
-00010474    1 *8* r8.x.m.bit8 := 1
-              *union* IMP REF a
-00010478    4 *8* a_1 := CALL cc(
-                *8* r7 := r7
-              )
-              Reaching definitions: r7=r7{0},   r8=r8{0},   r9=r9{0},   r10=r10{0},   r11=r11{0},   r30=r8{0}
-              Live variables: a_1
 Ret BB:
-in edges: 10478 
+in edges: 
 out edges: 
-0001047c    5 RET *8* a_1 := a_1
-              Modifieds: *8* a_1,  *8* r30
-              Reaching definitions: r7=r7,   a_1=a_1,   r9=argc,   r10=argv,   r11=envp,   r30=a
+00000000    0 *union* a := -
+            0 *8* r0 := -
+00010474    1 *8* r8.x.m.bit7 := 0
+              *union* IMP REF a
+00010478    5 *8* m[zfill(8,31,r1)] := r0 + 1
+0001047c    6 RET
+              Modifieds: *8* r30
+              Reaching definitions: r0=r0,   r1=r1,   r8=a,   r9=argc,   r10=argv,   r11=envp,   r30=a,
+                tmp1=zfill(8,31,r1)
 
 
-type failure: no type for subexp1 of r8.x.m.bit8
+type failure: no type for subexp1 of r8.x.m.bit7
 type failure: no type for subexp1 of r8.x.m
 type failure: no type for subexp1 of r8.x
-void cc(__size8 param1 r7)
-in cluster sparcbinary
-parameters: 8 param1
-end parameters
-locals:
-end locals
-symbols:
-  r7{0} maps to param1 type __size8
-end symbols
-live variables: r7
-end live variables
-Ret BB:
-in edges: 
-out edges: 
-00000000    0 *8* param1 := -
-00010480
-00010484    2 RET *8* a := param1
-              Modifieds: *8* a
-              Reaching definitions: r7=param1,   a=param1
-
-

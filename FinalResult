@@ -1,11 +1,7 @@
-bb
-		SETB
+main
+		CLR
 					 A 
-		ACALL
-					 cc 
-		RET
-cc
 		MOV
-					 A 
-					 R7 
+					 R1 
+					 R0 + 1 
 		RET
