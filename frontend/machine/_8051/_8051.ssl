@@ -490,6 +490,13 @@ MOV_RI1_IMM i32
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := i32;
 
+MOV_RI0_EXP exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *8* m[tmp1] := exp;
+
+MOV_RI1_EXP exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *8* m[tmp1] := exp;
 
 # 0x80
 
@@ -932,9 +939,12 @@ MOVX_A_RI1
 
 CLR_A
   *8* %a := 0;
-  
+
 MOV_A_EXP z32
   *8* %a := z32;
+
+MOV_EXP exp1, exp2
+  *8* exp1 := exp2;
 
 MOV_A_DIR  z32
   *8* %a := m[z32]{8};
@@ -995,13 +1005,13 @@ MOVX_RI1_A
 CPL_A
   *8* %a := 0 - %a;
 
-MOV_RI0_A
+MOV_RI0_A exp
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[tmp1] := %a;
+  *8* m[tmp1] := exp;
 
-MOV_RI1_A
+MOV_RI1_A exp
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[tmp1] := %a;
+  *8* m[tmp1] := exp;
 
 MOV_R0_A
   *8* %r0 := %a;

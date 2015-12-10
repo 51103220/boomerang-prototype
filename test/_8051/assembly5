@@ -1,4 +1,6 @@
 PUBLIC main
 main:
-	MOV A, #R7 + 1
+	CLR ACC.7
+	MOV A, R7 + 1
+	MOV A, #100
 	RET

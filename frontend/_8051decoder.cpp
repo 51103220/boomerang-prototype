@@ -131,6 +131,7 @@ DecodeResult&  _8051Decoder::decodeInstruction (ADDRESS pc, int delta){
 }
 bool if_a_byte(char * reg){
     std::list<char*>::iterator br;
+    std::cout << reg;
     for(br = bitReg.begin(); br != bitReg.end(); ++ br ){
         if(strcmp(reg,(*br)) == 0)
             return true;
@@ -286,13 +287,18 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     if (opcode == "MOV" || opcode == "MOVC" || opcode == "MOVX") {
         Exp* exp1;
         Exp* exp2;
+        //-----EXPRESSION1, ALWAYS AN ID----------------------------
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
-        ++ei;
-        if((*ei)->kind == 2){
-            exp2 = binary_expr((*ei));
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
         }
-        AssemblyArgument* arg2 = (*ei)->argList.front(); 
+        //-----EXPRESSION2, FIRST TEST THE BINARY
+        ++ei;
+        
+        AssemblyArgument* arg2 = (*ei)->argList.front();
+        //---------------------------------------------------------
         unsigned op1;
         unsigned op2;
         if(opcode == "MOV"){
@@ -302,43 +308,64 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                     op1 = magic_process(std::string(arg1->value.c));
                     switch (op1){
                         case 0: /* @R0 */
-                        {    switch (arg2->kind){
-                                case 6: /* ID */
-                                {    op2 = magic_process(arg2->value.c);
-                                    if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12)   /* DIRECT ID */
-                                        stmts = instantiate(pc, "MOV_RI0_DIR", new Const(op2));
-                                    else if(op2 == 8) /* A */
-                                        stmts = instantiate(pc, "MOV_RI0_A");
-                                    break;
+                        {   if((*ei)->kind == 2){
+                                exp2 = binary_expr((*ei));
+                                stmts = instantiate(pc, "MOV_RI0_EXP", exp2);
+                            } 
+                            else {
+                                switch (arg2->kind){
+                                    case 6: /* @R0, ID */
+                                    {   op2 = magic_process(arg2->value.c);
+                                        exp2 = Location::regOf(op2);
+                                        if(if_a_byte(arg2->value.c))
+                                            exp2 = byte_present(arg2->value.c);
+                                        
+                                        if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12)   /* DIRECT ID */
+                                            stmts = instantiate(pc, "MOV_RI0_DIR", exp2);
+                                        else if(op2 == 8) /* A */
+                                            stmts = instantiate(pc, "MOV_RI0_A", exp2);
+                                        break;
+                                    }
+                                    case 4: /* @R0, IMMEDIATE INT */
+                                    {    stmts = instantiate(pc, "MOV_RI0_IMM" , new Const(arg2->value.i));
+                                        break;
+                                    }
+                                    case 1: /* @R0, DIRECT INT */
+                                    {   stmts = instantiate(pc, "MOV_RI0_DIR", new Const(arg2->value.i));
+                                        break;
+                                    }
+                                    default:break; 
                                 }
-                                case 4: /* IMMEDIATE INT */
-                                {    stmts = instantiate(pc, "MOV_RI0_IMM" , new Const(arg2->value.i));
-                                    break;
-                                }
-                                case 1: /* DIRECT INT */
-                                {   stmts = instantiate(pc, "MOV_RI0_DIR", new Const(arg2->value.i));
-                                    break;
-                                }
-                                default:break; 
                             }
                             break;
                         }
                         case 1: /* @R1 */
-                        {    switch (arg2->kind){
-                                case 6: /* ID */
-                                    op2 = magic_process(arg2->value.c);
-                                    if(op2 >= 13 && op2 <= 16)   /* DIRECT ID */
+                        {   if((*ei)->kind == 2){
+                                exp2 = binary_expr((*ei));
+                                stmts = instantiate(pc, "MOV_RI1_EXP", exp2);
+                            } 
+                            else { 
+                                switch (arg2->kind){
+                                    case 6: /* ID */
+
+                                        op2 = magic_process(arg2->value.c);
+                                        exp2 = Location::regOf(op2);
+                                        if(if_a_byte(arg2->value.c))
+                                            exp2 = byte_present(arg2->value.c);
+
+                                        if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12)   /* DIRECT ID */
+                                            stmts = instantiate(pc, "MOV_RI1_DIR", exp2);
+                                        else if(op2 == 8) /* A */
+                                            stmts = instantiate(pc, "MOV_RI1_A",exp2);
+                                        break;
+                                    case 4: /* IMMEDIATE INT */
+                                        stmts = instantiate(pc, "MOV_RI1_IMM" , new Const(arg2->value.i));
+                                        break;
+                                    case 1: /* DIRECT INT */
                                         stmts = instantiate(pc, "MOV_RI1_DIR", new Const(op2));
-                                    else if(op2 == 8) /* A */
-                                        stmts = instantiate(pc, "MOV_RI1_A");
-                                    break;
-                                case 4: /* IMMEDIATE INT */
-                                    stmts = instantiate(pc, "MOV_RI1_IMM" , new Const(arg2->value.i));
-                                    break;
-                                case 1: /* DIRECT INT */
-                                    stmts = instantiate(pc, "MOV_RI1_DIR", new Const(op2));
-                                    break;
-                                default:break; 
+                                        break;
+                                    default:break; 
+                                }
                             }
                             break;
                         }
@@ -395,9 +422,15 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                                     break;
                             }
                         }
-                        else if (op1 == 8){ /* MOV A */ 
-                            if ((*ei)->kind == 2)
-                                stmts = instantiate(pc, "MOV_A_EXP", exp2);
+                        else if (op1 == 8){ /* MOV A */
+                            if (if_a_byte(arg1->value.c))
+                                    exp1 = byte_present(arg1->value.c);
+                            else 
+                                    exp1 = Location::regOf(8);
+                            if ((*ei)->kind == 2){
+                                
+                                stmts = instantiate(pc, "MOV_EXP", exp1, exp2);
+                            }
                             else
                             switch(arg2->kind){
                                 case 3: /* A, INDIRECT */
@@ -512,71 +545,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                         }   
                     break;
                 }
-                case 1: /* MOV DIRECT INT*/
-                {   
-                    std::string name = "MOV_DIR_";
-                    std::stringstream sstm;
-                    sstm << name;
-                    switch(arg2->kind){
-                        case 3: /* DIRECT, INDIRECT*/
-                        {    op2 = magic_process(std::string(arg2->value.c));
-                            if (op2 == 0)
-                                sstm << "RI" << op2;
-                            else if(op2 == 1)
-                                sstm << "RI" << op2;
-                            name = sstm.str();
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_, new Const(op1)); 
-                            break;
-                        }
-                        case 6: /* DIRECT, Rn | DIRECT */
-                        {    op2 = magic_process(std::string(arg2->value.c));
-                            if (op2 < 8 ){ /* DIRECT, Rn */
-                                 sstm << "R" << op2;
-                                name = sstm.str();
-                                char *name_ =  new char[name.length() + 1];
-                                strcpy(name_, name.c_str());
-                                stmts = instantiate(pc, name_, new Const(op1));
-                            }
-                            else if (op2 == 8 ){ /* DIRECT, A */
-                                sstm << "A";
-                                name = sstm.str();
-                                char *name_ =  new char[name.length() + 1];
-                                strcpy(name_, name.c_str());
-                                stmts = instantiate(pc, name_, new Const(op1));
-                            }
-                            else if ((op2 >= 9 && op2 <= 10) || op2 >= 12){ /* DIRECT, DIRECT */
-                                sstm << "DIR";
-                                name = sstm.str();
-                                char *name_ =  new char[name.length() + 1];
-                                strcpy(name_, name.c_str());
-                                stmts = instantiate(pc, name_, new Const(op1), new Const(op2));
-                            }
-
-                            break;
-                        }
-                        case 1: /* DIRECT, DIRECT */
-                        {    sstm << "DIR";
-                            name = sstm.str();
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_, new Const(op1), new Const(arg2->value.i));
-                            break;
-                        }
-                        case 4: /* DIRECT, IMM */
-                        {    sstm << "IMM";
-                            name = sstm.str();
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_ , new Const(op1), new Const(arg2->value.i));
-                            break;
-                        }
-                        default:
-                            break;   
-                        
-                    }
-                }
+               
                 default:
                     break;
             }

@@ -1,5 +1,11 @@
-main
+bb
+		SETB
+					 A 
+		ACALL
+					 cc 
+		RET
+cc
 		MOV
 					 A 
-					 R7 + 1 
+					 R7 
 		RET
