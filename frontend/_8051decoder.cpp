@@ -462,7 +462,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
 
                         }
                         else if (op1 == 11 ){ /* MOV DPTR */
-                            stmts = instantiate(pc,"MOV_DPTR_ADDR16", exp1, new Const(arg2->value.i)); 
+                            if ((*ei)->kind == 2){
+                                exp2 = binary_expr((*ei));
+                                stmts = instantiate(pc,"MOV_DPTR_ADDR16", exp1, exp2); 
+                            }
+                            else
+                                stmts = instantiate(pc,"MOV_DPTR_ADDR16", exp1, new Const(arg2->value.i)); 
                         }
                         else if ((op1 >= 9 && op1 <= 10) || op1 >= 12){ /* MOV DIRECT */
                             Exp * new_exp1 = Location::memOf(exp1);
@@ -537,21 +542,24 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
             switch(arg1->kind){
                 case 3: /* MOVX INDIRECT, A*/
                     op1 = magic_process(std::string(arg1->value.c));
+                    exp2 = Location::regOf(map_sfr(std::string(arg2->value.c)));
+                    if(if_a_byte(arg2->value.c))
+                        exp2 = byte_present(arg2->value.c);
                     if (op1 == 0)
-                        stmts = instantiate(pc, "MOVX_RI0_A");
+                        stmts = instantiate(pc, "MOVX_RI0_A",exp2);
                     else if (op1 == 1 )
-                        stmts = instantiate(pc, "MOVX_RI1_A");
+                        stmts = instantiate(pc, "MOVX_RI1_A", exp2);
                     else if (op1 == 11)
-                         stmts = instantiate(pc, "MOVX_DPTRA_A");
+                         stmts = instantiate(pc, "MOVX_DPTRA_A",exp2);
                     break;
                 case 6: /*MOVX A, INDIRECT*/
                     op2 = magic_process(std::string(arg2->value.c));
                     if (op2 == 0)
-                        stmts = instantiate(pc, "MOVX_A_RI0");
+                        stmts = instantiate(pc, "MOVX_A_RI0",exp1);
                     else if (op2 == 1 )
-                        stmts = instantiate(pc, "MOVX_A_RI1");
+                        stmts = instantiate(pc, "MOVX_A_RI1",exp1);
                     else if (op2 == 11)
-                        stmts = instantiate(pc, "MOVX_A_DPTRA");
+                        stmts = instantiate(pc, "MOVX_A_DPTRA",exp1);
                     break;
                 case 0:
                 case 1:

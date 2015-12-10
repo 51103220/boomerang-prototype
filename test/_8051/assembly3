@@ -5,7 +5,8 @@ bb:
 	SETB ACC.7
 	CLR P0.8
 	JNB ACC.8, cc
-
+	RET
+	
 cc: 
 	MOV R7, #someFlag + 450
 	SETB DRAB

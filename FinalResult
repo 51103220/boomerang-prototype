@@ -1,10 +1,13 @@
 main
 		MOV
+					 DPTR 
+					 R2 + 21 
+		MOVX
 					 A 
-					 R7 + 1 
+					 DPTR 
 		SETB
-					 P1 
-		MOV
-					 P0 
-					 P1 
+					 A 
+		MOVX
+					 DPTR 
+					 A 
 		RET

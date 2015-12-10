@@ -1,0 +1,3 @@
+PUBLIC main
+main:
+	RET

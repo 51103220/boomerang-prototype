@@ -1,45 +1,45 @@
 got filename elf-init.c for main
+after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
-WARNING: size 0x8 meet with __size8 *; allowing temporarily
+size 0x10 meet with size 0x8!
+size 0x8 meet with size 0x10!
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-in proc main adding addrExp r14{0} to local table
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-in proc main adding addrExp r14{0} to local table
 *forced* { int r8 } main(int argc r9, char *[] * argv r10, char *[] * envp r11)
 in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
-union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; } p1 r14
-__size8 r7 r7
+union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; } a r8
+__size16 r2 r2
 end locals
 symbols:
-  r7 maps to r7 type __size8
-  r8 maps to a type __size8
-  r14 maps to p1 type union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; }
+  r2 maps to r2 type __size16
+  r8 maps to a type union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; }
   r9{0} maps to argc type int
   r10{0} maps to argv type char *[] *
   r11{0} maps to envp type char *[] *
 end symbols
-live variables: r7,  r13,  r14
+live variables: r2,  r8
 end live variables
 Ret BB:
 in edges: 
 out edges: 
-00000000    0 *8* r7 := -
-            0 *union* p1 := -
-00010474    1 *8* a := m[r7 + 1]
-              *union* IMP REF p1
-00010478    4 *8* r14.x.m.bit8 := 1
-0001047c    5 *8* m[p0] := m[p1.x]
-00010480    6 RET *8* a := a
-              Modifieds: *8* a,  *8* r30
-              Reaching definitions: r7=r7,   a=a,   r9=argc,   r10=argv,   r11=envp,   r13=p0,   r14=p1,   r30=p1
+00000000    0 *16* r2 := -
+            0 *union* a := -
+00010474      *union* IMP REF a
+00010478    5 *8* r8.x := m[zfill(16,31,r2 + 21)]
+0001047c    6 *8* r8.x.m.bit4 := 1
+00010480    8 *8* m[zfill(16,31,r2 + 21)] := a.x
+00010484    9 RET
+              Modifieds: *16* r11,  *8* r30
+              Reaching definitions: r2=r2,   r8=a,   r9=argc,   r10=argv,   r11=r2 + 21,   r30=a,
+                tmp1=zfill(16,31,r2 + 21)
 
 
-type failure: no type for subexp1 of r14.x.m.bit8
-type failure: no type for subexp1 of r14.x.m
-type failure: no type for subexp1 of r14.x
-type failure: no type for subexp1 of p1.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x.m.bit4
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x

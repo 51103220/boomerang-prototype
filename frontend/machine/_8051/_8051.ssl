@@ -925,17 +925,17 @@ DJNZ_R7_IMM i32
 
 # 0xE0
 
-MOVX_A_DPTRA
+MOVX_A_DPTRA exp
   *32* tmp1 := zfill(16, 31, %dptr)
-  *8* %a := m[tmp1]{8};
+  *8* exp := m[tmp1]{8};
 
-MOVX_A_RI0
+MOVX_A_RI0 exp
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* %a := m[tmp1]{8};
+  *8* exp := m[tmp1]{8};
 
-MOVX_A_RI1
+MOVX_A_RI1 exp
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* %a := m[tmp1]{8};
+  *8* exp := m[tmp1]{8};
 
 CLR_A
   *8* %a := 0;
@@ -984,23 +984,23 @@ MOV_A_RI1
 
 # 0xF0
 
-MOVX_DPTRA_A
+MOVX_DPTRA_A exp
   *32* tmp1 := zfill(16, 31, %dptr)
-  *8* m[tmp1] := %a;
+  *8* m[tmp1] := exp;
 
 # ACALL
 
-MOVX_RI0_A
+MOVX_RI0_A exp
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[tmp1] := %a;
+  *8* m[tmp1] := exp;
 
-MOVX_RI1_A
+MOVX_RI1_A exp
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[tmp1] := %a;
+  *8* m[tmp1] := exp;
 
-MOVX_RI1_A
+MOVX_RI1_A exp
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[tmp1] := %a;
+  *8* m[tmp1] := exp;
 
 CPL_A
   *8* %a := 0 - %a;

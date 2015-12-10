@@ -1,6 +1,7 @@
 PUBLIC main
 main:
-	MOV A, R7 + 1
-	SETB P1.8
-	MOV P0, P1 
+	MOV DPTR, #R2 + #15H
+	MOVX A, @DPTR
+	SETB ACC.4
+	MOVX @DPTR, A
 	RET
