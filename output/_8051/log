@@ -8,72 +8,26 @@ in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
-union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit0; } m; } r0 r0
-union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit0; } m; } r1 r1
+__size8 r7 r7
 end locals
 symbols:
-  r0 maps to r0 type union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit0; } m; }
-  r1 maps to r1 type union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit0; } m; }
-  r8 maps to a type __size8
+  r7 maps to r7 type __size8
   r9{0} maps to argc type int
   r10{0} maps to argv type char *[] *
   r11{0} maps to envp type char *[] *
 end symbols
-live variables: r0,  r1
+live variables: r7
 end live variables
-Twoway BB:
+Ret BB:
 in edges: 
-out edges: 10488 1047c 
-00000000    0 *union* r0 := -
-            0 *union* r1 := -
-            0 *8* a := -
-00010474    1 *8* r0.x.m.bit5 := 1
-              *union* IMP REF r0
-              *union* IMP REF r0
-              *union* IMP REF r1
-              *union* IMP REF r0
-00010478   11 BRANCH 0x10488, condition equals
-High level: (r0.x.m.bit5)*8* ~= 1
-Twoway BB:
-in edges: 10478 
-out edges: 10488 10484 
-0001047c   12 *8* a := 150
-00010480   14 BRANCH 0x10488, condition equals
-High level: (r0.x.m.bit5)*8* ~= 0
-Fall BB:
-in edges: 10480 
-out edges: 10488 
-00010484   15 *8* a := 200
-L1: Twoway BB:
-in edges: 10478 10480 10484 
-out edges: 10490 1048c 
-00000000
-00010488   17 BRANCH 0x10490, condition equals
-High level: (r1.x.m.bit3)*8* ~= 0
-Fall BB:
-in edges: 10488 
-out edges: 10490 
-0001048c   18 *8* a := 200
-L2: Ret BB:
-in edges: 10488 1048c 
 out edges: 
-00000000
-00010490   19 RET *8* a := a
-              Modifieds: *8* a,  *8* r30
-              Reaching definitions: r0=r0,   r1=r1,   a=a,   r9=argc,   r10=argv,   r11=envp,   r30=r0,
-                %flags=(r1.x.m.bit3)*8* ~= 0,   %ZF=%ZF,   %CF=%CF
+00000000    0 *8* r7 := -
+            0 *i32* argc := -
+            0 *[c*]** argv := -
+            0 *[c*]** envp := -
+00010474
+00010478    2 RET *8* a := r7 + 1
+              Modifieds: *8* a
+              Reaching definitions: r7=r7,   a=r7 + 1
 
 
-type failure: no type for subexp1 of r0.x.m.bit5
-type failure: no type for subexp1 of r0.x.m
-type failure: no type for subexp1 of r0.x
-type failure: no type for subexp1 of r0.x.m.bit5
-type failure: no type for subexp1 of r0.x.m
-type failure: no type for subexp1 of r0.x
-type failure: no type for subexp1 of r0.x.m.bit5
-type failure: no type for subexp1 of r0.x.m
-type failure: no type for subexp1 of r0.x
-type failure: no type for subexp1 of r1.x.m.bit3
-type failure: no type for subexp1 of r1.x.m
-type failure: no type for subexp1 of r1.x

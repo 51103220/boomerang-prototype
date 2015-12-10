@@ -195,6 +195,78 @@ Exp* access_bit(char * reg, unsigned pos){
     exp = new Binary(opMemberAccess,exp2, new Const(bit));
     return exp;
 }
+Exp* binary_expr(AssemblyExpression* expr){
+    Exp* exp;
+    Exp* exp1;
+    Exp* exp2;
+    list<AssemblyArgument*>::iterator ai;
+    bool imm = false;
+    bool lhs = true;
+    OPER op;
+    for (ai = expr->argList.begin(); ai != expr->argList.end(); ++ ai){
+        switch((*ai)->kind){
+            case 7 : //OPERATOR
+            {  
+                if (strcmp((*ai)->value.c,"+") == 0 )
+                    op = opPlus;
+                if (strcmp((*ai)->value.c,"-") == 0 )
+                    op = opMinus;
+                if (strcmp((*ai)->value.c,"*") == 0 )
+                    op = opMult;
+                if (strcmp((*ai)->value.c,"/") == 0 )
+                    op = opDiv;
+                break;
+            }
+            case 6: // ID , handle as memOf
+            {   if(lhs){
+                    
+                    exp1 = Location::regOf((map_sfr(std::string((*ai)->value.c))));
+                    lhs = false;
+                }
+                else{
+                    exp2 = Location::regOf((map_sfr(std::string((*ai)->value.c))));
+                  
+                }
+                break;
+            }
+            case 5: // IMMEDIATE ID , handle as regOf
+            {   imm = true;
+                if(lhs){
+                    exp1 = Location::regOf(map_sfr(std::string((*ai)->value.c)));
+                    lhs = false;
+                }
+                else{
+                    exp2 = Location::regOf(map_sfr(std::string((*ai)->value.c)));
+                }
+                break;
+            }
+            case 1:
+            case 4: //IMMEDIATE INT
+            {   
+                if(lhs){
+                    exp1 = new Const((*ai)->value.i);
+                    lhs = false;
+                }
+                else{
+                    
+                    exp2 = new Const((*ai)->value.i);
+                }
+                
+                break;
+            }
+            default:
+                break;
+        }
+
+    }
+    
+    if (imm)
+        exp = new Binary(op, exp1, exp2);
+    else
+        exp = Location::memOf(new Binary(op, exp1, exp2));
+    return exp;
+}
+
 DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, AssemblyLine* Line)
 {
     static DecodeResult result;
@@ -209,14 +281,17 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     //ADDRESS nextPC = NO_ADDRESS;
     dword MATCH_p = hostPC;
     //-------------------------
-
     std::string opcode(Line->name);
     list<AssemblyExpression*>::iterator ei;
-
     if (opcode == "MOV" || opcode == "MOVC" || opcode == "MOVX") {
+        Exp* exp1;
+        Exp* exp2;
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
         ++ei;
+        if((*ei)->kind == 2){
+            exp2 = binary_expr((*ei));
+        }
         AssemblyArgument* arg2 = (*ei)->argList.front(); 
         unsigned op1;
         unsigned op2;
@@ -321,6 +396,9 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                             }
                         }
                         else if (op1 == 8){ /* MOV A */ 
+                            if ((*ei)->kind == 2)
+                                stmts = instantiate(pc, "MOV_A_EXP", exp2);
+                            else
                             switch(arg2->kind){
                                 case 3: /* A, INDIRECT */
                                 {   op2 = magic_process(std::string(arg2->value.c));

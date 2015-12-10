@@ -1,0 +1,4 @@
+PUBLIC main
+main:
+	MOV A, #R7 + 1
+	RET

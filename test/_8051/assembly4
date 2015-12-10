@@ -1,6 +1,7 @@
 PUBLIC bb
 bb:	
 	SETB R0.5
+	CLR R1.3
 	JB R0.5, cc
 	JNB R1.3, dd
 	RET

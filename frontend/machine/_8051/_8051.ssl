@@ -932,6 +932,9 @@ MOVX_A_RI1
 
 CLR_A
   *8* %a := 0;
+  
+MOV_A_EXP z32
+  *8* %a := z32;
 
 MOV_A_DIR  z32
   *8* %a := m[z32]{8};

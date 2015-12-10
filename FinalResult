@@ -1,36 +1,5 @@
-bb
-		SETB
-					 R0 
-		JB
-					 R0 
-					 cc 
+main
 		MOV
 					 A 
-					 150 
-		JNB
-					 R0 
-					 dd 
-		MOV
-					 A 
-					 200 
-		JNB
-					 R1 
-					 dd 
-		MOV
-					 A 
-					 200 
+					 R7 + 1 
 		RET
-cc
-		MOV
-					 A 
-					 150 
-		JNB
-					 R0 
-					 dd 
-		MOV
-					 A 
-					 200 
-dd
-		MOV
-					 A 
-					 200 
