@@ -574,9 +574,6 @@ MOV_DIR_RI1 exp
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := exp{8};
 
-MOV_DIR_RI1 z32
-  *8* m[z32] := %r1;
-
 MOV_DIR_R0 z32
   *8* m[z32] := %r0;
 

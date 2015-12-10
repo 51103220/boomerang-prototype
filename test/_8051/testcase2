@@ -1,9 +1,4 @@
-PUBLIC          MAIN
-MAIN:   
-        MOV   A, #100
-        LCALL ABCDEFG
-        RET
-
+PUBLIC          ABCDEFG
 ABCDEFG:
                 MOV     A,OPTIONS+1
                 JNB     SMPDUP,NOP_K1ECROF
@@ -27,11 +22,11 @@ TSMKHC:         MOV     A,BTS
 BPFUPFL:        MOV     DPTR,#SYSFLGMAP+04H
                 MOVX    A,@DPTR
                 ANL     A,#11000000B
-                MOV     B,A
+                MOV     R1,A
                 MOV     DPTR,#SLVFLGMAP+06H     
                 MOVX    A,@DPTR                 
                 ANL     A,#11000000B
-                ORL     A,B
+                ORL     A,R1
                 MOVX    @DPTR,A
 
 CLRBRAC:        CLR     CARB                    
@@ -122,11 +117,11 @@ NNGOL4:         JB      CARB,NNGRET
 NNGRET:         MOV     DPTR,#SLVFLGMAP+06H    
                 MOVX    A,@DPTR         
                 ANL     A,#11000000B
-                MOV     B,A
+                MOV     R1,A
                 MOV     DPTR,#SYSFLGMAP+4H
                 MOVX    A,@DPTR
                 ANL     A,#3FH  
-                ORL     A,B
+                ORL     A,R1
                 MOVX    @DPTR,A
 
 ENODXPDKP:      RET

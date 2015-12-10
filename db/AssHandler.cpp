@@ -61,6 +61,15 @@ void init_defined(){
 	defined["Option"] = "R1";
 	defined["someFlag"] = "R2";
 	defined["DRAB"] = "ACC.1";
+	defined["CARB"] = "ACC.3";
+	defined["OPTIONS"] = "R7";
+	defined["SMPDUP"] = "ACC.1";
+	defined["SLVFLGMAP"] = "R6";
+	defined["MASTER"] = "ACC.2";
+	defined["XROVLY"] = "R5";
+	defined["SIMP"] = "ACC.4";
+	defined["SYSFLGMAP"] = "R4";
+	defined["BTS"] = "P0";
 }
 char * defined_value(char * name){
 	std::map<char *,char *>::iterator it;

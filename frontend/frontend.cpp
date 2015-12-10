@@ -65,6 +65,7 @@ AssHandler* ass_handler;
 std::map<ADDRESS,const char*> namesList;
 std::map<ADDRESS,bool> funcsType;
 std::list<char*> bitReg;
+bool first_line;
 /*==============================================================================
  * FUNCTION:	  FrontEnd::FrontEnd
  * OVERVIEW:	  Construct the FrontEnd object
@@ -556,7 +557,7 @@ bool FrontEnd::processProc(ADDRESS uAddr, UserProc* pProc, std::ofstream &os, bo
 	PBB pBB;					// Pointer to the current basic block
 	std::cout<<"Entering Processing Proc\n"; 
 	// just in case you missed it
-	
+	first_line = true;
 	if (AssProgram)
 		std::cout <<"Name Of Program : " << AssProgram->name << std::endl;
 	Boomerang::get()->alert_new(pProc);

@@ -173,7 +173,7 @@ list<Statement*>* initial_bit_regs(){
     return stmts;
 }
 
-bool first_line = true;
+extern bool first_line;
 
 Exp* byte_present(char * reg){
     Exp* exp = NULL;
