@@ -55,27 +55,26 @@ unsigned _8051Decoder::magic_process(std::string name) {
     else if (name == "P1") return 14;
     else if (name == "P2") return 15;
     else if (name == "P3") return 16;
-    else if (name == "SP") return 17;
-    else if (name == "DPL") return 18;
-    else if (name == "DPH") return 19;
-    else if (name == "PCON") return 20;
-    else if (name == "TCON") return 21;
-    else if (name == "TMOD") return 22;
-    else if (name == "TL0") return 23;
-    else if (name == "TL1") return 24;
-    else if (name == "TH0") return 25;
-    else if (name == "TH1") return 26;
-    else if (name == "SCON") return 27;
-    else if (name == "SBUF") return 28;
-    else if (name == "IE") return 29;
-    else if (name == "IP") return 30;
-    else if (name == "PSW") return 31;
+    else if (name == "SP") return 88;
+    else if (name == "DPL") return 17;
+    else if (name == "DPH") return 18;
+    else if (name == "PCON") return 19;
+    else if (name == "TCON") return 20;
+    else if (name == "TMOD") return 21;
+    else if (name == "TL0") return 22;
+    else if (name == "TL1") return 23;
+    else if (name == "TH0") return 24;
+    else if (name == "TH1") return 25;
+    else if (name == "SCON") return 26;
+    else if (name == "SBUF") return 27;
+    else if (name == "IE") return 28;
+    else if (name == "IP") return 29;
+    else if (name == "PSW") return 30;
     else 
         return 999;
 }
 
 unsigned map_sfr(std::string name){
-
     if (name == "R0") return 0;
     else if (name == "R1") return 1;
     else if (name == "R2") return 2;
@@ -93,21 +92,21 @@ unsigned map_sfr(std::string name){
     else if (name == "P1") return 14;
     else if (name == "P2") return 15;
     else if (name == "P3") return 16;
-    else if (name == "SP") return 17;
-    else if (name == "DPL") return 18;
-    else if (name == "DPH") return 19;
-    else if (name == "PCON") return 20;
-    else if (name == "TCON") return 21;
-    else if (name == "TMOD") return 22;
-    else if (name == "TL0") return 23;
-    else if (name == "TL1") return 24;
-    else if (name == "TH0") return 25;
-    else if (name == "TH1") return 26;
-    else if (name == "SCON") return 27;
-    else if (name == "SBUF") return 28;
-    else if (name == "IE") return 29;
-    else if (name == "IP") return 30;
-    else if (name == "PSW") return 31;
+    else if (name == "SP") return 88;
+    else if (name == "DPL") return 17;
+    else if (name == "DPH") return 18;
+    else if (name == "PCON") return 19;
+    else if (name == "TCON") return 20;
+    else if (name == "TMOD") return 21;
+    else if (name == "TL0") return 22;
+    else if (name == "TL1") return 23;
+    else if (name == "TH0") return 24;
+    else if (name == "TH1") return 25;
+    else if (name == "SCON") return 26;
+    else if (name == "SBUF") return 27;
+    else if (name == "IE") return 28;
+    else if (name == "IP") return 29;
+    else if (name == "PSW") return 30;
     else 
         return 999;
 }
@@ -139,12 +138,12 @@ bool if_a_byte(char * reg){
     return false;
 }
 list<Statement*>* initial_bit_regs(){
-    std::list<Statement*>* stmts = NULL;
+    std::list<Statement*>* stmts = new list<Statement*>();
 
     // Build a Union
 
     CompoundType* ct = new CompoundType();
-    ct->addType(new SizeType(8), "bit0");  
+      
     ct->addType(new SizeType(8), "bit1");
     ct->addType(new SizeType(8), "bit2");
     ct->addType(new SizeType(8), "bit3");
@@ -152,24 +151,24 @@ list<Statement*>* initial_bit_regs(){
     ct->addType(new SizeType(8), "bit5");
     ct->addType(new SizeType(8), "bit6");
     ct->addType(new SizeType(8), "bit7");
+    ct->addType(new SizeType(8), "bit0");
     UnionType * ut = new UnionType();
     ut->addType(new SizeType(8), "x");
     ut->addType(ct,"m");
 
-    // A Register will represent a Union variable, i choose Reg0
+    // A Register will represent a Union variable, i choose Reg31
 
-    ImpRefStatement * i_s = new ImpRefStatement((Type*) ut, Location::regOf(0));
-    std::cout << i_s->prints() << std::endl;
-
+    
     // Now check in bitReg to match all Register that represents a byte
     std::list<char*>::iterator br;
     for(br = bitReg.begin(); br != bitReg.end(); ++ br ){
         unsigned num = map_sfr(std::string(*br));
-        Assign * a_ss = new Assign((Type *) ut,(Exp *) Location::regOf(0),(Exp *) new TypedExp((Type*) ut, (Exp*) Location::regOf(num)), NULL);
+        ImpRefStatement * i_s = new ImpRefStatement((Type*) ut, Location::regOf(num));
+        stmts->push_back(i_s);
+        Assign * a_ss = new Assign((Type *) ut,(Exp *) Location::regOf(30),(Exp *) new TypedExp((Type*) ut, (Exp*) Location::regOf(num)), NULL);
         std::cout << "REPRESENT A BYTE " << a_ss->prints() << std::endl;
-        stmts->push_back(a_ss);
+        stmts->push_back(a_ss);      
     }
-    
     return stmts;
 }
 
@@ -435,7 +434,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                         }   
                     break;
                 }
-                case 1: /* MOV DIRECT */
+                case 1: /* MOV DIRECT INT*/
                 {   
                     std::string name = "MOV_DIR_";
                     std::stringstream sstm;
@@ -573,8 +572,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     else if (opcode == "SETB"){
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
-        stmts = instantiate(pc, "SETB_DIR", access_bit(arg1->value.bit.reg,arg1->value.bit.pos));
-        
+        stmts = instantiate(pc, "SETB_DIR", access_bit(arg1->value.bit.reg,arg1->value.bit.pos));        
     }
     else if (opcode == "ORL" || opcode == "ANL" || opcode == "XRL") {
         ei = Line->expList->begin();
@@ -775,6 +773,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
 
         first_line = false;
     }
+
     return result;
 }
 

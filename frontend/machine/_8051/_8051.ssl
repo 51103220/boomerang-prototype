@@ -3,13 +3,15 @@ MAX8BITS := 0xFF;
 ADDRESSBITS := 8;
 
 INTEGER
-[%r0, %r1, %r2, %r3, %r4, %r5, %r6, %r7, %a, %b][8] -> 0..9,
-[%c][8] -> 10,
+[%r0, %r1, %r2, %r3, %r4, %r5, %r6, %r7 ][8] -> 0..7,
+%a[8] -> 8,
+%b[8] -> 9,
+%c[8] -> 10,
 [%dptr][16] -> 11,#0..15
-[ %ab, %p0, %p1, %p2 , %p3, %sp, 
+[  %ab, %p0, %p1, %p2 , %p3, 
   %dpl, %dph, %pcon, %tcon, 
   %tmod, %tl0, %tl1, %th0, %th1, 
-  %scon, %sbuf, %ie, %ip, %psw ][8] -> 12..31, #sfr 
+  %scon, %sbuf, %ie, %ip, %psw ][8] -> 12..30, #sfr 
 [%CF, %AC, %OV][1] -> -1,  # Standard flags
 [%pc][32] -> -1,
 %sp[32] -> 88;
@@ -457,7 +459,7 @@ MOV_A_IMM i32
   *8* %a := i32;
 
 MOV_R0_IMM i32
-  *8* %r0 := i32;
+  *8* r[8] := i32;
 
 MOV_R1_IMM i32
   *8* %r1 := i32;

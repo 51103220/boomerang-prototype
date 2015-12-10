@@ -979,6 +979,7 @@ void CallingConvention::StdC::SparcSignature::addReturn(Type *type, Exp *e)
 {
 	if (type->isVoid())
 		return;
+
 	if (e == NULL) {
 		e = Location::regOf(8);
 	}
@@ -1002,8 +1003,12 @@ Exp *CallingConvention::StdC::SparcSignature::getArgumentExp(int n) {
 		e = Location::memOf(new Binary(opPlus,
 			Location::regOf(14), // %o6 == %sp
 			new Const(92 + (n-6)*4)));
-	} else
-		e = Location::regOf((int)(8 + n));
+	} else{
+		if(!_8051)
+			e = Location::regOf((int)(8 + n));
+		else 
+			e = Location::regOf((int)(9 + n));
+	}
 	return e;
 }
  

@@ -1,0 +1,11 @@
+bb
+		SETB
+					 A 
+		ACALL
+					 cc 
+		RET
+cc
+		MOV
+					 A 
+					 R7 
+		RET

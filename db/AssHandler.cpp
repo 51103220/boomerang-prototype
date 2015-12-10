@@ -310,7 +310,10 @@ void handle_bit(AssemblyProgram* &ass_program){
 										check = true;
 									}
 									break;
-								}	
+								}
+								case 8: //BIT
+									check = true;
+									break;	
 								default:
 									break;
 							}
