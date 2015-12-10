@@ -1,3 +1,4 @@
 PUBLIC main
 main:
+	ANL     A,#3FH  
 	RET

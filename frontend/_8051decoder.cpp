@@ -602,75 +602,77 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         stmts = instantiate(pc, "SETB_DIR", access_bit(arg1->value.bit.reg,arg1->value.bit.pos));        
     }
     else if (opcode == "ORL" || opcode == "ANL" || opcode == "XRL") {
+        stringstream ss;
+        ss << opcode << "_EXP";
+        string str(ss.str());
+        char *name =  new char[str.length() + 1];
+        strcpy(name, str.c_str());
+        Exp* exp1;
+        Exp* exp2;
+
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
+        }
+
         ei++;
         AssemblyArgument* arg2 = (*ei)->argList.front();
         unsigned op1, op2;
 
-        std::stringstream sstm;
-        sstm << opcode << "_";
-        std::string name;
         switch(arg1->kind){
             case 6: /* A, C, DIRECT */
             {   op1 = magic_process(std::string(arg1->value.c));
-                if (op1 == 10){ /*C*/
-                    sstm << "C_DIR";
-                    name = sstm.str();
-                    char *name_ =  new char[name.length() + 1];
-                    strcpy(name_, name.c_str());
-                    stmts = instantiate(pc,name_, new Const(arg2->value.i));
-                }
-                else if (op1 == 8){ /*A*/
-                    sstm << "A_";
+                if (op1 == 8){ /*A*/
                     switch(arg2->kind){
                         case 3: /*A, INDIRECT*/
                         {   op2 = magic_process(arg2->value.c);
-                            if (op2 == 0)
-                                sstm << "RI0";
-                            else if (op2 == 1)
-                                sstm << "RI1";
-                                name = sstm.str();
-                                char *name_ =  new char[name.length() + 1];
-                                strcpy(name_, name.c_str());
-                                stmts = instantiate(pc,name_);
+                            if (op2 == 0){
+                                if (opcode == "ORL")
+                                    stmts = instantiate(pc,"ORL_EXP_RI0", exp1);
+                                else if(opcode == "ANL")
+                                    stmts = instantiate(pc,"ANL_EXP_RI0", exp1);
+                                else
+                                    stmts = instantiate(pc,"XRL_EXP_RI0", exp1);
+                            }
+                            else if (op2 == 1){
+                                if (opcode == "ORL")
+                                    stmts = instantiate(pc,"ORL_EXP_RI1", exp1);
+                                else if(opcode == "ANL")
+                                    stmts = instantiate(pc,"ANL_EXP_RI1", exp1);
+                                else
+                                    stmts = instantiate(pc,"XRL_EXP_RI1", exp1);
+                            }
                             break;
                         }
-                        case 6: /*A, Rn | DIRECT*/
+                        case 6: /*A, Rn | DIRECT ID*/
                         {   
                             op2 = magic_process(arg2->value.c);
                             if (op2 < 8){
-                                sstm << "R" << op2;
-                                name = sstm.str();
-                                char *name_ =  new char[name.length() + 1];
-                                strcpy(name_, name.c_str());
-                                stmts = instantiate(pc, name_);
+                                exp2 = Location::regOf(op2);
+                                if(if_a_byte(arg2->value.c))
+                                    exp2 = byte_present(arg2->value.c);
                             }
                             else if (op2 >= 9){
-                                sstm << "DIR";
-                                name = sstm.str();
-                                char *name_ =  new char[name.length() + 1];
-                                strcpy(name_, name.c_str());
-                                stmts = instantiate(pc, name_, new Const(op2));
+                                Exp * temp = Location::regOf(op2);
+                                if(if_a_byte(arg2->value.c))
+                                    temp = byte_present(arg2->value.c);
+                                exp2 = Location::memOf(temp);
                             }
+                            stmts = instantiate(pc,name, exp1,exp2);
                             break;
                         }
-                        case 1: /* A, DIRECT*/
+                        case 1: /* A, DIRECT INT */
                         {   
-                            sstm << "DIR";
-                            name = sstm.str();
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_, new Const(arg2->value.i));
+                            exp2 = Location::memOf(new Const(arg2->value.i));
+                            stmts = instantiate(pc,name, exp1,exp2);
                             break;
                         }
                         case 4: /*A, IMM */
                         {
-                            sstm << "IMM";
-                            name = sstm.str();
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_, new Const(arg2->value.i));
+                            exp2 = new Const(arg2->value.i);
+                            stmts = instantiate(pc,name, exp1,exp2);
                             break;
                         }
                         default:
@@ -678,22 +680,20 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                     }
                 }
                 else if (op1 >= 9){ /*DIRECT*/
-                    sstm << "DIR_";
+                    Exp* new_exp1 = Location::memOf(exp1);
                     switch(arg2->kind){
                         case 6: /*JUST DIRECT, A*/
-                        {   sstm << "A";
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_, new Const(op1));
+                        {   
+                            exp2 = Location::regOf(map_sfr(std::string(arg2->value.c)));
+                            if (if_a_byte(arg2->value.c))
+                                exp2 = byte_present(arg2->value.c);
+                            stmts = instantiate(pc,name, new_exp1,exp2);
                             break;
                         }
                         case 4: /*DIRECT, IMM*/
                         {
-                            sstm << "IMM";
-                            name = sstm.str();
-                            char *name_ =  new char[name.length() + 1];
-                            strcpy(name_, name.c_str());
-                            stmts = instantiate(pc, name_,new Const(op1), new Const(arg2->value.i));
+                            exp2  = new Const(arg2->value.i);
+                            stmts = instantiate(pc,name, new_exp1 ,exp2);
                             break;
                         }
                         default:
@@ -702,30 +702,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                 }    
                 break;
             }
-            case 1 : /*DIRECT*/
-            {   sstm << "DIR_";
-                switch(arg2->kind){
-                    case 6: /*JUST DIRECT, A*/
-                    {   sstm << "A";
-                        char *name_ =  new char[name.length() + 1];
-                        strcpy(name_, name.c_str());
-                        stmts = instantiate(pc, name_, new Const(arg1->value.i));
-                        break;
-                    }
-                    case 4: /*DIRECT, IMM*/
-                    {
-                        sstm << "IMM";
-                        name = sstm.str();
-                        char *name_ =  new char[name.length() + 1];
-                        strcpy(name_, name.c_str());
-                        stmts = instantiate(pc, name_,new Const(arg1->value.i), new Const(arg2->value.i));
-                        break;
-                    }
-                    default:
-                        break;
-                }
-                break;
-            }
+          
             default:
                 break;
         }

@@ -277,6 +277,47 @@ JC_IMM i32
   add_signed_pc(i32)
   *32* %pc := [%CF = 1 ? tmp5: %pc];
 
+#### BITWISE #####
+ORL_EXP exp1, exp2
+  *8* exp1 := exp1 | exp2;
+
+ANL_EXP exp1, exp2
+  *8* exp1 := exp1 & exp2;
+
+XRL_EXP exp1, exp2
+  *8* exp1 := exp1 ^ exp2;
+
+ORL_EXP_RI0 exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *8* tmpb := m[tmp1]{8}
+  *8* exp := exp | tmpb;
+
+ORL_EXP_RI1 exp
+  *32* tmp1 := zfill(8, 31, %r1)
+  *8* tmpb := m[tmp1]{8}
+  *8* exp := exp | tmpb;
+
+ANL_EXP_RI0 exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *8* tmpb := m[tmp1]{8}
+  *8* exp := exp & tmpb;
+
+ANL_EXP_RI1 exp
+  *32* tmp1 := zfill(8, 31, %r1)
+  *8* tmpb := m[tmp1]{8}
+  *8* exp := exp & tmpb;
+
+XRL_EXP_RI0 exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *8* tmpb := m[tmp1]{8}
+  *8* exp := exp ^ tmpb;
+
+XRL_EXP_RI1 exp
+  *32* tmp1 := zfill(8, 31, %r1)
+  *8* tmpb := m[tmp1]{8}
+  *8* exp := exp ^ tmpb;
+## END ####
+
 AJMP_IMM i32
   *32* %pc := i32;
 
@@ -977,7 +1018,7 @@ MOV_A_RI0 exp
   *32* tmp1 := zfill(8, 31, %r0)
   *8* exp := m[tmp1];
 
-MOV_A_RI1
+MOV_A_RI1 exp
   *32* tmp1 := zfill(8, 31, %r1)
   *8* exp := m[tmp1];
 

@@ -1,13 +1,5 @@
 main
-		MOV
-					 DPTR 
-					 R2 + 21 
-		MOVX
+		ANL
 					 A 
-					 DPTR 
-		SETB
-					 A 
-		MOVX
-					 DPTR 
-					 A 
+					 63 
 		RET

@@ -1,8 +1,5 @@
 got filename elf-init.c for main
-after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
-size 0x10 meet with size 0x8!
-size 0x8 meet with size 0x10!
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
@@ -11,35 +8,26 @@ in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; } a r8
-__size16 r2 r2
+/*signed?*/char a r8
 end locals
 symbols:
-  r2 maps to r2 type __size16
-  r8 maps to a type union { __size8 x; struct { __size8 bit1; __size8 bit2; __size8 bit3; __size8 bit4; __size8 bit5; __size8 bit6; __size8 bit7; __size8 bit8; } m; }
+  r8 maps to a type /*signed?*/char
   r9{0} maps to argc type int
   r10{0} maps to argv type char *[] *
   r11{0} maps to envp type char *[] *
 end symbols
-live variables: r2,  r8
+live variables: r8
 end live variables
 Ret BB:
 in edges: 
 out edges: 
-00000000    0 *16* r2 := -
-            0 *union* a := -
-00010474      *union* IMP REF a
-00010478    5 *8* r8.x := m[zfill(16,31,r2 + 21)]
-0001047c    6 *8* r8.x.m.bit4 := 1
-00010480    8 *8* m[zfill(16,31,r2 + 21)] := a.x
-00010484    9 RET
-              Modifieds: *16* r11,  *8* r30
-              Reaching definitions: r2=r2,   r8=a,   r9=argc,   r10=argv,   r11=r2 + 21,   r30=a,
-                tmp1=zfill(16,31,r2 + 21)
+00000000    0 *j8* a := -
+            0 *i32* argc := -
+            0 *[c*]** argv := -
+            0 *[c*]** envp := -
+00010474
+00010478    2 RET *j8* a := a & 63
+              Modifieds: *v* a
+              Reaching definitions: a=a & 63
 
 
-type failure: no type for subexp1 of r8.x
-type failure: no type for subexp1 of r8.x.m.bit4
-type failure: no type for subexp1 of r8.x.m
-type failure: no type for subexp1 of r8.x
-type failure: no type for subexp1 of a.x
