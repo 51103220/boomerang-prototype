@@ -1,11 +1,36 @@
 bb
 		SETB
-					 A 
-		ACALL
+					 R0 
+		JB
+					 R0 
 					 cc 
+		MOV
+					 A 
+					 150 
+		JNB
+					 R0 
+					 dd 
+		MOV
+					 A 
+					 200 
+		JNB
+					 R1 
+					 dd 
+		MOV
+					 A 
+					 200 
 		RET
 cc
 		MOV
 					 A 
-					 R7 
-		RET
+					 150 
+		JNB
+					 R0 
+					 dd 
+		MOV
+					 A 
+					 200 
+dd
+		MOV
+					 A 
+					 200 

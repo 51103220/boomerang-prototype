@@ -938,8 +938,7 @@ int Boomerang::commandLine(int argc, const char **argv)
 					}
 				}
 				else
-				assumeABI = true;
-				std::cout<<"Decode assembly \n";
+					assumeABI = true;
 				break;
 			case 'l':
 				if (++i == argc) {

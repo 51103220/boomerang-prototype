@@ -1,0 +1,13 @@
+PUBLIC bb
+bb:	
+	SETB R0.5
+	JB R0.5, cc
+	JNB R1.3, dd
+	RET
+
+cc:
+	MOV A, #150
+	JNB R0.5, dd
+
+dd:
+	MOV A, #200

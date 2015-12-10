@@ -151,7 +151,7 @@ list<Statement*>* initial_bit_regs(){
     ct->addType(new SizeType(8), "bit5");
     ct->addType(new SizeType(8), "bit6");
     ct->addType(new SizeType(8), "bit7");
-    ct->addType(new SizeType(8), "bit0");
+    ct->addType(new SizeType(8), "bit8");
     UnionType * ut = new UnionType();
     ut->addType(new SizeType(8), "x");
     ut->addType(ct,"m");
