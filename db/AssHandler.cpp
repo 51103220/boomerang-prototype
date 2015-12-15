@@ -1,5 +1,6 @@
 #include "AssParser.cpp"
 #include <fstream>
+#include <cstddef>         
 ofstream myfile;
 using namespace std;
 unsigned int start_address = 66676;
@@ -63,8 +64,43 @@ const char *registers[rsize] = {
 };
 std::map<char*,int> undefined;
 std::map<char *, char *> defined;
-void init_defined(){
-	defined["Option"] = "R1";
+void init_defined(const char* name){
+	std::string path(name);
+	std::size_t found = path.find_last_of("/\\");
+	std::string define_path;
+	if (found != -1 ){
+		define_path.append(path.substr(0,found)).append("/defines"); 
+	}
+	const char *file = define_path.c_str();
+	FILE *myfile = fopen(file, "r");
+	if (!myfile) {
+		std::cout << "DEFINES file does not exist, create one if needed!" << std::endl;
+	}
+	else{
+		std::cout << "DEFINES exists, start Parsing...\n";
+		std::string line;
+		std::ifstream input(file);
+		std::string l;
+		
+	    while( std::getline(input, line)) {
+	       found = line.find_last_of(":");
+	       l = line.substr(0,found);
+	       char *key = new char[l.length() + 1];
+		   strcpy(key, l.c_str());
+		
+	       l = line.substr(found+1);
+	       char *value = new char[l.length() + 1];
+		   strcpy(value, l.c_str());
+		   defined[key] = value;
+	    }
+
+	}
+	fclose(myfile);
+	std::map<char *, char *>::iterator i;
+	for(i = defined.begin(); i != defined.end(); ++i){
+		std::cout << i->first << ":" << i->second << std::endl;
+	}
+	/*defined["Option"] = "R1";
 	defined["someFlag"] = "R2";
 	defined["DRAB"] = "ACC.1";
 	defined["CARB"] = "ACC.3";
@@ -76,7 +112,7 @@ void init_defined(){
 	defined["SIMP"] = "ACC.4";
 	defined["SYSFLGMAP"] = "R4";
 	defined["BTS"] = "P0";
-	defined["whatever"] = "R3";
+	defined["whatever"] = "R3";*/
 }
 char * defined_value(char * name){
 	std::map<char *,char *>::iterator it;
@@ -380,10 +416,11 @@ void address_label(AssemblyProgram* &ass_program){
 	}
 }
 AssemblyProgram* AssHandler::process(const char* name) {
-	std::cout << "------START PARSING------\n";
+
+	std::cout << "------START PARSING------\n" << name << std::endl;
 	handle(name);
 	std::cout << "-----HANDLE BINARY EXPRESSION---\n";
-	init_defined();
+	init_defined(name);
 	handle_binary(ass_program);
 
 	std::cout << "-----HANDLE BIT ---\n";
