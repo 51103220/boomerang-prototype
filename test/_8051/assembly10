@@ -1,0 +1,7 @@
+PUBLIC MAIN
+MAIN:
+	SETB ACC.5
+	MOV A, #100
+	DEC A
+	RET
+	

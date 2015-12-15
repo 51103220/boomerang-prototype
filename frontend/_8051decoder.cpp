@@ -910,10 +910,9 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                 break;
             }
             case 6: /*A, DPTR, DIRECT*/
-            {   if (op1 >=0 && op1 <=8 ||  op1 == 11)
-                    exp1 = Location::regOf(op1);
-                else 
-                    exp1 = Location::memOf(Location::regOf(op1));
+            {   if (!(op1 >=0 && op1 <=8 ||  op1 == 11))
+                    exp1 = Location::memOf(exp1);
+
                 stmts = instantiate(pc,name,exp1);
                 break;
             }
