@@ -1,17 +1,7 @@
-bb
-		MOV
-					 R7 
-					 0 
+MAIN
 		MOV
 					 A 
-					 R7 
-		JNZ
-					 dd 
-		MOV
+					 100 
+		CPL
 					 A 
-					 5 
 		RET
-dd
-		MOV
-					 A 
-					 5 

@@ -954,6 +954,29 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         if (opcode == "MUL")
             stmts = instantiate(pc, "MUL_AB", exp1, Location::memOf(exp2));
     }
+     else if (opcode == "CPL") {
+        Exp * exp1;
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        if(arg1->kind == 1){
+            stmts = instantiate(pc,"CPL_BIT", Location::memOf(new Const(arg1->value.i)));
+        }
+        else {
+            unsigned op1 = map_sfr(std::string(arg1->value.c));
+            exp1 = Location::regOf(op1);
+            if(if_a_byte(arg1->value.c))
+                exp1 = byte_present(arg1->value.c);
+
+            if (op1 == 8){
+                stmts = instantiate(pc,"CPL_A", exp1);
+            }
+            else{
+                exp1 = Location::memOf(exp1);
+                stmts = instantiate(pc,"CPL_DIR", exp1);
+            }
+        }
+        
+    }
     else if (opcode == "JZ" || opcode == "JNZ") {
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();

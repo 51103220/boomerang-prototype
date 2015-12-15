@@ -735,8 +735,8 @@ ANL_C_CDI z32
 
 # ACALL
 
-CPL_DIR  z32
-  *1* m[z32] := 1 - m[z32]{1};
+CPL_DIR  exp
+  *1* exp := 1 - exp{1};
 
 CPL_C
   *1* %CF := 1 - %CF;
@@ -1059,9 +1059,11 @@ MOVX_RI1_A exp
   *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := exp;
 
-CPL_A
-  *8* %a := 0 - %a;
-
+CPL_A exp
+  *8* exp := 0 - exp;
+CPL_BIT exp
+  *8* exp :=  1 - exp@[0:7];
+  
 MOV_RI0_A exp
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[tmp1] := exp;

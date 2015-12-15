@@ -8,34 +8,24 @@ in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
 end locals
 symbols:
-  r8 maps to a type __size8
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
 end symbols
 live variables: 
 end live variables
-Oneway BB:
+Ret BB:
 in edges: 
-out edges: 10484 
-00000000
-00010474
-00010478    2 *8* a := 0
-0001047c    0 GOTO 0x10484
-Fall BB:
-in edges: 
-out edges: 10484 
-00010480    5 *8* a := 5
-L1: Ret BB:
-in edges: 1047c 10480 
 out edges: 
-00000000
-00010484    6 RET *8* a := a
-              Modifieds: *8* a,  *8* r7
-              Reaching definitions: r7=0,   a=a,   r32=argc,   r33=argv,   r34=envp,   %flags=0 = 0,   %ZF=%ZF,
-                %CF=%CF
+00000000    0 *i32* argc := -
+            0 *[c*]** argv := -
+            0 *[c*]** envp := -
+00010474
+00010478
+0001047c    3 RET *8* a := -100
+              Modifieds: *8* a
+              Reaching definitions: a=-100
 
 
