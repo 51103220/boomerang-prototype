@@ -4,7 +4,7 @@ ofstream myfile;
 using namespace std;
 unsigned int start_address = 66676;
 const int jsize = 2;
-const int bsize = 2;
+const int bsize = 4;
 const int btsize = 4;
 const int rsize = 32;
 const char *jmps[jsize] = {
@@ -14,6 +14,8 @@ const char *jmps[jsize] = {
 const char *brs[bsize] = {
                    "JNB",
                    "JB",
+                   "JNC",
+                   "JC"
  };
 const char *bit[btsize] = {
 				"CLR",
@@ -235,11 +237,11 @@ void append_jumps(AssemblyProgram* &ass_program){
 					(*lbi)->lineList->insert(li,temp_list->begin(),temp_list->end());
 					advance(li,temp_list->size());
 				}
-				else if (if_exist((*li)->name, brs, bsize)){
+				else if (if_exist((*li)->name, brs, bsize)){ // APPEND CONDITION
 						if (!(*li)->checked){
 							char * label_name;
 							(*li)->checked = true;
-							if((*li)->expList->size() == 2){
+							if((*li)->expList->size() >= 1){
 								AssemblyExpression * temp_expr = (*li)->expList->back();
 								if(temp_expr->argList.size() != 0){
 									label_name = temp_expr->argList.front()->value.c;

@@ -1,6 +1,5 @@
 got filename elf-init.c for main
 ### type analysis for main ###
-WARNING: size 0x8 meet with __size8 *; allowing temporarily
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
@@ -10,29 +9,36 @@ parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 __size8 a r8
-__size8 * p0 r13
+__size8 c r10
 end locals
 symbols:
   r8 maps to a type __size8
-  r13 maps to p0 type __size8 *
+  r10 maps to c type __size8
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
 end symbols
-live variables: r13
+live variables: r10
 end live variables
-Ret BB:
+Twoway BB:
 in edges: 
+out edges: 10484 10480 
+00000000    0 *8* c := -
+00010474
+00010478    2 *8* a := 20
+0001047c    4 BRANCH 0x10484, condition equals
+High level: m[c] ~= 0
+Fall BB:
+in edges: 1047c 
+out edges: 10484 
+00010480    5 *8* a := 100
+L1: Ret BB:
+in edges: 1047c 10480 
 out edges: 
-00000000    0 *8** p0 := -
-            0 *i32* argc := -
-            0 *[c*]** argv := -
-            0 *[c*]** envp := -
-00010474    1 *8* m[p0] := 100
-00010478    2 *8* m[p0] := m[p0] + 1
-0001047c    3 *8* a := m[p0]
-00010480    4 RET *8* a := a
-              Modifieds: *8* a
-              Reaching definitions: a=a,   r13=p0
+00000000
+00010484    6 RET *8* a := a
+              Modifieds: *8* a,  *8* r7
+              Reaching definitions: r7=20,   a=a,   c=c,   r32=argc,   r33=argv,   r34=envp,   %flags=m[c] ~= 0,
+                %ZF=%ZF,   %CF=%CF
 
 

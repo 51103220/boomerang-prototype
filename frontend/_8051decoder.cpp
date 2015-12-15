@@ -920,6 +920,26 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                 break;
         }
     }
+    else if (opcode == "JC" || opcode == "JNC") {
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        Exp * exp1;
+        exp1 = Location::regOf(10);
+        if(if_a_byte("C"))
+            exp1 = byte_present("C");
+        exp1 =  Location::memOf(exp1);      
+        if (opcode == "JC")
+            stmts = instantiate(pc, "JC_IMM", exp1);
+        else if (opcode == "JNC")
+            stmts = instantiate(pc, "JNC_IMM", exp1);
+ 
+        result.rtl = new RTL(pc, stmts); 
+        BranchStatement* jump = new BranchStatement; 
+        result.rtl->appendStmt(jump); 
+        result.numBytes = 4; 
+        jump->setDest(pc + (Line->offset+1)*4);
+        jump->setCondType(BRANCH_JE);
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;

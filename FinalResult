@@ -1,10 +1,17 @@
-MAIN
+bb
 		MOV
-					 P0 
-					 100 
-		INC
-					 P0 
+					 R7 
+					 20 
 		MOV
 					 A 
-					 P0 
+					 R7 
+		JNC
+					 dd 
+		MOV
+					 A 
+					 100 
 		RET
+dd
+		MOV
+					 A 
+					 100 

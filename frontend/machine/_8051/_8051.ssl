@@ -283,10 +283,11 @@ ADDC_A_R7
 
 # 0x40
 
-JC_IMM i32
-  *32* %pc := %pc + 2
-  add_signed_pc(i32)
-  *32* %pc := [%CF = 1 ? tmp5: %pc];
+JC_IMM exp
+  #*32* %pc := %pc + 2
+  #add_signed_pc(i32)
+  #*32* %pc := [%CF = 1 ? tmp5: %pc];
+  *v* %flags := exp ~= 1; 
 
 #### BITWISE #####
 ORL_EXP exp1, exp2
@@ -380,10 +381,12 @@ ORL_A_R7
 
 # 0x50
 
-JNC_IMM i32
-  *32* %pc := %pc + 2
-  add_signed_pc(i32)
-  *32* %pc := [%CF = 0 ? tmp5 : %pc];
+JNC_IMM exp
+  #*32* %pc := %pc + 2
+  #add_signed_pc(i32)
+  #*32* %pc := [%CF = 0 ? tmp5 : %pc];
+  *v* %flags := exp ~= 0 ;
+
 # ACALL
 
 ANL_DIR_A z32
