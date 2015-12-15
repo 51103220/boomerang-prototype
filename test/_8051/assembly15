@@ -1,0 +1,8 @@
+PUBLIC bb
+bb:	
+	MOV A, #50
+	CJNE R7, #20, dd
+	RET
+
+dd:
+	MOV A, #100

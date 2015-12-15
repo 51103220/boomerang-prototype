@@ -1,0 +1,8 @@
+PUBLIC bb
+bb:	
+	MOV P0, #100
+	CJNE A, P0, dd
+	RET
+
+dd:
+	MOV A, #100

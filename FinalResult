@@ -1,7 +1,16 @@
-MAIN
+bb
+		MOV
+					 P0 
+					 100 
+		CJNE
+					 A 
+					 P0 
+					 dd 
 		MOV
 					 A 
 					 100 
-		CPL
-					 A 
 		RET
+dd
+		MOV
+					 A 
+					 100 

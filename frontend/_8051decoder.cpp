@@ -954,7 +954,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         if (opcode == "MUL")
             stmts = instantiate(pc, "MUL_AB", exp1, Location::memOf(exp2));
     }
-     else if (opcode == "CPL") {
+    else if (opcode == "CPL") {
         Exp * exp1;
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
@@ -989,6 +989,70 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         else if (opcode == "JNZ")
             stmts = instantiate(pc, "JNZ_IMM", exp1);
  
+        result.rtl = new RTL(pc, stmts); 
+        BranchStatement* jump = new BranchStatement; 
+        result.rtl->appendStmt(jump); 
+        result.numBytes = 4; 
+        jump->setDest(pc + (Line->offset+1)*4);
+        jump->setCondType(BRANCH_JE);
+    }
+    else if (opcode == "CJNE"){
+        Exp* exp1;
+        Exp* exp2;
+        //-----EXPRESSION1, ALWAYS AN ID----------------------------
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
+        }
+        ++ei;
+        AssemblyArgument* arg2 = (*ei)->argList.front();
+        unsigned op1, op2;
+        switch(arg1->kind){
+            case 3: /*INDIRECT , IMM*/
+            {   
+                op1 = map_sfr(std::string(arg1->value.c));
+                if (op1 == 0)
+                    stmts = instantiate(pc,"CJNE_RI0", new Const(arg2->value.i));
+                if (op1 == 1)
+                    stmts = instantiate(pc,"CJNE_RI1", new Const(arg2->value.i));
+                break;
+            }
+            case 6: /*A, Rn*/
+            {   
+                op1 = map_sfr(std::string(arg1->value.c));
+                if (op1 <= 7){ //Rn
+                    stmts = instantiate(pc,"CJNE_EXP", exp1, new Const(arg2->value.i));
+                }   
+                else { //A
+                    switch(arg2->kind){
+                        case 1: // A, Direct int
+                        {   stmts = instantiate(pc,"CJNE_EXP", exp1, Location::memOf(new Const(arg2->value.i)));
+                            break;
+                        }
+                        case 6: //A, Direct ID
+                        {   op2 = map_sfr(std::string(arg2->value.c));
+                            exp2 = Location::regOf(op2);
+                            if(if_a_byte(arg2->value.c))
+                                exp2 = byte_present(arg2->value.c);
+                            exp2 = Location::memOf(exp2);
+                            stmts = instantiate(pc,"CJNE_EXP", exp1, exp2);
+                            break;
+                        }
+                        case 4: //A, Immediate
+                        {   stmts = instantiate(pc,"CJNE_EXP", exp1, new Const(arg2->value.i));
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+                break;
+            }
+            default:
+                break;
+        }
         result.rtl = new RTL(pc, stmts); 
         BranchStatement* jump = new BranchStatement; 
         result.rtl->appendStmt(jump); 

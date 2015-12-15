@@ -755,6 +755,21 @@ CJNE_A_DIR_IMM  z32, i32
   *32* %pc := [(%a = tmpb) ? %pc : tmp5]
   *1* %CF := [(%a < tmpb) ? 1 : 0];
 
+# DEDO CJNE
+
+CJNE_RI0 exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *v* %flags := m[tmp1] = exp;
+
+CJNE_RI1 exp
+  *32* tmp1 := zfill(8, 31, %r1)
+  *v* %flags := m[tmp1] = exp;
+
+CJNE_EXP exp1, exp2
+  *v* %flags := exp1 = exp2;
+
+# END CJNE
+
 CJNE_RI0_IMM_IMM i32, ix32
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
@@ -1063,7 +1078,7 @@ CPL_A exp
   *8* exp := 0 - exp;
 CPL_BIT exp
   *8* exp :=  1 - exp@[0:7];
-  
+
 MOV_RI0_A exp
   *32* tmp1 := zfill(8, 31, %r0)
   *8* m[tmp1] := exp;
