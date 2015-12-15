@@ -1,0 +1,9 @@
+PUBLIC bb
+bb:	
+	MOV R7, #0
+	MOV A, R7
+	JNZ dd
+	RET
+
+dd:
+	MOV A, #5

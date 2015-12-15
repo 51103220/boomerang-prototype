@@ -940,6 +940,39 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         jump->setDest(pc + (Line->offset+1)*4);
         jump->setCondType(BRANCH_JE);
     }
+    else if (opcode == "DIV" || opcode == "MUL") {
+        Exp * exp1;
+        Exp * exp2;
+        exp1 = Location::regOf(8);
+        exp2 = Location::regOf(9);
+        if (if_a_byte("A"))
+            exp1 = byte_present("A");
+        if (if_a_byte("B"))
+            exp1 = byte_present("B");
+        if (opcode == "DIV")
+            stmts = instantiate(pc, "DIV_AB", exp1, Location::memOf(exp2));
+        if (opcode == "MUL")
+            stmts = instantiate(pc, "MUL_AB", exp1, Location::memOf(exp2));
+    }
+    else if (opcode == "JZ" || opcode == "JNZ") {
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        Exp * exp1;
+        exp1 = Location::regOf(8);
+        if(if_a_byte("A"))
+            exp1 = byte_present("A");      
+        if (opcode == "JZ")
+            stmts = instantiate(pc, "JZ_IMM", exp1);
+        else if (opcode == "JNZ")
+            stmts = instantiate(pc, "JNZ_IMM", exp1);
+ 
+        result.rtl = new RTL(pc, stmts); 
+        BranchStatement* jump = new BranchStatement; 
+        result.rtl->appendStmt(jump); 
+        result.numBytes = 4; 
+        jump->setDest(pc + (Line->offset+1)*4);
+        jump->setCondType(BRANCH_JE);
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;

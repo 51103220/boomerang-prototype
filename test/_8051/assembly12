@@ -1,0 +1,6 @@
+PUBLIC MAIN
+MAIN:
+	MOV A, #100
+	MOV B, #12
+	DIV AB
+	RET

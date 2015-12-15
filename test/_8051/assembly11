@@ -2,6 +2,7 @@ PUBLIC bb
 bb:	
 	MOV R7, #20
 	MOV A, R7
+	MOV C, #0
 	JNC dd
 	RET
 

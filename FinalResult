@@ -1,17 +1,17 @@
 bb
 		MOV
 					 R7 
-					 20 
+					 0 
 		MOV
 					 A 
 					 R7 
-		JNC
+		JNZ
 					 dd 
 		MOV
 					 A 
-					 100 
+					 5 
 		RET
 dd
 		MOV
 					 A 
-					 100 
+					 5 

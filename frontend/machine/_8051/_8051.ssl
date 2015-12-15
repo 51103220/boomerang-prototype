@@ -437,10 +437,11 @@ ANL_A_RI1
 
 # 0x60
 
-JZ_IMM i32
-  *32* %pc := %pc + 2
-  add_signed_pc(i32)
-  *32* %pc := [(%a = 0) ? tmp5 : %pc];
+JZ_IMM exp
+  #*32* %pc := %pc + 2
+  #add_signed_pc(i32)
+  #*32* %pc := [(%a = 0) ? tmp5 : %pc];
+  *v* %flags := exp ~=0 ;
 AJMP_IMM i32
   *32* %pc := i32;
 
@@ -493,10 +494,11 @@ XRL_A_RI1
 
 # 0x70
 
-JNZ_IMM i32
-  *32* %pc := %pc + 2
-  add_signed_pc(i32)
-  *32* %pc := [(%a ~= 0) ? tmp5 : %pc];
+JNZ_IMM exp
+  #*32* %pc := %pc + 2
+  #add_signed_pc(i32)
+  #*32* %pc := [(%a ~= 0) ? tmp5 : %pc];
+  *v* %flags :=  exp = 0;
 
 # ACALL
 ORL_C_DIR  i32
@@ -572,10 +574,10 @@ MOVC_A_AaddPC
   *32* tmp1 := tmp1 + tmp2
   *8* %a := m[tmp1]{8};
 
-DIV_AB
-  *8* tmpb := %a
-  *8* %a := %a / %b
-  *8* %b := %a % %b;
+DIV_AB exp1, exp2
+  *8* tmpb := exp1
+  *8* exp1 := exp1 / exp2
+  *8* exp2 := exp1 % exp2;
 
 MOV_DIR_DIR  z32, rx32
   *8* m[z32] := m[rx32]{8};
@@ -687,8 +689,8 @@ MOV_C_DIR  z32
 INC_DPTR
   *16* %dptr := %dptr + 1;
 
-MUL_AB
-  *16* %a := %a * %b;
+MUL_AB exp1, exp2
+  *16* m[%ab] := exp1 * exp2;
 
 MOV_RI0_DIR  z32
   *32* tmp1 := zfill(8, 31, %r0)
