@@ -867,6 +867,60 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         }
         
     }
+    else if (opcode == "RR" || opcode == "RRC" || opcode == "RLC") { //TODO:
+       stmts = instantiate(pc,"RR_A", new Const(1));
+    }
+    else if (opcode == "DEC" || opcode == "INC") {
+        stringstream ss;
+        ss << opcode << "_EXP";
+        string str(ss.str());
+        char *name =  new char[str.length() + 1];
+        strcpy(name, str.c_str());
+
+        Exp* exp1;
+        Exp* exp2;
+
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
+        }
+        unsigned op1, op2;
+        op1 =  map_sfr(std::string(arg1->value.c));
+        switch(arg1->kind){
+            case 3: /*INDIRECT*/
+            {   
+                if (op1 == 0){
+                    if(opcode == "INC"){
+                        stmts = instantiate(pc,"INC_RI0");
+                    }
+                    else{
+                        stmts = instantiate(pc,"DEC_RI0");
+                    }
+                }
+                else{
+                    if(opcode == "INC"){
+                        stmts = instantiate(pc,"INC_RI1");
+                    }
+                    else{
+                        stmts = instantiate(pc,"DEC_RI1");
+                    }
+                }
+                break;
+            }
+            case 6: /*A, DPTR, DIRECT*/
+            {   if (op1 >=0 && op1 <=8 ||  op1 == 11)
+                    exp1 = Location::regOf(op1);
+                else 
+                    exp1 = Location::memOf(Location::regOf(op1));
+                stmts = instantiate(pc,name,exp1);
+                break;
+            }
+            default:
+                break;
+        }
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;

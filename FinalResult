@@ -1,10 +1,10 @@
 MAIN
-		SETB
-					 C 
 		MOV
-					 R1 
-					 20 
-		ADDC
+					 P0 
+					 100 
+		INC
+					 P0 
+		MOV
 					 A 
-					 R1 
+					 P0 
 		RET

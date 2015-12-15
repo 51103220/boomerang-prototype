@@ -66,16 +66,19 @@ INC_R6
 INC_R7
   *8* %r7 := %r7 + 1;
 
+INC_EXP exp
+  *8* exp := exp + 1;
+
 INC_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
-  *8* tmpb := tmpb - 1
+  *8* tmpb := tmpb + 1
   *8* m[tmp1] := tmpb;
 
 INC_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
-  *8* tmpb := tmpb - 1
+  *8* tmpb := tmpb + 1
   *8* m[tmp1] := tmpb;
 
 # 0x10
@@ -106,6 +109,8 @@ RRC_A
   *7* %a@[1:7] := %a@[0:6]
   *1* %a@[0:0] := bt;
 
+DEC_EXP exp
+  *8* exp := exp - 1;
 
 DEC_DIR  z32
   *8* m[z32] := m[z32]{8} - 1;
