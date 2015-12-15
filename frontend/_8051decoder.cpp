@@ -1073,6 +1073,42 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         jump->setDest(pc + (Line->offset+1)*4);
         jump->setCondType(BRANCH_JE);
     }
+    else if (opcode == "DJNZ"){
+        Exp* exp1;
+        Exp* exp2;
+        //-----EXPRESSION1, ALWAYS AN ID----------------------------
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
+        }
+        ++ei;
+        AssemblyArgument* arg2 = (*ei)->argList.front();
+        unsigned op1, op2;
+        switch(arg1->kind){
+            case 6: /*Rn, Direct*/
+            {   
+                op1 = map_sfr(std::string(arg1->value.c));
+                if (op1 <= 7){ //Rn
+                    stmts = instantiate(pc,"DJNZ_EXP", exp1);
+                }   
+                else {// Direct
+                    exp1 = Location::memOf(exp1);
+                    stmts = instantiate(pc,"DJNZ_EXP", exp1);
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        result.rtl = new RTL(pc, stmts); 
+        BranchStatement* jump = new BranchStatement; 
+        result.rtl->appendStmt(jump); 
+        result.numBytes = 4; 
+        jump->setDest(pc + (Line->offset+1)*4);
+        jump->setCondType(BRANCH_JE);
+    }
     else if (opcode == "PUSH" || opcode == "POP"){
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();

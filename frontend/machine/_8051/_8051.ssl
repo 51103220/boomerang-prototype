@@ -943,6 +943,9 @@ DJNZ_DIR_IMM  z32, i32
   *8* m[z32] := m[z32]{8} - 1
   add_signed_pc(i32)
   *32* %pc := [(m[z32]{8} = 0) ? %pc : tmp5];
+DJNZ_EXP exp
+  *8* exp := exp - 1
+  *v* %flags := exp = 0;
 
 XCHD_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)

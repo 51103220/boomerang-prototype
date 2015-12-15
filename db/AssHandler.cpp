@@ -4,7 +4,7 @@ ofstream myfile;
 using namespace std;
 unsigned int start_address = 66676;
 const int jsize = 2;
-const int bsize = 7;
+const int bsize = 8;
 const int btsize = 4;
 const int rsize = 32;
 const char *jmps[jsize] = {
@@ -18,7 +18,8 @@ const char *brs[bsize] = {
                    "JC",
                    "JZ",
                    "JNZ",
-                   "CJNE"
+                   "CJNE",
+                   "DJNZ"
  };
 const char *bit[btsize] = {
 				"CLR",

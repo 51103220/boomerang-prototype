@@ -1,0 +1,7 @@
+PUBLIC bb
+bb:	
+	DJNZ R7, dd	
+	RET
+
+dd:
+	MOV A, #100
