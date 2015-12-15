@@ -75,6 +75,7 @@ void init_defined(){
 	defined["SIMP"] = "ACC.4";
 	defined["SYSFLGMAP"] = "R4";
 	defined["BTS"] = "P0";
+	defined["whatever"] = "R3";
 }
 char * defined_value(char * name){
 	std::map<char *,char *>::iterator it;
@@ -346,7 +347,17 @@ void handle_bit(AssemblyProgram* &ass_program){
 								a.bit.reg = cstr;
 								a.bit.pos = num;
 								temp_arg->change(8,a);
-								ass_program->bitReg.push_back(cstr);
+
+								std::list<char*>::iterator br;
+								bool existed = false;
+        						for (br = ass_program->bitReg.begin(); br != ass_program->bitReg.end(); ++ br ){
+        							if(std::string(cstr) == std::string((*br))){
+        								existed = true;
+        								break;
+        							}
+        						}
+        						if (!existed)
+									ass_program->bitReg.push_back(cstr);
 							}
 							//-------------------------------
 						}

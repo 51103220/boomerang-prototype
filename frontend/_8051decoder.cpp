@@ -168,8 +168,9 @@ list<Statement*>* initial_bit_regs(){
         stmts->push_back(i_s);
         Assign * a_ss = new Assign((Type *) ut,(Exp *) Location::regOf(30),(Exp *) new TypedExp((Type*) ut, (Exp*) Location::regOf(num)), NULL);
         std::cout << "REPRESENT A BYTE " << a_ss->prints() << std::endl;
-        stmts->push_back(a_ss);      
+        stmts->push_back(a_ss);
     }
+    
     return stmts;
 }
 
@@ -190,10 +191,13 @@ Exp* access_bit(char * reg, unsigned pos){
     std::string name = sstm.str();
     char *bit =  new char[name.length() + 1];
     strcpy(bit, name.c_str());
-
+ 
     Exp * exp1 = new Binary(opMemberAccess,Location::regOf(num), new Const("x"));
     Exp * exp2 = new Binary(opMemberAccess,exp1, new Const("m"));
     exp = new Binary(opMemberAccess,exp2, new Const(bit));
+    
+   
+    //exp = new Ternary(opAt, Location::regOf(num), new Const(pos), new Const(pos));
     return exp;
 }
 Exp* binary_expr(AssemblyExpression* expr){
@@ -581,7 +585,16 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
     }
     else if (opcode == "RET" || opcode == "RETI") {
         result.rtl = new RTL(pc, stmts);
-        result.rtl->appendStmt(new ReturnStatement);
+        Assign * return_s;
+        std::list<char*>::iterator br;
+        for (br = bitReg.begin(); br != bitReg.end(); ++ br ){
+            if (strcmp("A",(*br)) == 0){
+                return_s = new Assign(new SizeType(8),(Exp *) Location::regOf(8),new Binary(opMemberAccess,Location::regOf(8), new Const("x")), NULL);
+                result.rtl->appendStmt(return_s);
+                break;
+            }
+        }
+        result.rtl->appendStmt(new ReturnStatement); 
         result.type = DD;
     }
     else if (opcode == "JNB" || opcode == "JB" || opcode == "JBC") {
@@ -1122,6 +1135,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
             default:
                 break;
         }
+    }
+    else if (opcode == "RL"){
+        Exp* exp1 = Location::regOf(8);
+        if(if_a_byte("A"))
+            exp1 = byte_present("A");
+        stmts = instantiate(pc,"RL_A", exp1);
     }
     else
     {

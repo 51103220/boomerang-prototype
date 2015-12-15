@@ -1,5 +1,6 @@
 PUBLIC aa
 aa: 
+	MOV A, #10
 	ACALL bb
 	RET
 

@@ -1,7 +1,13 @@
 got filename elf-init.c for main
 after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
+size 0x10 meet with size 0x8!
+size 0x8 meet with size 0x10!
+size 0x10 meet with size 0x8!
+size 0x8 meet with size 0x10!
 WARNING: size 0x8 meet with __size8 *; allowing temporarily
+size 0x10 meet with size 0x8!
+size 0x8 meet with size 0x10!
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
@@ -10,31 +16,212 @@ in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
+union { __size8 x; struct { __size8 bit1:1; __size8 bit2:1; __size8 bit3:1; __size8 bit4:1; __size8 bit5:1; __size8 bit6:1; __size8 bit7:1; __size8 bit8:1; } m; } a r8
 __size8 * p0 r13
+__size16 r4 r4
+__size16 r5 r5
+__size16 r6 r6
+__size8 r7 r7
 end locals
 symbols:
-  r8 maps to a type __size8
+  r4 maps to r4 type __size16
+  r5 maps to r5 type __size16
+  r6 maps to r6 type __size16
+  r7 maps to r7 type __size8
+  r8 maps to a type union { __size8 x; struct { __size8 bit1:1; __size8 bit2:1; __size8 bit3:1; __size8 bit4:1; __size8 bit5:1; __size8 bit6:1; __size8 bit7:1; __size8 bit8:1; } m; }
   r13 maps to p0 type __size8 *
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
 end symbols
-live variables: r13
+live variables: r4,  r5,  r6,  r7,  r8,  r13
 end live variables
-Ret BB:
+Twoway BB:
 in edges: 
+out edges: 104e0 1047c 
+00000000    0 *8* r7 := -
+            0 *union* a := -
+            0 *16* r6 := -
+            0 *16* r5 := -
+            0 *8** p0 := -
+            0 *16* r4 := -
+00010474    1 *8* r8.x := m[r7 + 1]
+              *union* IMP REF a
+00010478    5 BRANCH 0x104e0, condition equals
+High level: (a.x.m.bit1)*8* ~= 0
+Twoway BB:
+in edges: 10478 
+out edges: 104b8 10494 
+0001047c
+00010480    8 *8* r8.x := m[zfill(16,31,r6 + 20)]
+00010484    9 *8* r8.x.m.bit5 := 1
+00010488   11 *8* m[zfill(16,31,r6 + 20)] := a.x
+0001048c   12 *8* r8.x.m.bit3 := 0
+00010490   14 BRANCH 0x104b8, condition equals
+High level: (a.x.m.bit3)*8* ~= 1
+Twoway BB:
+in edges: 10490 
+out edges: 104a4 104a0 
+00010494
+00010498   17 *8* r8.x := m[zfill(16,31,r5 + 20)]
+0001049c   19 BRANCH 0x104a4, condition equals
+High level: (a.x.m.bit5)*8* ~= 0
+Fall BB:
+in edges: 1049c 
+out edges: 104a4 
+000104a0
+L3: Fall BB:
+in edges: 1049c 104a0 
+out edges: 104b8 
+000104a4
+000104a8   22 *8* r8.x := m[zfill(16,31,r5 + 6)]
+000104ac   23 *8* r8.x.m.bit7 := 0
+000104b0   24 *8* r8.x.m.bit6 := 0
+000104b4   26 *8* m[zfill(16,31,r5 + 6)] := a.x
+L2: Twoway BB:
+in edges: 10490 104b4 
+out edges: 104c8 104c4 
+00000000
+000104b8
+000104bc   29 *8* r8.x := m[zfill(16,31,r6 + 20)]
+000104c0   31 BRANCH 0x104c8, condition equals
+High level: (a.x.m.bit5)*8* ~= 0
+Fall BB:
+in edges: 104c0 
+out edges: 104c8 
+000104c4
+L4: Fall BB:
+in edges: 104c0 104c4 
+out edges: 104e0 
+000104c8
+000104cc   34 *8* r8.x := m[zfill(16,31,r6 + 6)]
+000104d0   35 *8* r8.x.m.bit7 := 0
+000104d4   36 *8* r8.x.m.bit6 := 0
+000104d8   38 *8* m[zfill(16,31,r6 + 6)] := a.x
+000104dc
+L1: Twoway BB:
+in edges: 10478 104dc 
+out edges: 10544 104e8 
+00000000
+000104e0   39 *8* r8.x := m[56]
+000104e4   41 BRANCH 0x10548, condition equals
+High level: (a.x.m.bit6)*8* ~= 1
+Synthetic out edge(s) to L7 
+Twoway BB:
+in edges: 104e4 
+out edges: 10514 104f0 
+000104e8   42 *8* r8.x := m[p0]
+000104ec   44 BRANCH 0x10514, condition equals
+High level: (a.x.m.bit2)*8* ~= 1
+Fall BB:
+in edges: 104ec 
+out edges: 10514 
+000104f0
+000104f4   47 *8* r8.x := m[zfill(16,31,r4 + 4)]
+000104f8   48 *j8* r8.x := (a.x) & 192
+000104fc
+00010500
+00010504   52 *8* r8.x := m[zfill(16,31,r6 + 6)]
+00010508   53 *j8* r8.x := (a.x) & 192
+0001050c   54 *8* r8.x := a.x
+00010510   56 *8* m[zfill(16,31,r6 + 6)] := a.x
+L6: Twoway BB:
+in edges: 104ec 10510 
+out edges: 10544 10520 
+00000000
+00010514
+00010518   59 *8* r8.x := m[zfill(16,31,r5 + 20)]
+0001051c   61 BRANCH 0x10544, condition equals
+High level: (a.x.m.bit4)*8* ~= 1
+Fall BB:
+in edges: 1051c 
+out edges: 10544 
+00010520
+00010524   64 *8* r8.x := m[zfill(16,31,r4 + 4)]
+00010528   65 *j8* r8.x := (a.x) & 192
+0001052c
+00010530
+00010534   69 *8* r8.x := m[zfill(16,31,r6 + 6)]
+00010538   70 *j8* r8.x := (a.x) & 192
+0001053c   71 *8* r8.x := a.x
+00010540   73 *8* m[zfill(16,31,r6 + 6)] := a.x
+L7: Ret BB:
+in edges: 1051c 10540 104e4 
 out edges: 
-00000000    0 *8** p0 := -
-            0 *i32* argc := -
-            0 *[c*]** argv := -
-            0 *[c*]** envp := -
-00010474
-00010478    2 *8* m[p0] := 29
-0001047c    4 *8* a := m[p0]
-            5 *8* m[p0] := 100
-00010480    6 RET *8* a := a
-              Modifieds: *8* a
-              Reaching definitions: a=a,   r13=p0,   tmpb=100
+00000000
+00010544   75 RET *8* a_1 := a.x
+              Modifieds: *v* a,  *8* r1,  *16* r11,  *8* r30
+              Reaching definitions: r1=r1,   r4=r4,   r5=r5,   r6=r6,   r7=r7,   a=a.x,   r11=r11,   r13=p0,   r30=a,
+                r32=argc,   r33=argv,   r34=envp,   tmp1=tmp1,   %flags=%flags,   %ZF=%ZF,   %CF=%CF
 
 
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit1
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x.m.bit5
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x.m.bit3
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit3
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit5
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x.m.bit7
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x.m.bit6
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit5
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x.m.bit7
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x.m.bit6
+type failure: no type for subexp1 of r8.x.m
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit6
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit2
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x.m.bit4
+type failure: no type for subexp1 of a.x.m
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of r8.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of a.x
+type failure: no type for subexp1 of a.x

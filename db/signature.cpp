@@ -976,7 +976,7 @@ bool CallingConvention::StdC::MIPSSignature::qualified(UserProc *p, Signature &c
 
 
 void CallingConvention::StdC::SparcSignature::addReturn(Type *type, Exp *e)
-{
+{	
 	if (type->isVoid())
 		return;
 

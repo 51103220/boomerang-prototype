@@ -170,10 +170,10 @@ RET retaddr
   *32* retaddr := %sp
   *32* %pc := retaddr;
 
-RL_A
-  *1* bt := %a@[0:0]
-  *7* %a@[0:6] := %a@[1:7]
-  *1* %a@[7:7] := bt;
+RL_A exp
+  *1* tmpb := exp@[0:0]
+  *7* exp@[0:6] := exp@[1:7]
+  *1* exp@[7:7] := tmpb;
 
 
 ADD_A_IMM exp,i32

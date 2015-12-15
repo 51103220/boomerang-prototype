@@ -4914,6 +4914,7 @@ bool UserProc::removeRedundantReturns(std::set<UserProc*>& removeRetSet) {
 		bool removedRets = false;
 		ReturnStatement::iterator rr;
 		for (rr = theReturnStatement->begin(); rr != theReturnStatement->end(); ) {
+			std::cout << "Return Statement " << (*rr)->prints() << std::endl;
 			Assign* a = (Assign*)*rr;
 			Exp *lhs = a->getLeft();
 			// For each location in the returns, check if in the signature
