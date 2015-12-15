@@ -171,21 +171,24 @@ RL_A
   *1* %a@[7:7] := bt;
 
 
-ADD_A_IMM i32
-  *8* %a := %a + i32;
+ADD_A_IMM exp,i32
+  *8* exp := exp + i32;
 
-ADD_A_DIR  z32
-  *8* %a := %a + m[z32]{8};
+ADD_A_DIR  exp,z32
+  *8* exp := exp + m[z32]{8};
 
-ADD_A_RI0
+ADD_A_RI0 exp
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
-  *8* %a := %a + tmpb;
+  *8* exp := exp + m[tmp1];
 
-ADD_A_RI1
+ADD_A_RI1 exp
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
-  *8* %a := %a + tmpb;
+  *8* exp := exp + m[tmp1];
+
+ADD_A_EXP exp1, exp2
+  *8* exp1 := exp1 + exp2;
 
 ADD_A_R0
   *8* %a := %a + %r0;
@@ -236,15 +239,18 @@ ADDC_A_IMM i32
 ADDC_A_DIR  z32
   *8* %a := %a + m[z32]{8};
 
-ADDC_A_RI0
+ADDC_A_RI0 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
-  *8* %a := %a + tmpb;
+  *8* exp1 := exp1 + exp2 + m[tmp1];
 
-ADDC_A_RI1
+ADDC_A_RI1 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
-  *8* %a := %a + tmpb;
+  *8* exp1 := exp1 + exp2 + m[tmp1];
+
+ADDC_A_EXP exp1, exp2,exp3
+  *8*  exp1 := exp1 + exp2 + exp3;
 
 ADDC_A_R0
   *8* %a := %a + %r0;
@@ -616,6 +622,9 @@ MOVC_A_AADDDPTR
   *32* tmp1 := tmp1 + tmp2
   *8* %a := m[tmp1]{8};
 
+SUBB_A_EXP exp1, exp2
+  *8* exp1 := exp1 - exp2;
+  
 SUBB_A_IMM i32
   *8* %a := %a - i32;
 
@@ -646,15 +655,15 @@ SUBB_A_R6
 SUBB_A_R7
   *8* %a := %a - %r7;
 
-SUBB_A_RI0
+SUBB_A_RI0 exp
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
-  *8* %a := %a - tmpb;
+  *8* exp := exp - m[tmp1];
 
 SUBB_A_RI1
   *32* tmp1 := zfill(8, 31, %r1)
   *8* tmpb := m[tmp1]{8}
-  *8* %a := %a - tmpb;
+  *8* exp := exp - m[tmp1];
 
 # 0xA0
 

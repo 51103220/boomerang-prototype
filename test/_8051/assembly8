@@ -1,0 +1,6 @@
+PUBLIC MAIN
+MAIN:
+	SETB C.7
+	MOV R1, #20
+	ADDC A, @R1 
+	RET

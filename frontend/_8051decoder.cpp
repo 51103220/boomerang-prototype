@@ -145,14 +145,14 @@ list<Statement*>* initial_bit_regs(){
 
     CompoundType* ct = new CompoundType();
       
-    ct->addType(new SizeType(8), "bit1");
-    ct->addType(new SizeType(8), "bit2");
-    ct->addType(new SizeType(8), "bit3");
-    ct->addType(new SizeType(8), "bit4");
-    ct->addType(new SizeType(8), "bit5");
-    ct->addType(new SizeType(8), "bit6");
-    ct->addType(new SizeType(8), "bit7");
-    ct->addType(new SizeType(8), "bit8");
+    ct->addType(new SizeType(8), "bit1:1");
+    ct->addType(new SizeType(8), "bit2:1");
+    ct->addType(new SizeType(8), "bit3:1");
+    ct->addType(new SizeType(8), "bit4:1");
+    ct->addType(new SizeType(8), "bit5:1");
+    ct->addType(new SizeType(8), "bit6:1");
+    ct->addType(new SizeType(8), "bit7:1");
+    ct->addType(new SizeType(8), "bit8:1");
     UnionType * ut = new UnionType();
     ut->addType(new SizeType(8), "x");
     ut->addType(ct,"m");
@@ -364,7 +364,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                                         stmts = instantiate(pc, "MOV_RI1_IMM" , new Const(arg2->value.i));
                                         break;
                                     case 1: /* DIRECT INT */
-                                        stmts = instantiate(pc, "MOV_RI1_DIR", new Const(op2));
+                                        stmts = instantiate(pc, "MOV_RI1_DIR", new Const(arg2->value.i));
                                         break;
                                     default:break; 
                                 }
@@ -400,11 +400,16 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                                         }
                                         else if (op2 == 8 ){ /* RN, A */
                                             exp2 = temp;
-                                   }
+                                        }
                                         break;
                                     }
                                     case 4: /* RN, IMM */
                                     {   exp2  =  new Const(arg2->value.i);  
+                                        break;
+                                    }
+                                    case 1: /* Rn, Direct int */
+                                    {
+                                        exp2  =  Location::memOf(new Const(arg2->value.i)); 
                                         break;
                                     }
                                     default:
@@ -729,7 +734,6 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         }
     }
     else if (opcode == "NOP") {
-
     }
     else if (opcode == "ACALL" || opcode == "LCALL") {
         ei = Line->expList->begin();
@@ -754,6 +758,114 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         result.rtl = new RTL(pc, stmts);
         result.rtl->appendStmt(newCall);
         result.type = SD;
+    }
+    else if (opcode == "ADD" || opcode == "ADDC" || opcode == "SUBB") {
+        stringstream ss;
+        ss << opcode << "_A_EXP";
+        string str(ss.str());
+        char *name =  new char[str.length() + 1];
+        strcpy(name, str.c_str());
+
+        Exp* exp1;
+        Exp* exp2;
+
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
+        }
+
+        ei++;
+        AssemblyArgument* arg2 = (*ei)->argList.front();
+        unsigned op1, op2;
+
+        switch(arg2->kind){
+            case 3: /* A, INDIRECT */
+            {   
+                op2 = map_sfr(std::string(arg2->value.c));
+                if (op2 == 0){
+                    if (opcode == "ADD")
+                        stmts = instantiate(pc,"ADD_A_RI0", exp1);
+                    else if (opcode == "SUBB")
+                        stmts = instantiate(pc,"SUBB_A_RI0", exp1);
+                    else{ 
+                        Exp * temp = Location::regOf(10);
+                        if(if_a_byte("C"))
+                            temp = byte_present("C");
+                        stmts = instantiate(pc,"ADDC_A_RI0", exp1, Location::memOf(temp));
+                    } 
+                }
+                else if (op2 == 1){
+                    if (opcode == "ADD")
+                        stmts = instantiate(pc,"ADD_A_RI1", exp1);
+                    else if (opcode == "SUBB")
+                        stmts = instantiate(pc,"SUBB_A_RI1", exp1);
+                    else{ 
+                        Exp * temp = Location::regOf(10);
+                        if(if_a_byte("C"))
+                            temp = byte_present("C");
+                        stmts = instantiate(pc,"ADDC_A_RI1", exp1, Location::memOf(temp));
+                    } 
+                }
+                     
+                break;
+            }
+            case 6: /* A, Rn | Direct ID */
+            {
+                op2 = map_sfr(std::string(arg2->value.c));
+                if (op2 < 8){ //Rn
+                    exp2 = Location::regOf(op2);
+                    if (if_a_byte(arg2->value.c))
+                        exp2 = byte_present(arg2->value.c);
+                }
+                else if (op2 >= 9){ //Direct
+                    exp2 = Location::regOf(op2);
+                    if (if_a_byte(arg2->value.c))
+                        exp2 = byte_present(arg2->value.c);
+                    exp2 = Location::memOf(exp2);
+                }
+                if (opcode == "ADDC"){
+                    Exp * temp = Location::regOf(10);
+                        if(if_a_byte("C"))
+                            temp = byte_present("C");
+                    stmts = instantiate(pc,name, exp1, Location::memOf(temp), exp2);
+                }
+                else 
+                    stmts = instantiate(pc,name, exp1, exp2);
+
+                break;
+            }
+            case 1: /*A, Direct Int */
+            {   
+                exp2 = Location::memOf(new Const(arg2->value.i));
+                if (opcode == "ADDC"){
+                    Exp * temp = Location::regOf(10);
+                        if(if_a_byte("C"))
+                            temp = byte_present("C");
+                    stmts = instantiate(pc,name, exp1, Location::memOf(temp), exp2);
+                }
+                else 
+                    stmts = instantiate(pc,name, exp1, exp2);
+                break;
+            }
+            case 4: /* A, IMM */
+            {
+                exp2 = new Const(arg2->value.i);
+                if (opcode == "ADDC"){
+                    Exp * temp = Location::regOf(10);
+                        if(if_a_byte("C"))
+                            temp = byte_present("C");
+                    stmts = instantiate(pc,name, exp1, Location::memOf(temp), exp2);
+                }
+                else 
+                    stmts = instantiate(pc,name, exp1, exp2);
+                break;
+            }
+            default:
+                break;
+        }
+        
     }
     else
     {

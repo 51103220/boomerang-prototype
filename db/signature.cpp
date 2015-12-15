@@ -1007,7 +1007,7 @@ Exp *CallingConvention::StdC::SparcSignature::getArgumentExp(int n) {
 		if(!_8051)
 			e = Location::regOf((int)(8 + n));
 		else 
-			e = Location::regOf((int)(9 + n));
+			e = Location::regOf((int)(32 + n));
 	}
 	return e;
 }
