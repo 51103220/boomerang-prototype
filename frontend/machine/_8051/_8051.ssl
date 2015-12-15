@@ -858,10 +858,10 @@ CLR_DIR z32
 #CLR_C
 #  *1* %CF := 0;
 
-#SWAP_A
-#  *4* bt4 := %a@[0:3]
-#  *4* %a@[0:3] := %a@[4:7]
-#  *4* %a@[4:7] := bt4;
+SWAP_A exp
+  *4* tmpb := exp@[0:3]
+  *4* exp@[0:3] := exp@[4:7]
+  *4* exp@[4:7] := tmpb;
 
 #XCH_A_R0
 #  *8* tmpb := %a

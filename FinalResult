@@ -1,9 +1,7 @@
-bb
+MAIN
 		MOV
 					 A 
-					 50 
-		PUSH
-					 7 
-		POP
-					 69 
+					 100 
+		SWAP
+					 A 
 		RET

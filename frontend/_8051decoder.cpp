@@ -1069,6 +1069,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         else
             stmts = instantiate(pc,"POP_DIR", new Const(arg1->value.i) );
     }
+    else if (opcode == "SWAP"){
+        Exp* exp1 = Location::regOf(8);
+        if(if_a_byte("A"))
+            exp1 = byte_present("A");
+        stmts = instantiate(pc,"SWAP_A", exp1);
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;
