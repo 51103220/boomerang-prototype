@@ -1,31 +1,40 @@
 got filename elf-init.c for main
 after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
+WARNING: size 0x8 meet with __size8 *; allowing temporarily
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
+### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 *forced* { int r8 } main(int argc r32, char *[] * argv r33, char *[] * envp r34)
 in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
+__size8 a r8
+__size8 * p0 r13
 end locals
 symbols:
+  r8 maps to a type __size8
+  r13 maps to p0 type __size8 *
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
 end symbols
-live variables: 
+live variables: r13
 end live variables
 Ret BB:
 in edges: 
 out edges: 
-00000000    0 *i32* argc := -
+00000000    0 *8** p0 := -
+            0 *i32* argc := -
             0 *[c*]** argv := -
             0 *[c*]** envp := -
 00010474
-00010478
-0001047c    5 RET *8* a := 100@0:3
+00010478    2 *8* m[p0] := 29
+0001047c    4 *8* a := m[p0]
+            5 *8* m[p0] := 100
+00010480    6 RET *8* a := a
               Modifieds: *8* a
-              Reaching definitions: a=100@0:3,   tmpb=100@0:3
+              Reaching definitions: a=a,   r13=p0,   tmpb=100
 
 

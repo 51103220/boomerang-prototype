@@ -868,6 +868,11 @@ SWAP_A exp
 #  *8* %a := %r0
 #  *8* %r0 := tmpb;
 
+XCH_EXP exp1, exp2
+  *8* tmpb := exp1
+  *8* exp1 := exp2
+  *8* exp2 := tmpb;
+
 XCH_A_R1
   *8* tmpb := %a
   *8* %a := %r1
@@ -903,13 +908,17 @@ XCH_A_R7
   *8* %a := %r7
   *8* %r7 := tmpb;
 
-XCH_A_RI0
-  *32* tmp1 := zfill(8, 31, %a)
-  *8* %r0 := m[tmp1]{8};
+XCH_A_RI0 exp
+  *32* tmp1 := zfill(8, 31, %r0)
+  *8* tmpb := exp{8}
+  *8* exp := m[tmp1] 
+  *8* m[tmp1] := tmpb;
 
-XCH_A_RI1
-  *32* tmp1 := zfill(8, 31, %a)
-  *8* %r1 := m[tmp1]{8};
+XCH_A_RI1 exp
+  *32* tmp1 := zfill(8, 31, %r1)
+  *8* tmpb := exp{8}
+  *8* exp := m[tmp1] 
+  *8* m[tmp1] := tmpb;
 
 # 0xD0
 

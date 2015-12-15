@@ -1075,6 +1075,54 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
             exp1 = byte_present("A");
         stmts = instantiate(pc,"SWAP_A", exp1);
     }
+    else if (opcode == "XCH"){
+        Exp* exp1;
+        Exp* exp2;
+        //-----EXPRESSION1, ALWAYS AN ID----------------------------
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+        if (if_a_byte(arg1->value.c)){
+            exp1 = byte_present(arg1->value.c);
+        }
+        //-----EXPRESSION2, FIRST TEST THE BINARY
+        ++ei;
+        
+        AssemblyArgument* arg2 = (*ei)->argList.front();
+        //---------------------------------------------------------
+        unsigned op1;
+        unsigned op2;
+        switch(arg2->kind){
+            case 3: //A, INDIRECT
+            {   op2 = map_sfr(std::string(arg2->value.c));
+                if (op2 == 0){
+                    stmts = instantiate(pc,"XCH_A_RI0", exp1);
+                }
+                else{
+                    stmts = instantiate(pc,"XCH_A_RI1", exp1);   
+                }
+                break;
+            }
+            case 6: //A, Rn|DIRECT ID
+            {   
+                op2 = map_sfr(string(arg2->value.c));
+                exp2 = Location::regOf(op2);
+                if (if_a_byte(arg2->value.c))
+                    exp2 = byte_present(arg2->value.c);
+                if(op2 > 7)
+                    exp2 = Location::memOf(exp2);
+                stmts = instantiate(pc,"XCH_EXP", exp1, exp2);
+                break;
+            }
+            case 1: //A, Direct INT
+            {   exp2 = Location::memOf(new Const(arg2->value.i));
+                stmts = instantiate(pc,"XCH_EXP", exp1, exp2);
+                break;
+            }
+            default:
+                break;
+        }
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;

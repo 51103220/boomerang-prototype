@@ -2,6 +2,10 @@ MAIN
 		MOV
 					 A 
 					 100 
-		SWAP
+		MOV
+					 P0 
+					 29 
+		XCH
 					 A 
+					 P0 
 		RET

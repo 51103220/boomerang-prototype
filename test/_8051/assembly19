@@ -1,0 +1,6 @@
+PUBLIC MAIN
+MAIN: 
+	MOV A, #100
+	MOV P0, #29 
+	XCH A, P0
+	RET
