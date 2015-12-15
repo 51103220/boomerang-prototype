@@ -1060,6 +1060,15 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         jump->setDest(pc + (Line->offset+1)*4);
         jump->setCondType(BRANCH_JE);
     }
+    else if (opcode == "PUSH" || opcode == "POP"){
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+
+        if (opcode == "PUSH")
+            stmts = instantiate(pc,"PUSH_DIR", new Const(arg1->value.i) );
+        else
+            stmts = instantiate(pc,"POP_DIR", new Const(arg1->value.i) );
+    }
     else
     {
         std::cout << "ELSE " << opcode << std::endl;

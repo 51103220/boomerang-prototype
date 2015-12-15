@@ -1,16 +1,9 @@
 bb
 		MOV
-					 P0 
-					 100 
-		CJNE
 					 A 
-					 P0 
-					 dd 
-		MOV
-					 A 
-					 100 
+					 50 
+		PUSH
+					 7 
+		POP
+					 69 
 		RET
-dd
-		MOV
-					 A 
-					 100 

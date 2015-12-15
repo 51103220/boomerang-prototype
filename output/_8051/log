@@ -1,6 +1,5 @@
 got filename elf-init.c for main
 ### type analysis for main ###
-WARNING: size 0x8 meet with __size8 *; allowing temporarily
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
@@ -9,39 +8,28 @@ in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
-__size8 * p0 r13
+__size32 * sp r88
 end locals
 symbols:
-  r8 maps to a type __size8
-  r13 maps to p0 type __size8 *
+  r88 maps to sp type __size32 *
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
 end symbols
-live variables: r8,  r13
+live variables: r88
 end live variables
-Twoway BB:
+Ret BB:
 in edges: 
-out edges: 10480 1047c 
-00000000    0 *8** p0 := -
-            0 *8* a := -
+out edges: 
+00000000    0 *32** sp := -
             0 *i32* argc := -
             0 *[c*]** argv := -
             0 *[c*]** envp := -
-00010474    1 *8* m[p0] := 100
-00010478    3 BRANCH 0x10480, condition equals
-High level: a = m[p0]
-Fall BB:
-in edges: 10478 
-out edges: 10480 
-0001047c    4 *8* a := 100
-L1: Ret BB:
-in edges: 10478 1047c 
-out edges: 
-00000000
-00010480    5 RET *8* a := a
+00010474
+00010478    3 *32* m[sp + 1] := m[7]
+0001047c    5 *32* m[69] := m[sp]
+00010480    6 RET *8* a := 50
               Modifieds: *8* a
-              Reaching definitions: a=a,   r13=p0,   %flags=a = m[p0],   %ZF=%ZF,   %CF=%CF
+              Reaching definitions: a=50,   sp=sp
 
 

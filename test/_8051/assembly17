@@ -1,0 +1,6 @@
+PUBLIC bb
+bb:	
+	MOV A, #50
+	PUSH 111B
+	POP 45H
+	RET

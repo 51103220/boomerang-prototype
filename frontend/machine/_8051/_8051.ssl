@@ -913,9 +913,9 @@ XCH_A_RI1
 
 # 0xD0
 
-#POP_DIR  z32
-#*32* m[z32] := m[%sp]
-#*32* %sp := %sp - 1;
+POP_DIR  z32
+*32* %sp := %sp - 1
+*32* m[z32] := m[%sp];
 
 # ACALL_addr11
 
