@@ -64,6 +64,16 @@ const char *registers[rsize] = {
 };
 std::map<char*,int> undefined;
 std::map<char *, char *> defined;
+list<const char*> loop_labels;
+
+bool check_loop(const char* name){
+	list<const char*>::iterator i;
+	for(i = loop_labels.begin(); i!= loop_labels.end(); ++i){
+		if(strcmp(name, (*i)) == 0)
+			return true;
+	}
+	return false;
+}
 void init_defined(const char* name){
 	std::string path(name);
 	std::size_t found = path.find_last_of("/\\");
@@ -190,6 +200,7 @@ void print_ass(AssemblyProgram* ass_program){
 			myfile << (*lbi)->name << std::endl;
 			std::cout << "\t Number of lines: " << (*lbi)->lineList->size() << std::endl;
 			for(li = (*lbi)->lineList->begin(); li != (*lbi)->lineList->end(); li++ ){
+				std::cout << "\t\t Offset " << (*li)->offset << std::endl;
 				std::cout << "\t\t Opcode " << (*li)->name << std::endl;
 				myfile << "\t\t" << (*li)->name << std::endl;
 				std::cout << "\t\t\t Number of Expression: " << (*li)->expList->size() << std::endl;
@@ -236,10 +247,20 @@ list<AssemblyLine*>* iterate_label(AssemblyProgram* &ass_program, char* name){
 									label_name = temp_expr->argList.front()->value.c;
 								}
 							} 			
-							list<AssemblyLine*> *temp_list = iterate_label(ass_program, label_name);
-							(*li)->offset = temp_list->size();
-							(*lbi)->lineList->insert(++li,temp_list->begin(),temp_list->end());
-							advance(li,temp_list->size()+1);
+							
+							if(strcmp(label_name,(*lbi)->name) != 0){ // Check for Loop - NON LOOP			
+								list<AssemblyLine*> *temp_list = iterate_label(ass_program, label_name);
+								(*li)->offset = temp_list->size();
+								(*lbi)->lineList->insert(++li,temp_list->begin(),temp_list->end());
+								
+								advance(li,temp_list->size()+1);
+							}
+							else{ // LOOP
+								std::cout << "LOOP LABEL: " << (*lbi)->name << std::endl;
+								loop_labels.push_back((*lbi)->name);
+								(*li)->offset = -1;
+								++li;
+							}
 						}
 						else{
 							++li;
@@ -287,21 +308,41 @@ void append_jumps(AssemblyProgram* &ass_program){
 								if(temp_expr->argList.size() != 0){
 									label_name = temp_expr->argList.front()->value.c;
 								}
-							} 			
+							}
 							list<AssemblyLine*> *temp_list = iterate_label(ass_program, label_name);
 							(*li)->offset = temp_list->size();
 							(*lbi)->lineList->insert(++li,temp_list->begin(),temp_list->end());
-							
 							advance(li,temp_list->size()+1);
 						}
 						else{
 							++li;
 						}
+						
 				}
 				else{
 					++li;
 				}
 
+			}
+		}
+
+	}
+}
+void loop_offset(AssemblyProgram* &ass_program){
+	list<AssemblyArgument*>::iterator ai;
+	list<AssemblyLine*>::iterator li;
+	list<AssemblyExpression*>::iterator ei;
+	list<AssemblyLabel*>::iterator lbi;
+	if (ass_program){
+		for(lbi = ass_program->labelList->begin();lbi != ass_program->labelList->end(); lbi++){
+			if(check_loop((*lbi)->name)){
+				int count = 0;
+				for(li = (*lbi)->lineList->begin(); li != (*lbi)->lineList->end(); ++li){
+					if ((*li)->offset == -1){
+						(*li)->offset = (-1)*count;
+					}
+					++count;
+				}
 			}
 		}
 
@@ -428,6 +469,9 @@ AssemblyProgram* AssHandler::process(const char* name) {
 
 	std::cout << "-----APPENDING JUMP AND BRANCH STATEMENTS---\n";	
 	append_jumps(ass_program);
+
+	std::cout << "-----CHECK FOR LOOPS------\n";
+	loop_offset(ass_program);
 
 	myfile.open("FinalResult");
 	print_ass(ass_program);

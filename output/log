@@ -1,45 +1,4 @@
 after removing matching assigns (t[WILDSTR]).
-### type analysis for fib ###
-### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure fib ###
-in proc fib adding addrExp r14{0} to local table
-in proc fib adding addrExp r14{0} + 4 to local table
-in proc fib adding addrExp r14{0} + 8 to local table
-in proc fib adding addrExp r14{0} + 12 to local table
-in proc fib adding addrExp r14{0} + 16 to local table
-in proc fib adding addrExp r14{0} + 20 to local table
-in proc fib adding addrExp r14{0} + 24 to local table
-in proc fib adding addrExp r14{0} + 28 to local table
-in proc fib adding addrExp r14{0} + 32 to local table
-in proc fib adding addrExp r14{0} + 36 to local table
-in proc fib adding addrExp r14{0} + 40 to local table
-in proc fib adding addrExp r14{0} + 44 to local table
-in proc fib adding addrExp r14{0} + 48 to local table
-in proc fib adding addrExp r14{0} + 52 to local table
-in proc fib adding addrExp r14{0} + 56 to local table
-in proc fib adding addrExp r14{0} + 60 to local table
-in proc fib adding addrExp r14{0} + 4 to local table
-in proc fib adding addrExp r14{0} + 8 to local table
-in proc fib adding addrExp r14{0} + 12 to local table
-in proc fib adding addrExp r14{0} + 16 to local table
-in proc fib adding addrExp r14{0} + 20 to local table
-in proc fib adding addrExp r14{0} + 24 to local table
-in proc fib adding addrExp r14{0} + 28 to local table
-in proc fib adding addrExp r14{0} + 32 to local table
-in proc fib adding addrExp r14{0} + 36 to local table
-in proc fib adding addrExp r14{0} + 40 to local table
-in proc fib adding addrExp r14{0} + 44 to local table
-in proc fib adding addrExp r14{0} + 48 to local table
-in proc fib adding addrExp r14{0} + 52 to local table
-in proc fib adding addrExp r14{0} + 56 to local table
-in proc fib adding addrExp r14{0} + 60 to local table
-in proc fib adding addrExp r14{0} to local table
-finding final parameters for fib
-potential param r8
-found new parameter r8
-finding final parameters for fib
-potential param r8
-found new parameter r8
-after removing matching assigns (t[WILDSTR]).
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 in proc main adding addrExp r14{0} to local table
@@ -58,6 +17,9 @@ in proc main adding addrExp r14{0} + 48 to local table
 in proc main adding addrExp r14{0} + 52 to local table
 in proc main adding addrExp r14{0} + 56 to local table
 in proc main adding addrExp r14{0} + 60 to local table
+in proc main adding addrExp r14{0} - 20 to local table
+in proc main adding addrExp r14{0} - 20 to local table
+in proc main adding addrExp r14{0} - 20 to local table
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 in proc main adding addrExp r14{0} to local table
 in proc main adding addrExp r14{0} + 4 to local table
@@ -75,161 +37,92 @@ in proc main adding addrExp r14{0} + 48 to local table
 in proc main adding addrExp r14{0} + 52 to local table
 in proc main adding addrExp r14{0} + 56 to local table
 in proc main adding addrExp r14{0} + 60 to local table
+in proc main adding addrExp r14{0} - 20 to local table
+in proc main adding addrExp r14{0} - 20 to local table
+in proc main adding addrExp r14{0} - 20 to local table
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-### type analysis for fib ###
-### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure fib ###
-finding final parameters for fib
-potential param r8
-found new parameter r8
-local o0 has type int that doesn't agree with type of define void of a library, why?
-local o1 has type /*signed?*/int that doesn't agree with type of define void of a library, why?
+in proc main adding addrExp r14{0} - 20 to local table
+in proc main adding addrExp r14{0} - 20 to local table
+in proc main adding addrExp r14{0} - 20 to local table
+local o0 has type char * that doesn't agree with type of define void of a library, why?
+local o1 has type int that doesn't agree with type of define void of a library, why?
+local o6 has type void * that doesn't agree with type of define void of a library, why?
 *forced* { int r8 } main(int argc r8, char *[] * argv r9, char *[] * envp r10)
-in cluster fib
+in cluster loop
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-void o0 r8
+int local0 m[o6 - 20]
 end locals
 symbols:
-  r8 maps to o0 type void
+  m[o6 - 20] maps to local0 type int
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
 end symbols
 live variables: r8,  r9,  r10,  r11,  r12,  r13,  r14,  r15,  r16,  r17,  r18,  r19,  r20,  r21,  r22,  r23,  r24,  r25,  r26,  r27,  r28,  r29,  r30,  r31
 end live variables
-Call BB:
+Fall BB:
 in edges: 
-out edges: 106a8 
+out edges: 1068c 
 00000000
-0001069c
-000106a0
-000106a0   28 {*j32* o0, *32* r0} := CALL fib(
-                *i32* o0 := 10
-              )
-              Reaching definitions: r8=10,   r9=r9{0},   r10=r10{0},   r11=r11{0},   r12=r12{0},   r13=r13{0},
-                r14=r14{0} - 112,   r15=r15{0},   r16=r16{0},   r17=r17{0},   r18=r18{0},   r19=r19{0},   r20=r20{0},
-                r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},   r26=r10{0},   r27=r11{0},
-                r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},   m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},
-                m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},   m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},
-                m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},   m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},
-                m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},   m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},
-                m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},   tmp=r14{0} - 112
-              Live variables: o0
-Call BB:
-in edges: 106a0 
-out edges: 106b8 
+00010684
+00010688   27 *i32* local0 := 0
+L3: Twoway BB:
+in edges: 10688 106b0 
+out edges: 106a4 106b8 
+00000000
+0001068c
+00010690
+00010694   32 BRANCH 0x106a4, condition signed less or equals
+High level: local0 <= 9
+Synthetic out edge(s) to L1 L2 
+L1: Oneway BB:
+in edges: 10694 
+out edges: 1068c 
+000106a4
 000106a8
-000106ac
-000106b0
-000106b0   32 {*v* o0, *v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL printf(
-                *c** o0_1 := "%i
+000106ac   37 *i32* local0 := local0 + 1
+000106b0   38 GOTO 0x1068c
+L2: Call BB:
+in edges: 10694 
+out edges: 106cc 
+000106b8
+000106bc
+000106c0
+000106c4   42 {*v* r10, *v* r11, *v* r12, *v* r13, *v* r15} := CALL printf(
+                *c** o0 := "%i
 "
-                *j32* o1 := o0
+                *i32* o1 := local0
               )
-              Reaching definitions: r0=r0{28},   r1=0x10400,   r8=0x10798,   r9=r8{28},   r10=r10{0},   r11=r11{0},
-                r12=r12{0},   r13=r13{0},   r14=r14{0} - 112,   r15=r15{0},   r16=r16{0},   r17=r17{0},   r18=r18{0},
-                r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},
-                r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
+              Reaching definitions: r0=m[r14{0} - 20]{79} - 9,   r8=0x10780,   r9=m[r14{0} - 20]{79},   r10=r10{0},
+                r11=r11{0},   r12=r12{0},   r13=r13{0},   r14=r14{0} - 120,   r15=r15{0},   r16=r16{0},   r17=r17{0},
+                r18=r18{0},   r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},
+                r25=r9{0},   r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
                 m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},
                 m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},
                 m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},
-                m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},
-                tmp=r14{0} - 112
+                m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},
+                m[r14{0} - 20]=m[r14{0} - 20]{79},   m[r14{0}]=r16{0},   tmp=m[r14{0} - 20]{79},
+                %flags=SUBFLAGS( m[r14{0} - 20]{79}, 9, m[r14{0} - 20]{79} - 9 ),   %ZF=(m[r14{0} - 20]{79} - 9) = 0,
+                %CF=m[r14{0} - 20]{79} <u 9
               Live variables: 
 Ret BB:
-in edges: 106b0 
+in edges: 106c4 
 out edges: 
-000106b8
-000106b8   60 RET *32* o0 := 0
-              Modifieds: *32* o0,  *32* r0,  *32* r1
-              Reaching definitions: r0=r0,   r1=0x10400,   o0=0,   o1=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13
-                r14=r14,   r15=r15,   r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,   r22=r22,
-                r23=r23,   r24=r24,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,
-                m[r14 + 4]=r17,   m[r14 + 8]=r18,   m[r14 + 12]=r19,   m[r14 + 16]=r20,   m[r14 + 20]=r21,
-                m[r14 + 24]=r22,   m[r14 + 28]=r23,   m[r14 + 32]=r24,   m[r14 + 36]=r25,   m[r14 + 40]=r26,
-                m[r14 + 44]=r27,   m[r14 + 48]=r28,   m[r14 + 52]=r29,   m[r14 + 56]=r30,   m[r14 + 60]=r31,
-                m[r14]=r16,   tmp=0
-
-
-void fib(int param1 r8)
-in cluster fib
-parameters: i32 param1
-end parameters
-locals:
-int i0 r24
-int o0 r8
-int o0_1 r8{37}
-end locals
-symbols:
-  r8 maps to o0 type int
-  r24 maps to i0 type int
-  r8{0} maps to param1 type int
-  r8{37} maps to o0_1 type int
-end symbols
-live variables: r8,  r9,  r10,  r11,  r12,  r13,  r14,  r15,  r16,  r17,  r18,  r19,  r20,  r21,  r22,  r23,  r24,  r25,  r26,  r27,  r28,  r29,  r30,  r31
-end live variables
-Twoway BB:
-in edges: 
-out edges: 106e8 106d0 
-00000000    0 *i32* param1 := -
-000106c0   18 *i32* i0 := param1
-000106c4
-000106c8   30 BRANCH 0x106e8, condition signed less or equals
-High level: param1 <= 1
-Call BB:
-in edges: 106c8 
-out edges: 106d8 
+000106cc
 000106d0
-000106d0   33 {*i32* o0, *32* r0} := CALL fib(
-                *i32* o0 := param1 - 1
-              )
-              Reaching definitions: r0=r8{0} - 1,   r8=r8{0} - 1,   r9=r9{0},   r10=r10{0},   r11=r11{0},   r12=r12{0},
-                r13=r13{0},   r14=r14{0} - 112,   r15=r15{0},   r16=r16{0},   r17=r17{0},   r18=r18{0},   r19=r19{0},
-                r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},   r26=r10{0},
-                r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},   m[r14{0} + 4]=r17{0},
-                m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},   m[r14{0} + 20]=r21{0},
-                m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},   m[r14{0} + 36]=r25{0},
-                m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},   m[r14{0} + 52]=r29{0},
-                m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},   tmp=r8{0},
-                %flags=SUBFLAGS( r8{0}, 1, r8{0} - 1 ),   %ZF=(r8{0} - 1) = 0,   %CF=r8{0} <u 1
-              Live variables: o0
-Call BB:
-in edges: 106d0 
-out edges: 106e4 
+000106d4
 000106d8
-000106dc
-000106dc   37 {*i32* o0_1, *j32* r0} := CALL fib(
-                *i32* o0 := param1 - 2
-              )
-              Reaching definitions: r0=r0{33},   r8=r8{0} - 2,   r9=r9{0},   r10=r10{0},   r11=r11{0},   r12=r12{0},
-                r13=r13{0},   r14=r14{0} - 112,   r15=r15{0},   r16=r8{33},   r17=r17{0},   r18=r18{0},   r19=r19{0},
-                r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},   r26=r10{0},
-                r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},   m[r14{0} + 4]=r17{0},
-                m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},   m[r14{0} + 20]=r21{0},
-                m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},   m[r14{0} + 36]=r25{0},
-                m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},   m[r14{0} + 52]=r29{0},
-                m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},   <all>=<all>{33},   tmp=r8{0},
-                %flags=%flags{33},   %ZF=%ZF{33},   %CF=%CF{33}
-              Live variables: o0_1
-Fall BB:
-in edges: 106dc 
-out edges: 106e8 
-000106e4   39 *i32* i0 := o0 + o0_1
-L1: Ret BB:
-in edges: 106c8 106e4 
-out edges: 
-00000000
-000106e8
-000106ec
-000106ec   67 RET *i32* o0 := i0
+000106d8   72 RET *32* o0 := 0
               Modifieds: *32* o0,  *32* r0
-              Reaching definitions: r0=0,   o0=i0,   r9=r9,   r10=r10,   r11=r11,   r12=r12,   r13=r13,   r14=r14,
+              Reaching definitions: r0=0,   o0=0,   o1=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13,   o6=o6,
                 r15=r15,   r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,   r22=r22,   r23=r23,
-                i0=i0,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,   local1=r17,
-                local2=r18,   local3=r19,   local4=r20,   local5=r21,   local6=r22,   local7=r23,   local8=i0,
-                local9=r25,   local10=r26,   local11=r27,   local12=r28,   local13=r29,   local14=r30,   local15=r31,
-                local0=r16,   tmp=0,   %flags=%flags,   %ZF=%ZF,   %CF=%CF
+                r24=r24,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,   m[o6 + 4]=r17,
+                m[o6 + 8]=r18,   m[o6 + 12]=r19,   m[o6 + 16]=r20,   m[o6 + 20]=r21,   m[o6 + 24]=r22,   m[o6 + 28]=r23
+                m[o6 + 32]=r24,   m[o6 + 36]=r25,   m[o6 + 40]=r26,   m[o6 + 44]=r27,   m[o6 + 48]=r28,
+                m[o6 + 52]=r29,   m[o6 + 56]=r30,   m[o6 + 60]=r31,   local0=local0,   m[o6]=r16,   tmp=0,
+                %flags=SUBFLAGS( local0, 9, local0 - 9 ),   %ZF=(local0 - 9) = 0,   %CF=local0 <u 9
 
 
