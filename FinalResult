@@ -1,38 +1,24 @@
-bb
-		SETB
-					 R0 
-		CLR
-					 R1 
-		JB
-					 R0 
-					 cc 
+MAIN
 		MOV
 					 A 
-					 150 
-		JNB
-					 R0 
-					 dd 
+					 100 
+		MOV
+					 R2 
+					 10 
 		MOV
 					 A 
-					 200 
-		JNB
-					 R1 
-					 dd 
+					 10 
+		DJNZ
+					 R2 
+					 AGAIN 
 		MOV
 					 A 
-					 200 
+					 R2 
 		RET
-cc
+AGAIN
 		MOV
 					 A 
-					 150 
-		JNB
-					 R0 
-					 dd 
-		MOV
-					 A 
-					 200 
-dd
-		MOV
-					 A 
-					 200 
+					 10 
+		DJNZ
+					 R2 
+					 AGAIN 

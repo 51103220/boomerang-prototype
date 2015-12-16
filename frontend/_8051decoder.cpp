@@ -1086,16 +1086,26 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         ++ei;
         AssemblyArgument* arg2 = (*ei)->argList.front();
         unsigned op1, op2;
+
+        bool loop = false;
+        if(Line->offset < 0)
+            loop = true;
         switch(arg1->kind){
             case 6: /*Rn, Direct*/
             {   
                 op1 = map_sfr(std::string(arg1->value.c));
                 if (op1 <= 7){ //Rn
-                    stmts = instantiate(pc,"DJNZ_EXP", exp1);
+                    if (!loop)
+                        stmts = instantiate(pc,"DJNZ_EXP", exp1);
+                    else
+                        stmts = instantiate(pc,"DJNZ_EXP_LOOP", exp1);
                 }   
                 else {// Direct
                     exp1 = Location::memOf(exp1);
-                    stmts = instantiate(pc,"DJNZ_EXP", exp1);
+                    if (!loop)
+                        stmts = instantiate(pc,"DJNZ_EXP", exp1);
+                    else 
+                        stmts = instantiate(pc,"DJNZ_EXP_LOOP", exp1);
                 }
                 break;
             }
@@ -1107,7 +1117,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         result.rtl->appendStmt(jump); 
         result.numBytes = 4; 
         jump->setDest(pc + (Line->offset+1)*4);
-        jump->setCondType(BRANCH_JE);
+        jump->setCondType(BRANCH_JNE);
     }
     else if (opcode == "PUSH" || opcode == "POP"){
         ei = Line->expList->begin();

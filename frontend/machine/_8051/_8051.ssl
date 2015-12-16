@@ -946,6 +946,10 @@ DJNZ_DIR_IMM  z32, i32
 DJNZ_EXP exp
   *8* exp := exp - 1
   *v* %flags := exp = 0;
+  
+DJNZ_EXP_LOOP exp
+  *8* exp := exp - 1
+  *v* %flags := exp ~= 0;
 
 XCHD_A_RI0
   *32* tmp1 := zfill(8, 31, %r0)
