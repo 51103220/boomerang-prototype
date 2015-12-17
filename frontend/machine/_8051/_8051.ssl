@@ -1013,17 +1013,17 @@ DJNZ_R7_IMM i32
 
 # 0xE0
 
-MOVX_A_DPTRA exp
+MOVX_A_DPTRA exp1, exp2
   *32* tmp1 := zfill(16, 31, %dptr)
-  *8* exp := m[tmp1]{8};
+  *8* exp1 := exp2{8};
 
-MOVX_A_RI0 exp
+MOVX_A_RI0 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* exp := m[tmp1]{8};
+  *8* exp1 := exp2;
 
-MOVX_A_RI1 exp
+MOVX_A_RI1 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* exp := m[tmp1]{8};
+  *8* exp1 := exp2;
 
 CLR_A
   *8* %a := 0;

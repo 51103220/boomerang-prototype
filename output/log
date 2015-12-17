@@ -17,9 +17,6 @@ in proc main adding addrExp r14{0} + 48 to local table
 in proc main adding addrExp r14{0} + 52 to local table
 in proc main adding addrExp r14{0} + 56 to local table
 in proc main adding addrExp r14{0} + 60 to local table
-in proc main adding addrExp r14{0} - 20 to local table
-in proc main adding addrExp r14{0} - 20 to local table
-in proc main adding addrExp r14{0} - 20 to local table
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
 in proc main adding addrExp r14{0} to local table
 in proc main adding addrExp r14{0} + 4 to local table
@@ -37,92 +34,105 @@ in proc main adding addrExp r14{0} + 48 to local table
 in proc main adding addrExp r14{0} + 52 to local table
 in proc main adding addrExp r14{0} + 56 to local table
 in proc main adding addrExp r14{0} + 60 to local table
-in proc main adding addrExp r14{0} - 20 to local table
-in proc main adding addrExp r14{0} - 20 to local table
-in proc main adding addrExp r14{0} - 20 to local table
 ### type analysis for main ###
 ### WARNING: iteration limit exceeded for dfaTypeAnalysis of procedure main ###
-in proc main adding addrExp r14{0} - 20 to local table
-in proc main adding addrExp r14{0} - 20 to local table
-in proc main adding addrExp r14{0} - 20 to local table
 local o0 has type char * that doesn't agree with type of define void of a library, why?
-local o1 has type int that doesn't agree with type of define void of a library, why?
-local o6 has type void * that doesn't agree with type of define void of a library, why?
+local o1 has type /*signed?*/int that doesn't agree with type of define void of a library, why?
 *forced* { int r8 } main(int argc r8, char *[] * argv r9, char *[] * envp r10)
-in cluster loop
+in cluster andn
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-int local0 m[o6 - 20]
 end locals
 symbols:
-  m[o6 - 20] maps to local0 type int
   r8{0} maps to argc type int
   r9{0} maps to argv type char *[] *
   r10{0} maps to envp type char *[] *
 end symbols
 live variables: r8,  r9,  r10,  r11,  r12,  r13,  r14,  r15,  r16,  r17,  r18,  r19,  r20,  r21,  r22,  r23,  r24,  r25,  r26,  r27,  r28,  r29,  r30,  r31
 end live variables
-Fall BB:
+Call BB:
 in edges: 
-out edges: 1068c 
+out edges: 10690 
 00000000
+0001066c
+00010670
+00010674
+00010678
+0001067c
+00010680
 00010684
-00010688   27 *i32* local0 := 0
-L3: Twoway BB:
-in edges: 10688 106b0 
-out edges: 106a4 106b8 
-00000000
-0001068c
-00010690
-00010694   32 BRANCH 0x106a4, condition signed less or equals
-High level: local0 <= 9
-Synthetic out edge(s) to L1 L2 
-L1: Oneway BB:
-in edges: 10694 
-out edges: 1068c 
-000106a4
-000106a8
-000106ac   37 *i32* local0 := local0 + 1
-000106b0   38 GOTO 0x1068c
-L2: Call BB:
-in edges: 10694 
-out edges: 106cc 
-000106b8
-000106bc
-000106c0
-000106c4   42 {*v* r10, *v* r11, *v* r12, *v* r13, *v* r15} := CALL printf(
-                *c** o0 := "%i
+00010688
+00010688   34 {*v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL printf(
+                *c** o0 := "a andn b is %d
 "
-                *i32* o1 := local0
+                *j32* o1 := 0x458a0182
               )
-              Reaching definitions: r0=m[r14{0} - 20]{79} - 9,   r8=0x10780,   r9=m[r14{0} - 20]{79},   r10=r10{0},
-                r11=r11{0},   r12=r12{0},   r13=r13{0},   r14=r14{0} - 120,   r15=r15{0},   r16=r16{0},   r17=r17{0},
-                r18=r18{0},   r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},
-                r25=r9{0},   r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
+              Reaching definitions: r8=0x10768,   r9=0x458a0182,   r10=r10{0},   r11=r11{0},   r12=r12{0},   r13=r13{0}
+                r14=r14{0} - 112,   r15=r15{0},   r16=0x12345678,   r17=0x55aa55aa,   r18=r18{0},   r19=r19{0},
+                r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},   r26=r10{0},
+                r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},   m[r14{0} + 4]=r17{0},
+                m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},   m[r14{0} + 20]=r21{0},
+                m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},   m[r14{0} + 36]=r25{0},
+                m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},   m[r14{0} + 52]=r29{0},
+                m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},   tmp=r14{0} - 112
+              Live variables: 
+Call BB:
+in edges: 10688 
+out edges: 106a4 
+00010690
+00010694
+00010698
+0001069c
+0001069c   39 {*v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL printf(
+                *c** o0 := "b orn  a is %d
+"
+                *j32* o1 := 0xba75fe7d
+              )
+              Reaching definitions: r8=0x10778,   r9=0xba75fe7d,   r10=r10{34},   r11=r11{34},   r12=r12{34},
+                r13=r13{34},   r14=r14{0} - 112,   r15=r15{34},   r16=0xba75fe7d,   r17=0x55aa55aa,   r18=r18{0},
+                r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},
+                r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
                 m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},
                 m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},
                 m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},
-                m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},
-                m[r14{0} - 20]=m[r14{0} - 20]{79},   m[r14{0}]=r16{0},   tmp=m[r14{0} - 20]{79},
-                %flags=SUBFLAGS( m[r14{0} - 20]{79}, 9, m[r14{0} - 20]{79} - 9 ),   %ZF=(m[r14{0} - 20]{79} - 9) = 0,
-                %CF=m[r14{0} - 20]{79} <u 9
+                m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},
+                tmp=r14{0} - 112
+              Live variables: 
+Call BB:
+in edges: 1069c 
+out edges: 106bc 
+000106a4
+000106a8
+000106ac
+000106b0
+000106b4
+000106b4   45 {*v* r10, *v* r11, *v* r12, *v* r13, *v* r14, *v* r15} := CALL printf(
+                *c** o0 := "a xorn c is %d
+"
+                *j32* o1 := 0x3223fe67
+              )
+              Reaching definitions: r8=0x10788,   r9=0x3223fe67,   r10=r10{39},   r11=r11{39},   r12=r12{39},
+                r13=r13{39},   r14=r14{0} - 112,   r15=r15{39},   r16=0xba75fe7d,   r17=0x55aa55aa,   r18=r18{0},
+                r19=r19{0},   r20=r20{0},   r21=r21{0},   r22=r22{0},   r23=r23{0},   r24=r8{0},   r25=r9{0},
+                r26=r10{0},   r27=r11{0},   r28=r12{0},   r29=r13{0},   r30=r14{0},   r31=r15{0},
+                m[r14{0} + 4]=r17{0},   m[r14{0} + 8]=r18{0},   m[r14{0} + 12]=r19{0},   m[r14{0} + 16]=r20{0},
+                m[r14{0} + 20]=r21{0},   m[r14{0} + 24]=r22{0},   m[r14{0} + 28]=r23{0},   m[r14{0} + 32]=r24{0},
+                m[r14{0} + 36]=r25{0},   m[r14{0} + 40]=r26{0},   m[r14{0} + 44]=r27{0},   m[r14{0} + 48]=r28{0},
+                m[r14{0} + 52]=r29{0},   m[r14{0} + 56]=r30{0},   m[r14{0} + 60]=r31{0},   m[r14{0}]=r16{0},
+                tmp=r14{0} - 112
               Live variables: 
 Ret BB:
-in edges: 106c4 
+in edges: 106b4 
 out edges: 
-000106cc
-000106d0
-000106d4
-000106d8
-000106d8   72 RET *32* o0 := 0
-              Modifieds: *32* o0,  *32* r0
-              Reaching definitions: r0=0,   o0=0,   o1=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13,   o6=o6,
-                r15=r15,   r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,   r22=r22,   r23=r23,
-                r24=r24,   r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,   m[o6 + 4]=r17,
-                m[o6 + 8]=r18,   m[o6 + 12]=r19,   m[o6 + 16]=r20,   m[o6 + 20]=r21,   m[o6 + 24]=r22,   m[o6 + 28]=r23
-                m[o6 + 32]=r24,   m[o6 + 36]=r25,   m[o6 + 40]=r26,   m[o6 + 44]=r27,   m[o6 + 48]=r28,
-                m[o6 + 52]=r29,   m[o6 + 56]=r30,   m[o6 + 60]=r31,   local0=local0,   m[o6]=r16,   tmp=0,
-                %flags=SUBFLAGS( local0, 9, local0 - 9 ),   %ZF=(local0 - 9) = 0,   %CF=local0 <u 9
+000106bc
+000106bc   73 RET *32* o0 := 0
+              Modifieds: *32* o0
+              Reaching definitions: o0=0,   o1=argv,   r10=envp,   r11=r11,   r12=r12,   r13=r13,   r14=r14,   r15=r15,
+                r16=r16,   r17=r17,   r18=r18,   r19=r19,   r20=r20,   r21=r21,   r22=r22,   r23=r23,   r24=r24,
+                r25=r25,   r26=r26,   r27=r27,   r28=r28,   r29=r29,   r30=r30,   r31=r31,   m[r14 + 4]=r17,
+                m[r14 + 8]=r18,   m[r14 + 12]=r19,   m[r14 + 16]=r20,   m[r14 + 20]=r21,   m[r14 + 24]=r22,
+                m[r14 + 28]=r23,   m[r14 + 32]=r24,   m[r14 + 36]=r25,   m[r14 + 40]=r26,   m[r14 + 44]=r27,
+                m[r14 + 48]=r28,   m[r14 + 52]=r29,   m[r14 + 56]=r30,   m[r14 + 60]=r31,   m[r14]=r16,   tmp=0
 
 
