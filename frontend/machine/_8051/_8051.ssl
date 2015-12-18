@@ -582,13 +582,13 @@ DIV_AB exp1, exp2
 MOV_DIR_DIR  z32, rx32
   *8* m[z32] := m[rx32]{8};
 
-MOV_DIR_RI0 exp
+MOV_DIR_RI0 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[tmp1] := exp{8};
+  *8* exp1 := exp2;
 
-MOV_DIR_RI1 exp
+MOV_DIR_RI1 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[tmp1] := exp{8};
+  *8* exp1 := exp2;
 
 MOV_DIR_R0 z32
   *8* m[z32] := %r0;

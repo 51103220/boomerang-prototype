@@ -1,14 +1,5 @@
 main
 		MOV
 					 A 
-					 20 
-		MOV
-					 R0 
-					 100 + 25 
-		MOV
-					 P0 
-					 20 
-		MOV
-					 R0 
-					 A 
+					 P1 
 		RET

@@ -539,10 +539,12 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                                     case 3: /* DIRECT, INDIRECT*/
                                     {   
                                         op2 = magic_process(std::string(arg2->value.c));
+                                        Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op2));
+                                        exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                                         if (op2 == 0)
-                                            stmts = instantiate(pc, "MOV_DIR_RI0", new_exp1); 
+                                            stmts = instantiate(pc, "MOV_DIR_RI0", new_exp1, exp2); 
                                         else if(op2 == 1)
-                                            stmts = instantiate(pc, "MOV_DIR_RI1", new_exp1); 
+                                            stmts = instantiate(pc, "MOV_DIR_RI1", new_exp1, exp2); 
                                         break;
                                     }
                                     case 6: /* DIRECT, Rn | DIRECT ID*/
