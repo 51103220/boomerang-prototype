@@ -692,16 +692,16 @@ INC_DPTR
 MUL_AB exp1, exp2
   *16* m[%ab] := exp1 * exp2;
 
-MOV_RI0_DIR  z32
+MOV_RI0_DIR  exp1, exp2
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[z32] := m[tmp1];
+  *8*  exp1 := exp2;
 
 MOV_REG_IMM z32, i32
   *8* z32 := i32;
 
-MOV_RI1_DIR  z32
+MOV_RI1_DIR  exp1, exp2 
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* m[z32] := m[tmp1];
+  *8* exp1 := exp2;
 
 MOV_R0_DIR  z32
   *8* %r0 := m[z32]{8};
@@ -1061,13 +1061,13 @@ MOV_A_R6
 MOV_A_R7
   *8* %a := %r7;
 
-MOV_A_RI0 exp
+MOV_A_RI0 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* exp := m[tmp1];
+  *8* exp1 := exp2;
 
-MOV_A_RI1 exp
+MOV_A_RI1 exp1, exp2
   *32* tmp1 := zfill(8, 31, %r1)
-  *8* exp := m[tmp1];
+  *8* exp1 := exp2;
 
 
 # 0xF0
@@ -1080,10 +1080,6 @@ MOVX_DPTRA_A exp
 
 MOVX_RI0_A exp
   *32* tmp1 := zfill(8, 31, %r0)
-  *8* m[tmp1] := exp;
-
-MOVX_RI1_A exp
-  *32* tmp1 := zfill(8, 31, %r1)
   *8* m[tmp1] := exp;
 
 MOVX_RI1_A exp

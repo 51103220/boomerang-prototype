@@ -226,7 +226,6 @@ Exp* binary_expr(AssemblyExpression* expr){
             case 6: // ID , handle as memOf
             {   
                 op1 = map_sfr(std::string((*ai)->value.c));
-                
                 if(lhs){
                     
                     if (op1 <= 8)
@@ -263,8 +262,21 @@ Exp* binary_expr(AssemblyExpression* expr){
                 break;
             }
             case 1:
+            {
+                if(lhs){
+                    exp1 = new Const((*ai)->value.i);
+                    lhs = false;
+                }
+                else{
+                    
+                    exp2 = new Const((*ai)->value.i);
+                }
+                
+                break;
+            }
             case 4: //IMMEDIATE INT
             {   
+                imm = true;
                 if(lhs){
                     exp1 = new Const((*ai)->value.i);
                     lhs = false;
@@ -343,8 +355,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                                         if(if_a_byte(arg2->value.c))
                                             exp2 = byte_present(arg2->value.c);
                                         
-                                        if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12)   /* DIRECT ID */
-                                            stmts = instantiate(pc, "MOV_RI0_DIR", exp2);
+                                        if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12){/* DIRECT ID */
+                                            Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(0));
+                                            exp1 = Location::memOf(e2);
+                                            stmts = instantiate(pc, "MOV_RI0_DIR",exp1, Location::memOf(exp2));
+                                        }
                                         else if(op2 == 8) /* A */
                                             stmts = instantiate(pc, "MOV_RI0_A", exp2);
                                         break;
@@ -356,7 +371,9 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                                     case 1: /* @R0, DIRECT INT */
                                     {   
                                         
-                                        stmts = instantiate(pc, "MOV_RI0_DIR", new TypedExp((Type *) direct_type, new Const(arg2->value.i)));
+                                        Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(0));
+                                        exp1 = Location::memOf(e2);  
+                                        stmts = instantiate(pc, "MOV_RI0_DIR", exp1, Location::memOf(new TypedExp((Type *) direct_type, new Const(arg2->value.i))));
                                         break;
                                     }
                                     default:break; 
@@ -373,24 +390,34 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                             else { 
                                 switch (arg2->kind){
                                     case 6: /* ID */
-
+                                    {
                                         op2 = magic_process(arg2->value.c);
                                         exp2 = Location::regOf(op2);
                                         if(if_a_byte(arg2->value.c))
                                             exp2 = byte_present(arg2->value.c);
 
-                                        if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12)   /* DIRECT ID */
-                                            stmts = instantiate(pc, "MOV_RI1_DIR", exp2);
+                                        if((op2 >= 9 &&  op2 <= 10) ||  op2 >= 12){/* DIRECT ID */
+                                            Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(1));
+                                            exp1 = Location::memOf(e2);                                        
+                                            stmts = instantiate(pc, "MOV_RI1_DIR",exp1,Location::memOf(exp2));
+                                        }
                                         else if(op2 == 8) /* A */
                                             stmts = instantiate(pc, "MOV_RI1_A",exp2);
                                         break;
+                                    }
                                     case 4: /* IMMEDIATE INT */
-                                        stmts = instantiate(pc, "MOV_RI1_IMM" , new Const(arg2->value.i));
+                                    {    stmts = instantiate(pc, "MOV_RI1_IMM" , new Const(arg2->value.i));
                                         break;
+                                    }
                                     case 1: /* DIRECT INT */
-                                        stmts = instantiate(pc, "MOV_RI1_DIR", new TypedExp((Type *) direct_type, new Const(arg2->value.i)));
+                                    {   
+                                        Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(1));
+                                        exp1 = Location::memOf(e2);  
+                                        stmts = instantiate(pc, "MOV_RI1_DIR", exp1, Location::memOf(new TypedExp((Type *) direct_type, new Const(arg2->value.i))));
                                         break;
-                                    default:break; 
+                                    }
+                                    default:
+                                        break; 
                                 }
                             }
                             break;
@@ -450,11 +477,14 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                             else{
                                 switch(arg2->kind){
                                     case 3: /* A, INDIRECT */
-                                    {   op2 = magic_process(std::string(arg2->value.c));
+                                    {   
+                                        op2 = magic_process(std::string(arg2->value.c));
+                                        Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op2));
+                                        exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                                         if (op2 == 0)
-                                            stmts = instantiate(pc, "MOV_A_RI0", exp1);
+                                            stmts = instantiate(pc, "MOV_A_RI0", exp1, exp2);
                                         else if (op2 == 1)
-                                            stmts = instantiate(pc, "MOV_A_RI1", exp1);
+                                            stmts = instantiate(pc, "MOV_A_RI1", exp1, exp2);
                                         break;
                                     }
                                     case 6: /* A, Rn | DIRECT ID */
@@ -570,7 +600,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         else if(opcode == "MOVX"){
             switch(arg1->kind){
                 case 3: /* MOVX INDIRECT, A*/
-                {    op1 = magic_process(std::string(arg1->value.c));
+                {   op1 = magic_process(std::string(arg1->value.c));
                     exp2 = Location::regOf(map_sfr(std::string(arg2->value.c)));
                     if(if_a_byte(arg2->value.c))
                         exp2 = byte_present(arg2->value.c);
@@ -583,7 +613,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                     break;
                 }
                 case 6: /*MOVX A, INDIRECT*/
-                {    op2 = magic_process(std::string(arg2->value.c));
+                {   op2 = magic_process(std::string(arg2->value.c));
                     Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op2));
                     exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                     if (op2 == 0){
