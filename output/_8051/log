@@ -8,10 +8,8 @@ in cluster elf-init
 parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
-__size8 a r8
 end locals
 symbols:
-  r8 maps to a type __size8
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
@@ -24,9 +22,9 @@ out edges:
 00000000
 00010474
 00010478
-0001047c    3 *8* a := 100 - m[ *8**10]
-00010480    4 RET *8* a := a
-              Modifieds: *8* a,  *8* r1
-              Reaching definitions: r1=20,   a=a,   r32=argc,   r33=argv,   r34=envp
+0001047c    3 *8* m[20] := m[ *8**20] - 1
+00010480    4 RET *8* a := 100
+              Modifieds: *8* a,  *8* r0
+              Reaching definitions: r0=20,   a=100,   r32=argc,   r33=argv,   r34=envp
 
 

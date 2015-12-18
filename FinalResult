@@ -3,9 +3,8 @@ main
 					 A 
 					 100 
 		MOV
-					 R1 
+					 R0 
 					 20 
-		SUBB
-					 A 
-					 10 
+		DEC
+					 R0 
 		RET

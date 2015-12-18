@@ -975,20 +975,23 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         switch(arg1->kind){
             case 3: /*INDIRECT*/
             {   
+                Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op1));
+                exp1 = Location::memOf(Location::regOf(op1));
+                exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                 if (op1 == 0){
                     if(opcode == "INC"){
-                        stmts = instantiate(pc,"INC_RI0");
+                        stmts = instantiate(pc,"INC_EXP_EXP",exp1,exp2);
                     }
                     else{
-                        stmts = instantiate(pc,"DEC_RI0");
+                        stmts = instantiate(pc,"DEC_EXP_EXP",exp1,exp2);
                     }
                 }
                 else{
                     if(opcode == "INC"){
-                        stmts = instantiate(pc,"INC_RI1");
+                        stmts = instantiate(pc,"INC_EXP_EXP",exp1,exp2);
                     }
                     else{
-                        stmts = instantiate(pc,"DEC_RI1");
+                        stmts = instantiate(pc,"DEC_EXP_EXP",exp1,exp2);
                     }
                 }
                 break;

@@ -69,6 +69,9 @@ INC_R7
 INC_EXP exp
   *8* exp := exp + 1;
 
+INC_EXP_EXP exp1,exp2
+  *8* exp1 := exp2 + 1;
+
 INC_RI0
   *32* tmp1 := zfill(8, 31, %r0)
   *8* tmpb := m[tmp1]{8}
@@ -111,6 +114,9 @@ RRC_A
 
 DEC_EXP exp
   *8* exp := exp - 1;
+
+DEC_EXP_EXP exp1, exp2
+  *8* exp1 := exp2 - 1;
 
 DEC_DIR  z32
   *8* m[z32] := m[z32]{8} - 1;
