@@ -1228,11 +1228,13 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         switch(arg2->kind){
             case 3: //A, INDIRECT
             {   op2 = map_sfr(std::string(arg2->value.c));
+                Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op2));
+                exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                 if (op2 == 0){
-                    stmts = instantiate(pc,"XCH_A_RI0", exp1);
+                    stmts = instantiate(pc,"XCH_EXP_EXP", exp1, exp2, Location::memOf(Location::regOf(op2)));
                 }
                 else{
-                    stmts = instantiate(pc,"XCH_A_RI1", exp1);   
+                    stmts = instantiate(pc,"XCH_EXP_EXP", exp1, exp2, Location::memOf(Location::regOf(op2)));   
                 }
                 break;
             }
@@ -1248,8 +1250,8 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                 break;
             }
             case 1: //A, Direct INT
-            {   exp2 = Location::memOf(new Const(arg2->value.i));
-                stmts = instantiate(pc,"XCH_EXP", exp1, exp2);
+            {   exp2 = Location::memOf(new TypedExp((Type *) direct_type, new Const(arg2->value.i)));
+                stmts = instantiate(pc,"XCH_EXP_EXP", exp1, exp2,Location::memOf(new Const(arg2->value.i)));
                 break;
             }
             default:

@@ -878,6 +878,11 @@ XCH_EXP exp1, exp2
   *8* tmpb := exp1
   *8* exp1 := exp2
   *8* exp2 := tmpb;
+  
+XCH_EXP_EXP exp1, exp2, exp3
+  *8* tmpb := exp1
+  *8* exp1 := exp2
+  *8* exp3 := tmpb;  
 
 XCH_A_R1
   *8* tmpb := %a
