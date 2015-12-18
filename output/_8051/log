@@ -10,25 +10,29 @@ parameters: i32 argc, [c*]* argv, [c*]* envp
 end parameters
 locals:
 /*signed?*/char a r8
+unsigned char r0 r0
 end locals
 symbols:
+  r0 maps to r0 type unsigned char
   r8 maps to a type /*signed?*/char
   r32{0} maps to argc type int
   r33{0} maps to argv type char *[] *
   r34{0} maps to envp type char *[] *
 end symbols
-live variables: 
+live variables: r0
 end live variables
 Ret BB:
 in edges: 
 out edges: 
-00000000
+00000000    0 *u8* r0 := -
+            0 *i32* argc := -
+            0 *[c*]** argv := -
+            0 *[c*]** envp := -
 00010474
-00010478
-0001047c    4 *8* m[20] := 200
-00010480    5 *j8* a := 100 ^ m[ *8**20]
-00010484    6 RET *j8* a := a
-              Modifieds: *8* a,  *8* r0
-              Reaching definitions: r0=20,   a=a,   r32=argc,   r33=argv,   r34=envp,   tmp1=20
+00010478    3 *8* m[zfill(8,31,r0)] := 200
+0001047c    4 *j8* a := 100 ^ m[ *8**zfill(16,31,r0)]
+00010480    5 RET *j8* a := a
+              Modifieds: *8* a
+              Reaching definitions: r0=r0,   a=a,   tmp1=zfill(8,31,r0)
 
 
