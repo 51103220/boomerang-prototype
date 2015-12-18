@@ -31,10 +31,10 @@ AJMP_IMM i32
 LJMP_ADDR16 i32
   *32* %pc := i32;
 
-RR_A bt
-  *1* bt := %a@[7:7]
-  *7* %a@[1:7] := %a@[0:6]
-  *1* %a@[0:0] := bt;
+RR_A exp
+  *1* tmpb := exp@[7:7]
+  *7* exp@[1:7] := exp@[0:6]
+  *1* exp@[0:0] := tmpb;
 
 INC_DIR z32
   *8* m[z32] := m[z32]{8} + 1;
@@ -106,11 +106,12 @@ LCALL_ADDR16 i32
   *32* m[%sp] := %pc
   *32* %pc := i32;
 
-RRC_A
-  *1* bt := %CF
-  *1* %CF := %a@[7:7]
-  *7* %a@[1:7] := %a@[0:6]
-  *1* %a@[0:0] := bt;
+RRC_A exp
+  *1* tmpb := %c
+  *1* %c := exp@[0:0]
+  *7* exp@[1:7] := exp@[0:6]
+  *1* bt := exp@[7:7]
+  *1* bt := tmpb;
 
 DEC_EXP exp
   *8* exp := exp - 1;
@@ -238,11 +239,12 @@ RETI retaddr
   *32* retaddr := m[%sp]{32}
   *32* %pc := retaddr;
 
-RLC_A
-  *1* bt := %CF
-  *1* %CF := %a@[0:0]
-  *7* %a@[0:6] := %a@[1:7]
-  *1* %a@[7:7] := bt;
+RLC_A exp
+  *1* tmpb := %c
+  *1* %c := exp@[0:0]
+  *7* exp@[0:6] := exp@[1:7]
+  *1* bt := exp@[7:7]
+  *1* bt := tmpb;
 
 ADDC_A_IMM i32
   *8* %a := %a + i32@[0:7];
@@ -878,7 +880,7 @@ XCH_EXP exp1, exp2
   *8* tmpb := exp1
   *8* exp1 := exp2
   *8* exp2 := tmpb;
-  
+
 XCH_EXP_EXP exp1, exp2, exp3
   *8* tmpb := exp1
   *8* exp1 := exp2

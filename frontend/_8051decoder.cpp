@@ -951,8 +951,22 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         }
         
     }
-    else if (opcode == "RR" || opcode == "RRC" || opcode == "RLC") { //TODO:
-       stmts = instantiate(pc,"RR_A", new Const(1));
+    else if (opcode == "RR" || opcode == "RRC" || opcode == "RLC") {
+        Exp* exp1;
+        ei = Line->expList->begin();
+        AssemblyArgument* arg1 = (*ei)->argList.front();
+        if(arg1->kind != 1){
+            exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+            if (if_a_byte(arg1->value.c)){
+                exp1 = byte_present(arg1->value.c);
+            }
+        }
+        if(opcode == "RR")
+            stmts = instantiate(pc,"RR_A", exp1);
+        else if(opcode == "RRC")
+            stmts = instantiate(pc,"RRC_A", exp1);
+        else 
+            stmts = instantiate(pc,"RLC_A", exp1);
     }
     else if (opcode == "DEC" || opcode == "INC") {
         stringstream ss;

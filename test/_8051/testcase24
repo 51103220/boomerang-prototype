@@ -1,5 +1,5 @@
 PUBLIC main
 main:
 	MOV A, #100
-	XCH A, 599
+	RRC A
 	RET

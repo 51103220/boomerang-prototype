@@ -2,7 +2,6 @@ main
 		MOV
 					 A 
 					 100 
-		XCH
+		RRC
 					 A 
-					 599 
 		RET
