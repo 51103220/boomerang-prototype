@@ -866,28 +866,30 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
             case 3: /* A, INDIRECT */
             {   
                 op2 = map_sfr(std::string(arg2->value.c));
+                Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op2));
+                exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                 if (op2 == 0){
                     if (opcode == "ADD")
-                        stmts = instantiate(pc,"ADD_A_RI0", exp1);
+                        stmts = instantiate(pc,"ADD_A_EXP", exp1, exp2);
                     else if (opcode == "SUBB")
-                        stmts = instantiate(pc,"SUBB_A_RI0", exp1);
+                        stmts = instantiate(pc,"SUBB_A_EXP", exp1, exp2);
                     else{ 
                         Exp * temp = Location::regOf(10);
                         if(if_a_byte("C"))
                             temp = byte_present("C");
-                        stmts = instantiate(pc,"ADDC_A_RI0", exp1, Location::memOf(temp));
+                        stmts = instantiate(pc,"ADDC_A_EXP", exp1, Location::memOf(temp), exp2);
                     } 
                 }
                 else if (op2 == 1){
                     if (opcode == "ADD")
-                        stmts = instantiate(pc,"ADD_A_RI1", exp1);
+                        stmts = instantiate(pc,"ADD_A_EXP", exp1, exp2);
                     else if (opcode == "SUBB")
-                        stmts = instantiate(pc,"SUBB_A_RI1", exp1);
+                        stmts = instantiate(pc,"SUBB_A_EXP", exp1, exp2);
                     else{ 
                         Exp * temp = Location::regOf(10);
                         if(if_a_byte("C"))
                             temp = byte_present("C");
-                        stmts = instantiate(pc,"ADDC_A_RI1", exp1, Location::memOf(temp));
+                        stmts = instantiate(pc,"ADDC_A_EXP", exp1, Location::memOf(temp), exp2);
                     } 
                 }
                      
@@ -920,7 +922,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
             }
             case 1: /*A, Direct Int */
             {   
-                exp2 = Location::memOf(new Const(arg2->value.i));
+                exp2 = Location::memOf(new TypedExp((Type *) direct_type, new Const(arg2->value.i)));
                 if (opcode == "ADDC"){
                     Exp * temp = Location::regOf(10);
                         if(if_a_byte("C"))

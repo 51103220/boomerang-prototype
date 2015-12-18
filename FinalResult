@@ -3,9 +3,9 @@ main
 					 A 
 					 100 
 		MOV
-					 R0 
-					 200 
-		XRL
+					 R1 
+					 20 
+		SUBB
 					 A 
-					 R0 
+					 10 
 		RET
