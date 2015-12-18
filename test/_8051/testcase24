@@ -1,4 +1,7 @@
 PUBLIC main
 main:
-	MOV A, P1
+	MOV A, #100
+	MOV R0, #20
+	MOV @R0, #200
+	XRL A, @R0
 	RET

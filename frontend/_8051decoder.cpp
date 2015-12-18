@@ -324,9 +324,11 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
         //-----EXPRESSION1, ALWAYS AN ID----------------------------
         ei = Line->expList->begin();
         AssemblyArgument* arg1 = (*ei)->argList.front();
-        exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
-        if (if_a_byte(arg1->value.c)){
-            exp1 = byte_present(arg1->value.c);
+        if(arg1->kind != 1){
+            exp1 = Location::regOf(map_sfr(std::string(arg1->value.c)));
+            if (if_a_byte(arg1->value.c)){
+                exp1 = byte_present(arg1->value.c);
+            }
         }
         //-----EXPRESSION2, FIRST TEST THE BINARY
         ++ei;
@@ -583,7 +585,13 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                         }   
                     break;
                 }
-               
+                case 1: /* DIRECT INT*/
+                {   
+                    Exp * new_exp1 = Location::memOf(new Const(arg1->value.i));
+                    exp2 = Location::memOf(Location::regOf(map_sfr(std::string(arg2->value.c))));
+                    stmts = instantiate(pc, "MOV_EXP", new_exp1, exp2);
+                    break;
+                }
                 default:
                     break;
             }
@@ -705,21 +713,23 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                     switch(arg2->kind){
                         case 3: /*A, INDIRECT*/
                         {   op2 = magic_process(arg2->value.c);
+                            Ternary* e2 = new Ternary(opZfill, new Const(16), new Const(31), Location::regOf(op2));
+                            exp2 = Location::memOf(new TypedExp((Type *) direct_type, e2));
                             if (op2 == 0){
                                 if (opcode == "ORL")
-                                    stmts = instantiate(pc,"ORL_EXP_RI0", exp1);
+                                    stmts = instantiate(pc,"ORL_EXP", exp1, exp2);
                                 else if(opcode == "ANL")
-                                    stmts = instantiate(pc,"ANL_EXP_RI0", exp1);
+                                    stmts = instantiate(pc,"ANL_EXP", exp1, exp2);
                                 else
-                                    stmts = instantiate(pc,"XRL_EXP_RI0", exp1);
+                                    stmts = instantiate(pc,"XRL_EXP", exp1, exp2);
                             }
                             else if (op2 == 1){
                                 if (opcode == "ORL")
-                                    stmts = instantiate(pc,"ORL_EXP_RI1", exp1);
+                                    stmts = instantiate(pc,"ORL_EXP", exp1, exp2);
                                 else if(opcode == "ANL")
-                                    stmts = instantiate(pc,"ANL_EXP_RI1", exp1);
+                                    stmts = instantiate(pc,"ANL_EXP", exp1, exp2);
                                 else
-                                    stmts = instantiate(pc,"XRL_EXP_RI1", exp1);
+                                    stmts = instantiate(pc,"XRL_EXP", exp1, exp2);
                             }
                             break;
                         }
@@ -742,7 +752,7 @@ DecodeResult& _8051Decoder::decodeAssembly(ADDRESS pc,std::string line, Assembly
                         }
                         case 1: /* A, DIRECT INT */
                         {   
-                            exp2 = Location::memOf(new Const(arg2->value.i));
+                            exp2 = Location::memOf(new TypedExp((Type *) direct_type, new Const(arg2->value.i)));
                             stmts = instantiate(pc,name, exp1,exp2);
                             break;
                         }

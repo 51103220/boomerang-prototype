@@ -1,7 +1,9 @@
 // address: 0x10474
 int main(int argc, char *argv[], char *envp[]) {
-    __size8 local0; 		// m[p1]
+    char a; 		// r8
 
-    return local0;
+    *(__size8*)20 = 200;
+    a = 100 ^ *(__size8 *)20;
+    return a;
 }
 
